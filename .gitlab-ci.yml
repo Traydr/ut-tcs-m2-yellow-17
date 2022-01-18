@@ -1,0 +1,6 @@
+test:
+  stage: test
+  image: maven:latest
+  script:
+    - cd java/pentago_client_server
+    - mvn verify
