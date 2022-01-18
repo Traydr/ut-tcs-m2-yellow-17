@@ -8,6 +8,6 @@ public class MyTest {
     @Test
     public void onePlusOneShouldBeTwo() {
         int sum = 1 + 1;
-        assertEquals(3, sum);
+        assertEquals(2, sum);
     }
 }
