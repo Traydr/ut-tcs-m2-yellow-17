@@ -179,21 +179,21 @@ public class Board {
      * @return True if there is 5 in a row, false if not
      */
     public boolean hasRow(Mark mark) {
-        for (int i = 0; i < (QUADRANT_NUM / 2) - 1; i++) {
-            for (int j = 0; j < QUADRANT_SIZE - 1; j++) {
+        for (int i = 0; i < (QUADRANT_NUM / 2); i++) {
+            for (int j = 0; j < QUADRANT_SIZE; j++) {
                 int fiveConsecutive = 0;
 
                 for (int k = 0; k < 2; k++) {
-                    for (int l = 0; l < QUADRANT_SIZE - 1; l++) {
-                        if (fiveConsecutive == 5) {
-                            return true;
-                        }
-
+                    for (int l = 0; l < QUADRANT_SIZE; l++) {
                         if (getField(i * 2 + k, l, j) != mark) {
                             fiveConsecutive = 0;
                         }
                         else {
                             fiveConsecutive += 1;
+                        }
+
+                        if (fiveConsecutive == 5) {
+                            return true;
                         }
                     }
                 }
@@ -208,21 +208,21 @@ public class Board {
      * @return True if there is 5 in a column, false if not
      */
     public boolean hasColumn(Mark mark) {
-        for (int i = 0; i < (QUADRANT_NUM / 2) - 1; i++) {
-            for (int j = 0; j < QUADRANT_SIZE - 1; j++) {
+        for (int i = 0; i < (QUADRANT_NUM / 2); i++) {
+            for (int j = 0; j < QUADRANT_SIZE; j++) {
                 int fiveConsecutive = 0;
 
                 for (int k = 0; k < 2; k++) {
-                    for (int l = 0; l < QUADRANT_SIZE - 1; l++) {
-                        if (fiveConsecutive == 5) {
-                            return true;
-                        }
-
+                    for (int l = 0; l < QUADRANT_SIZE; l++) {
                         if (getField(i + k * 2, j, l) != mark) {
                             fiveConsecutive = 0;
                         }
                         else {
                             fiveConsecutive += 1;
+                        }
+
+                        if (fiveConsecutive == 5) {
+                            return true;
                         }
                     }
                 }

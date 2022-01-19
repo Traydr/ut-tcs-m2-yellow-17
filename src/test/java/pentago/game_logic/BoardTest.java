@@ -1,6 +1,7 @@
 package pentago.game_logic;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;
@@ -127,5 +128,42 @@ public class BoardTest {
         board.setField(3, 2, 2, new Random().nextBoolean() ? Mark.BLACK : Mark.WHITE); // Set the last field too
 
         assertTrue(board.isFull());
+    }
+
+    @Test
+    void testHasRow() {
+        // TODO
+    }
+
+    @Test
+    void testHasColumn() {
+        String[] column1 = {"A1", "A4", "A7", "C1", "C4"};
+        String[] column2 = {"B2", "B5", "B8", "D2", "D5"};
+        String[] column3 = {"A3", "A6", "C0", "C3", "C6"};
+
+        String[][] columns = {column1, column2, column3};
+
+        for (var column : columns) {
+            for (int i = 0; i < column.length; i++) {
+                board.setField(column[i], Mark.BLACK);
+            }
+            assertTrue(board.hasColumn(Mark.BLACK));
+            board.reset(); // Make sure we reset the board
+        }
+    }
+
+    @Test
+    void testHasDiagonal() {
+        // TODO
+    }
+
+    @Test
+    void testIsWinner() {
+        // TODO
+    }
+
+    @Test
+    void hasWinner() {
+        // TODO
     }
 }
