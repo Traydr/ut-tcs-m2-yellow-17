@@ -50,7 +50,7 @@ public class BoardTest {
             assertEquals(expectedResults1[i], isField);
         }
 
-        int[][] testCoordinates2 = {{0,4,2}, {1,2,2}, {2,1,0}, {3,2,1}};
+        int[][] testCoordinates2 = {{0, 4, 2}, {1, 2, 2}, {2, 1, 0}, {3, 2, 1}};
         boolean[] expectedResults2 = {false, true, true, true};
 
         for (int i = 0; i < testCoordinates2.length; i++) {
@@ -63,7 +63,7 @@ public class BoardTest {
     void testGetSetFields() {
         String[] testCoordinates1 = {"A2", "B5", "C4", "D8"};
         Mark[] marks1 = {Mark.WHITE, Mark.WHITE, Mark.BLACK, Mark.BLACK};
-        int[][] testCoordinates2 = {{0,2,1}, {1,1,1}, {2,2,1}, {3,0,1}};
+        int[][] testCoordinates2 = {{0, 2, 1}, {1, 1, 1}, {2, 2, 1}, {3, 0, 1}};
         Mark[] marks2 = {Mark.BLACK, Mark.BLACK, Mark.WHITE, Mark.WHITE};
 
         for (int i = 0; i < testCoordinates1.length; i++) {
@@ -78,6 +78,34 @@ public class BoardTest {
         }
         for (int i = 0; i < testCoordinates2.length; i++) {
             assertEquals(marks2[i], board.getField(testCoordinates2[i][0], testCoordinates2[i][1], testCoordinates2[i][2]));
+        }
+    }
+
+    @Test
+    void testIsEmptyField() {
+        String[] testCoordinates1 = {"A4", "B2", "C6", "D4", "D8"};
+        int[][] testCoordinates2 = {{0, 2, 1}, {1, 1, 1}, {2, 2, 1}, {3, 0, 1}};
+
+        for (int i = 0; i < board.QUADRANT_NUM; i++) {
+            for (int j = 0; j < board.QUADRANT_SIZE; j++) {
+                for (int k = 0; k < board.QUADRANT_SIZE; k++) {
+                    board.setField(i, j, k, Mark.BLACK);
+                }
+            }
+        }
+
+        for (int i = 0; i < testCoordinates1.length; i++) {
+            board.setField(testCoordinates1[i], Mark.EMPTY);
+        }
+        for (int i = 0; i < testCoordinates2.length; i++) {
+            board.setField(testCoordinates2[i][0], testCoordinates2[i][1], testCoordinates2[i][2], Mark.EMPTY);
+        }
+
+        for (var coordinate : testCoordinates1) {
+            assertTrue(board.isEmptyField(coordinate));
+        }
+        for(var coordinate : testCoordinates2) {
+            assertTrue(board.isEmptyField(coordinate[0], coordinate[1], coordinate[2]));
         }
     }
 }
