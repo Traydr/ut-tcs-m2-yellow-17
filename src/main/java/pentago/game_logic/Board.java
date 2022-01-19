@@ -136,6 +136,44 @@ public class Board {
     }
 
     /**
+     * Hardcoded rotation for left (anti-clockwise) and right (clockwise)
+     * @param cmd format [A-D][L|R]
+     */
+    public void rotateQuadrant(String cmd) {
+        // Command that comes in is in format [A-D][L|R]
+        // L for rotate anti-clockwise, R for rotate clockwise
+        int quad = getCoords(cmd.charAt(0) + "0")[0];
+        char rotate = cmd.charAt(1);
+
+        Mark[][] tmpShallow = this.quadrants[quad];
+        Mark[][] tmpDeep = new Mark[QUADRANT_SIZE][QUADRANT_SIZE];
+
+        switch (rotate) {
+            case 'L':
+                tmpDeep[0][0] = tmpShallow[2][0];
+                tmpDeep[0][1] = tmpShallow[1][0];
+                tmpDeep[0][2] = tmpShallow[0][0];
+                tmpDeep[1][0] = tmpShallow[2][1];
+                tmpDeep[1][2] = tmpShallow[0][1];
+                tmpDeep[2][0] = tmpShallow[2][2];
+                tmpDeep[2][1] = tmpShallow[1][2];
+                tmpDeep[2][2] = tmpShallow[0][2];
+                break;
+            case 'R':
+                tmpDeep[0][0] = tmpShallow[0][2];
+                tmpDeep[0][1] = tmpShallow[1][2];
+                tmpDeep[0][2] = tmpShallow[2][2];
+                tmpDeep[1][0] = tmpShallow[0][1];
+                tmpDeep[1][2] = tmpShallow[2][1];
+                tmpDeep[2][0] = tmpShallow[0][0];
+                tmpDeep[2][1] = tmpShallow[1][0];
+                tmpDeep[2][2] = tmpShallow[2][0];
+                break;
+        }
+        this.quadrants[quad] = tmpDeep;
+    }
+
+    /**
      * Checks whether a specific player has 5 in a row
      * @param mark Specific player
      * @return True if there is 5 in a row, false if not
