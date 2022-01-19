@@ -3,8 +3,9 @@ package pentago.game_logic;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class BoardTest {
     Board board;
@@ -104,8 +105,27 @@ public class BoardTest {
         for (var coordinate : testCoordinates1) {
             assertTrue(board.isEmptyField(coordinate));
         }
-        for(var coordinate : testCoordinates2) {
+        for (var coordinate : testCoordinates2) {
             assertTrue(board.isEmptyField(coordinate[0], coordinate[1], coordinate[2]));
         }
+    }
+
+    @Test
+    void testIsFull() {
+        // Fill the whole board, except for the very last value
+        for (int i = 0; i < board.QUADRANT_NUM; i++) {
+            for (int j = 0; j < board.QUADRANT_SIZE; j++) {
+                for (int k = 0; k < board.QUADRANT_SIZE; k++) {
+                    board.setField(i, j, k, new Random().nextBoolean() ? Mark.BLACK : Mark.WHITE);
+                }
+            }
+        }
+        board.setField(3, 2, 2, Mark.EMPTY); // Empty the last field
+
+        assertFalse(board.isFull());
+
+        board.setField(3, 2, 2, new Random().nextBoolean() ? Mark.BLACK : Mark.WHITE); // Set the last field too
+
+        assertTrue(board.isFull());
     }
 }
