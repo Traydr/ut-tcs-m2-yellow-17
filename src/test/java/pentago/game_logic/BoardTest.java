@@ -27,8 +27,8 @@ public class BoardTest {
 
     @Test
     void testGetCoords() {
-        String[] testUserCoordinates = {"A3", "B1", "C0", "D8"};
-        int[][] correspondingCoordinates = {{0, 0, 1}, {1, 1, 0}, {2, 0, 0}, {3, 2, 2}};
+        String[] testUserCoordinates = {"A3", "B1", "C0", "D8", "B5"};
+        int[][] correspondingCoordinates = {{0, 0, 1}, {1, 1, 0}, {2, 0, 0}, {3, 2, 2}, {1, 2, 1}};
 
         for (int i = 0; i < testUserCoordinates.length; i++) {
             int[] calculatedCoordinates = board.getCoords(testUserCoordinates[i]);
@@ -56,6 +56,28 @@ public class BoardTest {
         for (int i = 0; i < testCoordinates2.length; i++) {
             boolean isField = board.isField(testCoordinates2[i][0], testCoordinates2[i][1], testCoordinates2[i][2]);
             assertEquals(expectedResults2[i], isField);
+        }
+    }
+
+    @Test
+    void testGetSetFields() {
+        String[] testCoordinates1 = {"A2", "B5", "C4", "D8"};
+        Mark[] marks1 = {Mark.WHITE, Mark.WHITE, Mark.BLACK, Mark.BLACK};
+        int[][] testCoordinates2 = {{0,2,1}, {1,1,1}, {2,2,1}, {3,0,1}};
+        Mark[] marks2 = {Mark.BLACK, Mark.BLACK, Mark.WHITE, Mark.WHITE};
+
+        for (int i = 0; i < testCoordinates1.length; i++) {
+            board.setField(testCoordinates1[i], marks1[i]);
+        }
+        for (int i = 0; i < testCoordinates1.length; i++) {
+            assertEquals(marks1[i], board.getField(testCoordinates1[i]));
+        }
+
+        for (int i = 0; i < testCoordinates2.length; i++) {
+            board.setField(testCoordinates2[i][0], testCoordinates2[i][1], testCoordinates2[i][2], marks2[i]);
+        }
+        for (int i = 0; i < testCoordinates2.length; i++) {
+            assertEquals(marks2[i], board.getField(testCoordinates2[i][0], testCoordinates2[i][1], testCoordinates2[i][2]));
         }
     }
 }
