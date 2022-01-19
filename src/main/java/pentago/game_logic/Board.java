@@ -23,9 +23,13 @@ public class Board {
      * This sets all the positions of the board to be empty
      */
     public void reset() {
-        Arrays.fill(this.quadrants[0][0], Mark.EMPTY);
-        Arrays.fill(this.quadrants[0], this.quadrants[0][0]);
-        Arrays.fill(this.quadrants, this.quadrants[0]);
+        for (int i = 0; i < QUADRANT_NUM; i++) {
+            for (int j = 0; j < QUADRANT_SIZE; j++) {
+                for (int k = 0; k < QUADRANT_SIZE; k++) {
+                    this.quadrants[i][j][k] = Mark.EMPTY;
+                }
+            }
+        }
     }
 
     /**
@@ -103,11 +107,20 @@ public class Board {
         return (getField(quad, x, y) == Mark.EMPTY);
     }
 
+    /**
+     * Translates coords in format [A-D][0-8] to 3 indexes and then calls itself with coords
+     * @param userCoords [A-D][0-8]
+     * @return True if the field is empty, false if occupied
+     */
     public boolean isEmptyField(String userCoords) {
         int[] coords = getCoords(userCoords);
         return isField(coords[0], coords[1], coords[2]);
     }
 
+    /**
+     * Check whether the board is completely full
+     * @return True if full, false if at least 1 space remains empty
+     */
     public boolean isFull() {
         for (int i = 0; i < QUADRANT_NUM; i++) {
             for (int j = 0; j < QUADRANT_SIZE; j++) {
@@ -122,39 +135,89 @@ public class Board {
         return true;
     }
 
+    /**
+     * Checks whether a specific player has 5 in a row
+     * @param mark Specific player
+     * @return True if there is 5 in a row, false if not
+     */
     public boolean hasRow(Mark mark) {
         return false;
     }
 
+    /**
+     * Checks whether a specific player has 5 in a column
+     * @param mark Specific player
+     * @return True if there is 5 in a column, false if not
+     */
     public boolean hasColumn(Mark mark) {
+        int fiveInACol = 0;
+        for (int i = 0; i < (QUADRANT_NUM / 2) - 1; i++) {
+            for (int j = 0; j < QUADRANT_SIZE - 1; j++) {
+
+            }
+        }
         return false;
     }
 
+    /**
+     * Checks whether a specific player has 5 diagonally
+     * @param mark Specific player
+     * @return True if there is 5 diagonally, false if not
+     */
     public boolean hasDiagonal(Mark mark) {
         return false;
     }
 
+    /**
+     * Checks if a certain player has won
+     * @param mark Specific player
+     * @return True if there are 5 consecutive marks somewhere, false if not
+     */
     public boolean isWinner(Mark mark) {
         return hasRow(mark) || hasColumn(mark) || hasDiagonal(mark);
     }
 
+    /**
+     * Checks whether the game has a winner
+     * @return True if there is a winner, false if not
+     */
     public boolean hasWinner() {
         return isWinner(Mark.BLACK) || isWinner(Mark.WHITE);
     }
 
+    /**
+     * Checks whether the game has ended
+     * @return true if game has ended, false if not
+     */
     public boolean gameOver() {
         return isFull() || hasWinner();
     }
 
+    /**
+     * Converts the board into a string representation
+     * @return Board as a string
+     */
     public String toString() {
         // TODO: Actually make this work
         return "";
     }
 
+    /**
+     * Sets a field on the board to be a certain mark
+     * @param quad The quadrant to look at
+     * @param x x position
+     * @param y y position
+     * @param mark Specific player
+     */
     public void setField(int quad, int x, int y, Mark mark) {
         this.quadrants[quad][x][y] = mark;
     }
 
+    /**
+     * Translates coords in format [A-D][0-8] to 3 indexes and then calls itself with coords
+     * @param userCoords [A-D][0-8]
+     * @param mark Specific player
+     */
     public void setField(String userCoords, Mark mark) {
         int[] coords = getCoords(userCoords);
         setField(coords[0], coords[1], coords[2], mark);
