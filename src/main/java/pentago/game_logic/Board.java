@@ -50,24 +50,55 @@ public class Board {
         return qxy;
     }
 
+    /**
+     * Check if this field exists
+     * @param quad The quadrant to look at
+     * @param x x position
+     * @param y y position
+     * @return true if field exists, false if not
+     */
     public boolean isField(int quad, int x, int y) {
-        return (quad >= 0 && quad <= QUADRANT_NUM && x >= 0 && x <= QUADRANT_SIZE && y >= 0 && y <= QUADRANT_SIZE);
+        return (quad >= 0 && quad <= QUADRANT_NUM - 1 && x >= 0 && x <= QUADRANT_SIZE - 1 && y >= 0 && y <= QUADRANT_SIZE - 1);
     }
 
+    /**
+     * Translates coords in format [A-D][0-8] to 3 indexes and then calls itself with coords
+     * @param userCoords [A-D][0-8]
+     * @return true if field exists, false if not
+     */
     public boolean isField(String userCoords) {
         int[] coords = getCoords(userCoords);
         return isField(coords[0], coords[1], coords[2]);
     }
 
+    /**
+     * Returns the mark present in the field
+     * @param quad The quadrant to look at
+     * @param x x position
+     * @param y y position
+     * @return The mark in the field
+     */
     public Mark getField(int quad, int x, int y) {
         return this.quadrants[quad][x][y];
     }
 
+    /**
+     * Translates coords in format [A-D][0-8] to 3 indexes and then calls itself with coords
+     * @param userCoords [A-D][0-8]
+     * @return The mark in the field
+     */
     public Mark getField(String userCoords) {
         int[] coords = getCoords(userCoords);
         return getField(coords[0], coords[1], coords[2]);
     }
 
+    /**
+     * Checks whether the specified field is empty
+     * @param quad The quadrant to look at
+     * @param x x position
+     * @param y y position
+     * @return True if the field is empty, false if occupied
+     */
     public boolean isEmptyField(int quad, int x, int y) {
         return (getField(quad, x, y) == Mark.EMPTY);
     }
