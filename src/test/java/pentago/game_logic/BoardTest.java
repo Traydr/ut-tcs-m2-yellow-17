@@ -132,7 +132,19 @@ public class BoardTest {
 
     @Test
     void testHasRow() {
-        // TODO
+        String[] column1 = {"A1", "A2", "B0", "B1", "B2"};
+        String[] column2 = {"C6", "C7", "C8", "D6", "D7"};
+        String[] column3 = {"A3", "A4", "A5", "B3", "B4"};
+
+        String[][] columns = {column1, column2, column3};
+
+        for (var column : columns) {
+            for (int i = 0; i < column.length; i++) {
+                board.setField(column[i], Mark.BLACK);
+            }
+            assertTrue(board.hasRow(Mark.BLACK));
+            board.reset(); // Make sure we reset the board
+        }
     }
 
     @Test
