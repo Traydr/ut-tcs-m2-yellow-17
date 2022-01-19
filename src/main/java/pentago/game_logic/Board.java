@@ -188,10 +188,24 @@ public class Board {
      * @return True if there is 5 in a column, false if not
      */
     public boolean hasColumn(Mark mark) {
-        int fiveInACol = 0;
         for (int i = 0; i < (QUADRANT_NUM / 2) - 1; i++) {
             for (int j = 0; j < QUADRANT_SIZE - 1; j++) {
+                int fiveConsecutive = 0;
 
+                for (int k = 0; k < 2; k++) {
+                    for (int l = 0; l < QUADRANT_SIZE - 1; l++) {
+                        if (fiveConsecutive == 5) {
+                            return true;
+                        }
+
+                        if (getField(i + k * 2, j, l) != mark) {
+                            fiveConsecutive = 0;
+                        }
+                        else {
+                            fiveConsecutive += 1;
+                        }
+                    }
+                }
             }
         }
         return false;
