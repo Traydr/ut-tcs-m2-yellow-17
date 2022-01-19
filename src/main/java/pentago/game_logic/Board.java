@@ -23,9 +23,13 @@ public class Board {
      * This sets all the positions of the board to be empty
      */
     public void reset() {
-        Arrays.fill(this.quadrants[0][0], Mark.EMPTY);
-        Arrays.fill(this.quadrants[0], this.quadrants[0][0]);
-        Arrays.fill(this.quadrants, this.quadrants[0]);
+        for (int i = 0; i < QUADRANT_NUM; i++) {
+            for (int j = 0; j < QUADRANT_SIZE; j++) {
+                for (int k = 0; k < QUADRANT_SIZE; k++) {
+                    this.quadrants[i][j][k] = Mark.EMPTY;
+                }
+            }
+        }
     }
 
     /**
@@ -146,6 +150,12 @@ public class Board {
      * @return True if there is 5 in a column, false if not
      */
     public boolean hasColumn(Mark mark) {
+        int fiveInACol = 0;
+        for (int i = 0; i < (QUADRANT_NUM / 2) - 1; i++) {
+            for (int j = 0; j < QUADRANT_SIZE - 1; j++) {
+
+            }
+        }
         return false;
     }
 
