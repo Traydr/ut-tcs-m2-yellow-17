@@ -1,7 +1,6 @@
 package pentago.game_logic;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;
@@ -18,9 +17,9 @@ public class BoardTest {
 
     @Test
     void testIfEmpty() {
-        for (int i = 0; i < board.QUADRANT_NUM; i++) {
-            for (int j = 0; j < board.QUADRANT_SIZE; j++) {
-                for (int k = 0; k < board.QUADRANT_SIZE; k++) {
+        for (int i = 0; i < board.quadrantNum; i++) {
+            for (int j = 0; j < board.quadrantSize; j++) {
+                for (int k = 0; k < board.quadrantSize; k++) {
                     assertEquals(Mark.EMPTY, board.getField(i, j, k));
                 }
             }
@@ -88,9 +87,9 @@ public class BoardTest {
         String[] testCoordinates1 = {"A4", "B2", "C6", "D4", "D8"};
         int[][] testCoordinates2 = {{0, 2, 1}, {1, 1, 1}, {2, 2, 1}, {3, 0, 1}};
 
-        for (int i = 0; i < board.QUADRANT_NUM; i++) {
-            for (int j = 0; j < board.QUADRANT_SIZE; j++) {
-                for (int k = 0; k < board.QUADRANT_SIZE; k++) {
+        for (int i = 0; i < board.quadrantNum; i++) {
+            for (int j = 0; j < board.quadrantSize; j++) {
+                for (int k = 0; k < board.quadrantSize; k++) {
                     board.setField(i, j, k, Mark.BLACK);
                 }
             }
@@ -114,9 +113,9 @@ public class BoardTest {
     @Test
     void testIsFull() {
         // Fill the whole board, except for the very last value
-        for (int i = 0; i < board.QUADRANT_NUM; i++) {
-            for (int j = 0; j < board.QUADRANT_SIZE; j++) {
-                for (int k = 0; k < board.QUADRANT_SIZE; k++) {
+        for (int i = 0; i < board.quadrantNum; i++) {
+            for (int j = 0; j < board.quadrantSize; j++) {
+                for (int k = 0; k < board.quadrantSize; k++) {
                     board.setField(i, j, k, new Random().nextBoolean() ? Mark.BLACK : Mark.WHITE);
                 }
             }

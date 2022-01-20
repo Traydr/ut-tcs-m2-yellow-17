@@ -1,4 +1,4 @@
 package pentago.client.player;
 
-public class Human implements Player{
+public class Human implements Player {
 }

@@ -1,4 +1,4 @@
 package pentago.client.player;
 
-public class NaiveStrategy implements Strategy{
+public class NaiveStrategy implements Strategy {
 }
