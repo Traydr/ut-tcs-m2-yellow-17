@@ -4,17 +4,20 @@ import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 
-public class Networking implements Network{
+public class Networking implements Network {
     Socket socket = null;
     BufferedWriter bw;
     BufferedReader br;
+    Listener listener;
 
     @Override
     public boolean connect(InetAddress address, int port) {
         try {
             this.socket = new Socket(address, port);
             this.bw = new BufferedWriter(new OutputStreamWriter(this.socket.getOutputStream()));
-            this.br = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+            listener = new Listener(this.socket);
+            Thread thread = new Thread(listener);
+            thread.start();
             return true;
         } catch (IOException e) {
             return false;
@@ -28,7 +31,7 @@ public class Networking implements Network{
                 this.socket.close();
             }
             this.bw.close();
-            this.br.close();
+            this.listener.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -38,7 +41,7 @@ public class Networking implements Network{
     public boolean sendMessage(String message) {
         // TODO : Change so more commands are accepted
         try {
-            bw.write("SAY~" + message + "\n");
+            bw.write(message + "\n");
             bw.flush();
             return true;
         } catch (IOException e) {

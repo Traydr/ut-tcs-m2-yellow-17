@@ -4,9 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
-import java.util.List;
 
-public class Listener implements Runnable{
+public class Listener implements Runnable {
     Socket socket = null;
     BufferedReader br = null;
 
@@ -14,6 +13,14 @@ public class Listener implements Runnable{
         this.socket = sock;
         try {
             this.br = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    void close() {
+        try {
+            br.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -27,12 +34,10 @@ public class Listener implements Runnable{
         }
         try {
             String output;
-
             while ((output = br.readLine()) != null) {
                 String[] outputParsed = output.split("~");
                 System.out.println(output);
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
