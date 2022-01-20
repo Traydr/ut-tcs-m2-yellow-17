@@ -47,11 +47,26 @@ public class PentagoClient {
             else if (output.equals("")) {
                 continue;
             }
-            System.out.println("o: " + output);
+            else if (output.equals("help")) {
+                displayHelp();
+            }
 
             network.sendMessage(output);
         }
 
         scanner.close();
+    }
+
+    public static void displayHelp() {
+        // TODO : Make these simpler for the user
+        System.out.println("Commands: \n" +
+                "HELLO~<client description>[~extension]*\n" +
+                "LOGIN~<username>\n" +
+                "LIST\n" +
+                "QUEUE\n" +
+                "MOVE~<A>~<B>\n" +
+                "PING\n" +
+                "PONG\n" +
+                "QUIT\n");
     }
 }
