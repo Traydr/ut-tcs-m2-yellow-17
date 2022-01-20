@@ -1,4 +1,4 @@
 package pentago.client.player;
 
-public class SmartStrategy implements Strategy{
+public class SmartStrategy implements Strategy {
 }
