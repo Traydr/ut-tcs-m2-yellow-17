@@ -1,8 +1,6 @@
 package pentago.client;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.Socket;
 
 public class Listener implements Runnable {
@@ -17,6 +15,17 @@ public class Listener implements Runnable {
             this.br = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    // TODO : Should replace switch statement with these
+    public enum cmd {
+        HELLO, LOGIN, MOVE, PING, PONG, LIST, NEWGAME, QUEUE, GAMEOVER, QUIT, ERROR, CHAT, WHISPER,
+        CHALLENGE;
+
+        @Override
+        public String toString() {
+            return this.name();
         }
     }
 
@@ -35,17 +44,20 @@ public class Listener implements Runnable {
             case "HELLO":
                 String features = "";
                 for (int i = 2; i < inputParsed.length; i++) {
-                    features = inputParsed[i] + ", ";
+                    features = features + " | " + inputParsed[i];
                 }
-                System.out.println("Success : Hello\nServer Name : " + inputParsed[1] +
-                                   "\nSupported Features : ");
+                System.out.println("Hello : Success" +
+                           "\nServer Name : " + inputParsed[1] +
+                           "\nSupported Features : " + features);
                 break;
             case "LOGIN":
-                System.out.println("Success : Login");
+                System.out.println("Login : Success");
                 break;
             case "MOVE":
                 // TODO : Implement game functions & Ignore when server repeats moves
-                System.out.println("Server moved: " + inputParsed[1] + " " + inputParsed[2]);
+                System.out.println("Server" +
+                           " pos:" + inputParsed[1] +
+                           " rotate:" + inputParsed[2]);
                 break;
             case "PING":
                 // TODO : Implement this in a better way
@@ -60,17 +72,25 @@ public class Listener implements Runnable {
             case "LIST":
                 String allUsers = "";
                 for (int i = 1; i < inputParsed.length; i++) {
-                    allUsers = inputParsed + ", ";
+                    allUsers = allUsers + " | " + inputParsed[i];
                 }
                 System.out.println("Currently connected: " + allUsers);
+                break;
             case "NEWGAME":
-                System.out.println("Player 1: " + inputParsed[1] + "Player 2: " + inputParsed[2]);
+                System.out.println("New game started:" +
+                           "\nPlayer 1: " + inputParsed[1] +
+                           "\nPlayer 2: " + inputParsed[2]);
                 break;
             case "GAMEOVER":
-                System.out.println("Gameover");
+                System.out.println("GAME OVER\nWinner: " + inputParsed[1] +
+                           "\nLoser: " + inputParsed[2]);
                 break;
             case "CHAT":
                 System.out.println("FROM: " + inputParsed[1] + " | MESSAGE: " + inputParsed[2]);
+                break;
+            case "WHISPER":
+                System.out.println("WHISPER \nFROM: " + inputParsed[1] + " | MESSAGE: " +
+                           inputParsed[2]);
                 break;
             case "QUIT":
                 // TODO : Implement disconnect
@@ -90,6 +110,7 @@ public class Listener implements Runnable {
         try {
             String output;
             while ((output = br.readLine()) != null) {
+                System.out.println("[SEVER]" + output);
                 messageParser(output);
             }
         } catch (IOException e) {

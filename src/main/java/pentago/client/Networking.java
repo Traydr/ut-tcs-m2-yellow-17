@@ -7,7 +7,6 @@ import java.net.Socket;
 public class Networking implements Network {
     Socket socket = null;
     BufferedWriter bw;
-    BufferedReader br;
     Listener listener;
 
     @Override

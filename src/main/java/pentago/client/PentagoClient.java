@@ -14,17 +14,21 @@ public class PentagoClient {
         String username;
         Network network = new Networking();
 
-        System.out.println("Server Addr:");
-        //serverAddress = scanner.nextLine();
-        System.out.println("Server Port:");
-        //port = scanner.nextInt();
-
-        System.out.println("Username:");
-        username = scanner.nextLine();
-
-        // DEBUG SO I DONT HAVE TO KEEP TYPING
-        serverAddress = "130.89.253.64";
-        port = 55555;
+        System.out.println("(P)reset or (C)ustom?");
+        if (scanner.nextLine().equals("C")) {
+            System.out.println("Server Addr:");
+            serverAddress = scanner.nextLine();
+            System.out.println("Server Port:");
+            port = scanner.nextInt();
+            System.out.println("Username:");
+            username = scanner.nextLine();
+        }
+        else {
+            // DEBUG SO I DONT HAVE TO KEEP TYPING
+            serverAddress = "130.89.253.64";
+            port = 55555;
+            username = "testing-Tray";
+        }
 
         try {
             if (!network.connect(InetAddress.getByName(serverAddress), port)) {
@@ -35,7 +39,7 @@ public class PentagoClient {
         }
 
         //TODO : Make connection better
-        network.sendMessage("HELLO~" + username);
+        network.sendMessage("HELLO~" + username + "~CHAT");
         network.sendMessage("LOGIN~" + username);
 
         String output;
@@ -48,27 +52,10 @@ public class PentagoClient {
             else if (output.equals("")) {
                 continue;
             }
-            else if (output.equals("help")) {
-                displayHelp();
-                continue;
-            }
 
             network.sendMessage(output);
         }
 
         scanner.close();
-    }
-
-    public static void displayHelp() {
-        // TODO : Make these simpler for the user
-        System.out.println("Commands: \n" +
-                "HELLO~<client description>[~extension]*\n" +
-                "LOGIN~<username>\n" +
-                "LIST\n" +
-                "QUEUE\n" +
-                "MOVE~<A>~<B>\n" +
-                "PING\n" +
-                "PONG\n" +
-                "QUIT\n");
     }
 }
