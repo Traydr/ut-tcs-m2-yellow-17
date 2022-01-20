@@ -40,6 +40,7 @@ public class PentagoClient {
 
         String output;
         while (scanner.hasNextLine()) {
+            // TODO : Add exception for ~ chars so that user can't us them
             output = scanner.nextLine();
             if (output.equals("quit")) {
                 break;
@@ -49,6 +50,7 @@ public class PentagoClient {
             }
             else if (output.equals("help")) {
                 displayHelp();
+                continue;
             }
 
             network.sendMessage(output);

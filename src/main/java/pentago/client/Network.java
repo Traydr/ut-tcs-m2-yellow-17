@@ -22,8 +22,4 @@ public interface Network {
      * @return true on success, false on failure
      */
     boolean sendMessage(String message);
-
-    void addChatListener();
-
-    void removeChatListener();
 }

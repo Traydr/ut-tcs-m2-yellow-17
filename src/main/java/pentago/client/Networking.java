@@ -15,7 +15,7 @@ public class Networking implements Network {
         try {
             this.socket = new Socket(address, port);
             this.bw = new BufferedWriter(new OutputStreamWriter(this.socket.getOutputStream()));
-            listener = new Listener(this.socket);
+            listener = new Listener(this.socket, this);
             Thread thread = new Thread(listener);
             thread.start();
             return true;
@@ -49,13 +49,5 @@ public class Networking implements Network {
             close();
             return false;
         }
-    }
-
-    @Override
-    public void addChatListener() {
-    }
-
-    @Override
-    public void removeChatListener() {
     }
 }
