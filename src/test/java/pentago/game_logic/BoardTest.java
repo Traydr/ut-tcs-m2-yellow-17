@@ -166,7 +166,15 @@ public class BoardTest {
 
     @Test
     void testHasDiagonal() {
-        // TODO
+        String[][] columns = {{"A0", "A4", "A8", "D0", "D4"}, {"C4", "C2", "B6", "B4", "B2"}, {"C2", "D3", "A7", "A3", "D7"}};
+
+        for (var column : columns) {
+            for (int i = 0; i < column.length; i++) {
+                board.setField(column[i], Mark.BLACK);
+            }
+            assertTrue(board.hasDiagonal(Mark.BLACK));
+            board.reset(); // Make sure we reset the board
+        }
     }
 
     @Test
