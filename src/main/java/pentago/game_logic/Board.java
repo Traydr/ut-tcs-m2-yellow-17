@@ -1,7 +1,5 @@
 package pentago.game_logic;
 
-import java.util.Arrays;
-
 public class Board {
     public final int QUADRANT_SIZE = 3;
     public final int QUADRANT_NUM = 4;
@@ -83,7 +81,9 @@ public class Board {
      * @return The mark in the field
      */
     public Mark getField(int quad, int x, int y) {
-        return this.quadrants[quad][x][y];
+        synchronized (this.quadrants) {
+            return this.quadrants[quad][x][y];
+        }
     }
 
     /**
@@ -140,37 +140,39 @@ public class Board {
      * @param cmd format [A-D][L|R]
      */
     public void rotateQuadrant(String cmd) {
-        // Command that comes in is in format [A-D][L|R]
-        // L for rotate anti-clockwise, R for rotate clockwise
-        int quad = getCoords(cmd.charAt(0) + "0")[0];
-        char rotate = cmd.charAt(1);
+        synchronized (this.quadrants) {
+            // Command that comes in is in format [A-D][L|R]
+            // L for rotate anti-clockwise, R for rotate clockwise
+            int quad = getCoords(cmd.charAt(0) + "0")[0];
+            char rotate = cmd.charAt(1);
 
-        Mark[][] tmpShallow = this.quadrants[quad];
-        Mark[][] tmpDeep = new Mark[QUADRANT_SIZE][QUADRANT_SIZE];
+            Mark[][] tmpShallow = this.quadrants[quad];
+            Mark[][] tmpDeep = new Mark[QUADRANT_SIZE][QUADRANT_SIZE];
 
-        switch (rotate) {
-            case 'L':
-                tmpDeep[0][0] = tmpShallow[2][0];
-                tmpDeep[0][1] = tmpShallow[1][0];
-                tmpDeep[0][2] = tmpShallow[0][0];
-                tmpDeep[1][0] = tmpShallow[2][1];
-                tmpDeep[1][2] = tmpShallow[0][1];
-                tmpDeep[2][0] = tmpShallow[2][2];
-                tmpDeep[2][1] = tmpShallow[1][2];
-                tmpDeep[2][2] = tmpShallow[0][2];
-                break;
-            case 'R':
-                tmpDeep[0][0] = tmpShallow[0][2];
-                tmpDeep[0][1] = tmpShallow[1][2];
-                tmpDeep[0][2] = tmpShallow[2][2];
-                tmpDeep[1][0] = tmpShallow[0][1];
-                tmpDeep[1][2] = tmpShallow[2][1];
-                tmpDeep[2][0] = tmpShallow[0][0];
-                tmpDeep[2][1] = tmpShallow[1][0];
-                tmpDeep[2][2] = tmpShallow[2][0];
-                break;
+            switch (rotate) {
+                case 'L':
+                    tmpDeep[0][0] = tmpShallow[2][0];
+                    tmpDeep[0][1] = tmpShallow[1][0];
+                    tmpDeep[0][2] = tmpShallow[0][0];
+                    tmpDeep[1][0] = tmpShallow[2][1];
+                    tmpDeep[1][2] = tmpShallow[0][1];
+                    tmpDeep[2][0] = tmpShallow[2][2];
+                    tmpDeep[2][1] = tmpShallow[1][2];
+                    tmpDeep[2][2] = tmpShallow[0][2];
+                    break;
+                case 'R':
+                    tmpDeep[0][0] = tmpShallow[0][2];
+                    tmpDeep[0][1] = tmpShallow[1][2];
+                    tmpDeep[0][2] = tmpShallow[2][2];
+                    tmpDeep[1][0] = tmpShallow[0][1];
+                    tmpDeep[1][2] = tmpShallow[2][1];
+                    tmpDeep[2][0] = tmpShallow[0][0];
+                    tmpDeep[2][1] = tmpShallow[1][0];
+                    tmpDeep[2][2] = tmpShallow[2][0];
+                    break;
+            }
+            this.quadrants[quad] = tmpDeep;
         }
-        this.quadrants[quad] = tmpDeep;
     }
 
     /**
@@ -282,7 +284,9 @@ public class Board {
      * @param mark Specific player
      */
     public void setField(int quad, int x, int y, Mark mark) {
-        this.quadrants[quad][x][y] = mark;
+        synchronized (this.quadrants) {
+            this.quadrants[quad][x][y] = mark;
+        }
     }
 
     /**
