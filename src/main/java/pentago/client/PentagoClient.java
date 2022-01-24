@@ -22,8 +22,7 @@ public class PentagoClient {
             port = scanner.nextInt();
             System.out.println("Username:");
             username = scanner.nextLine();
-        }
-        else {
+        } else {
             // DEBUG SO I DONT HAVE TO KEEP TYPING
             serverAddress = "130.89.253.64";
             port = 55555;
@@ -48,8 +47,10 @@ public class PentagoClient {
             output = scanner.nextLine();
             if (output.equals("quit")) {
                 break;
-            }
-            else if (output.equals("")) {
+            } else if (output.equals("")) {
+                continue;
+            } else if (output.equals("help")) {
+                displayHelp();
                 continue;
             }
 
@@ -57,5 +58,12 @@ public class PentagoClient {
         }
 
         scanner.close();
+    }
+
+    public static void displayHelp() {
+        // TODO : Make these simpler for the user
+        System.out.println("Commands: \n" + "HELLO~<client description>[~extension]*\n" +
+                           "LOGIN~<username>\n" + "LIST\n" + "QUEUE\n" + "MOVE~<A>~<B>\n" +
+                           "PING\n" + "PONG\n" + "QUIT\n");
     }
 }

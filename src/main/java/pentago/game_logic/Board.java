@@ -1,29 +1,29 @@
 package pentago.game_logic;
 
 public class Board {
-    public final int QUADRANT_SIZE = 3;
-    public final int QUADRANT_NUM = 4;
-    private final int CHARACTER_OFFSET = 65;
+    public final int quadrantSize = 3;
+    public final int quadrantNum = 4;
+    private final int characterOffset = 65;
 
     private Mark[][][] quadrants;
     private boolean isTurnFirstPlayer;
 
     /**
-     * This creates an empty board and set it that its the first players turn
+     * This creates an empty board and set it that its the first players turn.
      */
     public Board() {
-        this.quadrants = new Mark[QUADRANT_NUM][QUADRANT_SIZE][QUADRANT_SIZE];
+        this.quadrants = new Mark[quadrantNum][quadrantSize][quadrantSize];
         this.isTurnFirstPlayer = true;
         this.reset(); // Initialize the board by filling it in with empty marks
     }
 
     /**
-     * This sets all the positions of the board to be empty
+     * This sets all the positions of the board to be empty.
      */
     public void reset() {
-        for (int i = 0; i < QUADRANT_NUM; i++) {
-            for (int j = 0; j < QUADRANT_SIZE; j++) {
-                for (int k = 0; k < QUADRANT_SIZE; k++) {
+        for (int i = 0; i < quadrantNum; i++) {
+            for (int j = 0; j < quadrantSize; j++) {
+                for (int k = 0; k < quadrantSize; k++) {
                     this.quadrants[i][j][k] = Mark.EMPTY;
                 }
             }
@@ -31,7 +31,7 @@ public class Board {
     }
 
     /**
-     * Used to turn a combination of letters A-D and 0-8 to an array of 3 indexes
+     * Used to turn a combination of letters A-D and 0-8 to an array of 3 indexes.
      *
      * @param userCoords A combination a letters A-D and 0-8
      * @return An array of 3 indexes indicating quadrants and x, y within them
@@ -45,26 +45,31 @@ public class Board {
         char quad = userCoords.charAt(0);
         int index = Integer.parseInt(String.valueOf(userCoords.charAt(1)));
 
-        qxy[0] = (int) quad - CHARACTER_OFFSET; // Convert letters to the numeric position in the alphabet to get the quadrant
-        qxy[1] = index % QUADRANT_SIZE; // Java rounds down integers, so this gives us the x coordinate
-        qxy[2] = index / QUADRANT_SIZE; // This gives us the y coordinate
+        qxy[0] = (int) quad - characterOffset; // Convert letters to the numeric position in the
+        // alphabet to get the quadrant
+        qxy[1] = index % quadrantSize; // Java rounds down integers, so this gives us the x
+        // coordinate
+        qxy[2] = index / quadrantSize; // This gives us the y coordinate
 
         return qxy;
     }
 
     /**
-     * Check if this field exists
+     * Check if this field exists.
+     *
      * @param quad The quadrant to look at
-     * @param x x position
-     * @param y y position
+     * @param x    x position
+     * @param y    y position
      * @return true if field exists, false if not
      */
     public boolean isField(int quad, int x, int y) {
-        return (quad >= 0 && quad <= QUADRANT_NUM - 1 && x >= 0 && x <= QUADRANT_SIZE - 1 && y >= 0 && y <= QUADRANT_SIZE - 1);
+        return quad >= 0 && quad <= quadrantNum - 1 && x >= 0 && x <= quadrantSize - 1 && y >= 0 &&
+               y <= quadrantSize - 1;
     }
 
     /**
-     * Translates coords in format [A-D][0-8] to 3 indexes and then calls itself with coords
+     * Translates coords in format [A-D][0-8] to 3 indexes and then calls itself with coords.
+     *
      * @param userCoords [A-D][0-8]
      * @return true if field exists, false if not
      */
@@ -74,10 +79,11 @@ public class Board {
     }
 
     /**
-     * Returns the mark present in the field
+     * Returns the mark present in the field.
+     *
      * @param quad The quadrant to look at
-     * @param x x position
-     * @param y y position
+     * @param x    x position
+     * @param y    y position
      * @return The mark in the field
      */
     public Mark getField(int quad, int x, int y) {
@@ -87,7 +93,8 @@ public class Board {
     }
 
     /**
-     * Translates coords in format [A-D][0-8] to 3 indexes and then calls itself with coords
+     * Translates coords in format [A-D][0-8] to 3 indexes and then calls itself with coords.
+     *
      * @param userCoords [A-D][0-8]
      * @return The mark in the field
      */
@@ -97,18 +104,20 @@ public class Board {
     }
 
     /**
-     * Checks whether the specified field is empty
+     * Checks whether the specified field is empty.
+     *
      * @param quad The quadrant to look at
-     * @param x x position
-     * @param y y position
+     * @param x    x position
+     * @param y    y position
      * @return True if the field is empty, false if occupied
      */
     public boolean isEmptyField(int quad, int x, int y) {
-        return (getField(quad, x, y) == Mark.EMPTY);
+        return getField(quad, x, y) == Mark.EMPTY;
     }
 
     /**
-     * Translates coords in format [A-D][0-8] to 3 indexes and then calls itself with coords
+     * Translates coords in format [A-D][0-8] to 3 indexes and then calls itself with coords.
+     *
      * @param userCoords [A-D][0-8]
      * @return True if the field is empty, false if occupied
      */
@@ -118,13 +127,14 @@ public class Board {
     }
 
     /**
-     * Check whether the board is completely full
+     * Check whether the board is completely full.
+     *
      * @return True if full, false if at least 1 space remains empty
      */
     public boolean isFull() {
-        for (int i = 0; i < QUADRANT_NUM; i++) {
-            for (int j = 0; j < QUADRANT_SIZE; j++) {
-                for (int k = 0; k < QUADRANT_SIZE; k++) {
+        for (int i = 0; i < quadrantNum; i++) {
+            for (int j = 0; j < quadrantSize; j++) {
+                for (int k = 0; k < quadrantSize; k++) {
                     if (isEmptyField(i, j, k)) {
                         return false;
                     }
@@ -136,7 +146,8 @@ public class Board {
     }
 
     /**
-     * Hardcoded rotation for left (anti-clockwise) and right (clockwise)
+     * Hardcoded rotation for left (anti-clockwise) and right (clockwise).
+     *
      * @param cmd format [A-D][L|R]
      */
     public void rotateQuadrant(String cmd) {
@@ -147,7 +158,7 @@ public class Board {
             char rotate = cmd.charAt(1);
 
             Mark[][] tmpShallow = this.quadrants[quad];
-            Mark[][] tmpDeep = new Mark[QUADRANT_SIZE][QUADRANT_SIZE];
+            Mark[][] tmpDeep = new Mark[quadrantSize][quadrantSize];
 
             switch (rotate) {
                 case 'L':
@@ -176,21 +187,21 @@ public class Board {
     }
 
     /**
-     * Checks whether a specific player has 5 in a row
+     * Checks whether a specific player has 5 in a row.
+     *
      * @param mark Specific player
      * @return True if there is 5 in a row, false if not
      */
     public boolean hasRow(Mark mark) {
-        for (int i = 0; i < (QUADRANT_NUM / 2); i++) {
-            for (int j = 0; j < QUADRANT_SIZE; j++) {
+        for (int i = 0; i < (quadrantNum / 2); i++) {
+            for (int j = 0; j < quadrantSize; j++) {
                 int fiveConsecutive = 0;
 
                 for (int k = 0; k < 2; k++) {
-                    for (int l = 0; l < QUADRANT_SIZE; l++) {
+                    for (int l = 0; l < quadrantSize; l++) {
                         if (getField(i * 2 + k, l, j) != mark) {
                             fiveConsecutive = 0;
-                        }
-                        else {
+                        } else {
                             fiveConsecutive += 1;
                         }
 
@@ -205,21 +216,21 @@ public class Board {
     }
 
     /**
-     * Checks whether a specific player has 5 in a column
+     * Checks whether a specific player has 5 in a column.
+     *
      * @param mark Specific player
      * @return True if there is 5 in a column, false if not
      */
     public boolean hasColumn(Mark mark) {
-        for (int i = 0; i < (QUADRANT_NUM / 2); i++) {
-            for (int j = 0; j < QUADRANT_SIZE; j++) {
+        for (int i = 0; i < (quadrantNum / 2); i++) {
+            for (int j = 0; j < quadrantSize; j++) {
                 int fiveConsecutive = 0;
 
                 for (int k = 0; k < 2; k++) {
-                    for (int l = 0; l < QUADRANT_SIZE; l++) {
+                    for (int l = 0; l < quadrantSize; l++) {
                         if (getField(i + k * 2, j, l) != mark) {
                             fiveConsecutive = 0;
-                        }
-                        else {
+                        } else {
                             fiveConsecutive += 1;
                         }
 
@@ -234,16 +245,37 @@ public class Board {
     }
 
     /**
-     * Checks whether a specific player has 5 diagonally
+     * Checks whether a specific player has 5 diagonally.
+     *
      * @param mark Specific player
      * @return True if there is 5 diagonally, false if not
      */
     public boolean hasDiagonal(Mark mark) {
-        return false;
+        String[][] possibilities = {{"A0", "A4", "A8", "D0", "D4"}, {"A4", "A8", "D0", "D4", "D8"},
+                                    {"A3", "A7", "C2", "D3", "D7"}, {"A1", "A5", "B6", "D1", "D5"},
+                                    {"C6", "C4", "C2", "B6", "B4"}, {"C4", "C2", "B6", "B4", "B2"},
+                                    {"C3", "C1", "A8", "B3", "B1"}, {"C7", "C5", "D0", "B7", "B5"}};
+
+        boolean diagonalFound = false;
+
+        for (var possibility : possibilities) {
+            int consecutive = 0;
+            for (int i = 0; i < possibility.length; i++) {
+                if (this.getField(possibility[i]) == mark) {
+                    consecutive++;
+                }
+            }
+            if (consecutive == 5) {
+                diagonalFound = true;
+            }
+        }
+
+        return diagonalFound;
     }
 
     /**
-     * Checks if a certain player has won
+     * Checks if a certain player has won.
+     *
      * @param mark Specific player
      * @return True if there are 5 consecutive marks somewhere, false if not
      */
@@ -252,7 +284,8 @@ public class Board {
     }
 
     /**
-     * Checks whether the game has a winner
+     * Checks whether the game has a winner.
+     *
      * @return True if there is a winner, false if not
      */
     public boolean hasWinner() {
@@ -260,7 +293,8 @@ public class Board {
     }
 
     /**
-     * Checks whether the game has ended
+     * Checks whether the game has ended.
+     *
      * @return true if game has ended, false if not
      */
     public boolean gameOver() {
@@ -268,19 +302,40 @@ public class Board {
     }
 
     /**
-     * Converts the board into a string representation
+     * Converts the board into a string representation.
+     *
      * @return Board as a string
      */
     public String toString() {
-        // TODO: Actually make this work
-        return "";
+        StringBuilder boardString = new StringBuilder();
+        int width = 25;
+
+
+        boardString.append("-".repeat(width) + "\n");
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 3; j++) {
+                StringBuilder row = new StringBuilder();
+                for (int k = 0; k < 6; k++) {
+                    String fieldValue =
+                            this.getField(k < 3 ? 2 * i : 1 + 2 * i, k % 3, j).toString();
+                    row.append(String.format("|%-1s%-2s", "", fieldValue));
+
+                }
+                row.append("|\n");
+                boardString.append(row);
+                boardString.append("-".repeat(width) + "\n");
+            }
+        }
+
+        return boardString.toString();
     }
 
     /**
-     * Sets a field on the board to be a certain mark
+     * Sets a field on the board to be a certain mark.
+     *
      * @param quad The quadrant to look at
-     * @param x x position
-     * @param y y position
+     * @param x    x position
+     * @param y    y position
      * @param mark Specific player
      */
     public void setField(int quad, int x, int y, Mark mark) {
@@ -290,9 +345,10 @@ public class Board {
     }
 
     /**
-     * Translates coords in format [A-D][0-8] to 3 indexes and then calls itself with coords
+     * Translates coords in format [A-D][0-8] to 3 indexes and then calls itself with coords.
+     *
      * @param userCoords [A-D][0-8]
-     * @param mark Specific player
+     * @param mark       Specific player
      */
     public void setField(String userCoords, Mark mark) {
         int[] coords = getCoords(userCoords);

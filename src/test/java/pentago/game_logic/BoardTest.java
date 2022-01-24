@@ -1,7 +1,6 @@
 package pentago.game_logic;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;
@@ -18,9 +17,9 @@ public class BoardTest {
 
     @Test
     void testIfEmpty() {
-        for (int i = 0; i < board.QUADRANT_NUM; i++) {
-            for (int j = 0; j < board.QUADRANT_SIZE; j++) {
-                for (int k = 0; k < board.QUADRANT_SIZE; k++) {
+        for (int i = 0; i < board.quadrantNum; i++) {
+            for (int j = 0; j < board.quadrantSize; j++) {
+                for (int k = 0; k < board.quadrantSize; k++) {
                     assertEquals(Mark.EMPTY, board.getField(i, j, k));
                 }
             }
@@ -56,7 +55,8 @@ public class BoardTest {
         boolean[] expectedResults2 = {false, true, true, true};
 
         for (int i = 0; i < testCoordinates2.length; i++) {
-            boolean isField = board.isField(testCoordinates2[i][0], testCoordinates2[i][1], testCoordinates2[i][2]);
+            boolean isField = board.isField(testCoordinates2[i][0], testCoordinates2[i][1],
+                                            testCoordinates2[i][2]);
             assertEquals(expectedResults2[i], isField);
         }
     }
@@ -76,10 +76,14 @@ public class BoardTest {
         }
 
         for (int i = 0; i < testCoordinates2.length; i++) {
-            board.setField(testCoordinates2[i][0], testCoordinates2[i][1], testCoordinates2[i][2], marks2[i]);
+            board.setField(
+                    testCoordinates2[i][0], testCoordinates2[i][1], testCoordinates2[i][2],
+                    marks2[i]);
         }
         for (int i = 0; i < testCoordinates2.length; i++) {
-            assertEquals(marks2[i], board.getField(testCoordinates2[i][0], testCoordinates2[i][1], testCoordinates2[i][2]));
+            assertEquals(
+                    marks2[i], board.getField(testCoordinates2[i][0], testCoordinates2[i][1],
+                                              testCoordinates2[i][2]));
         }
     }
 
@@ -88,9 +92,9 @@ public class BoardTest {
         String[] testCoordinates1 = {"A4", "B2", "C6", "D4", "D8"};
         int[][] testCoordinates2 = {{0, 2, 1}, {1, 1, 1}, {2, 2, 1}, {3, 0, 1}};
 
-        for (int i = 0; i < board.QUADRANT_NUM; i++) {
-            for (int j = 0; j < board.QUADRANT_SIZE; j++) {
-                for (int k = 0; k < board.QUADRANT_SIZE; k++) {
+        for (int i = 0; i < board.quadrantNum; i++) {
+            for (int j = 0; j < board.quadrantSize; j++) {
+                for (int k = 0; k < board.quadrantSize; k++) {
                     board.setField(i, j, k, Mark.BLACK);
                 }
             }
@@ -100,7 +104,9 @@ public class BoardTest {
             board.setField(testCoordinates1[i], Mark.EMPTY);
         }
         for (int i = 0; i < testCoordinates2.length; i++) {
-            board.setField(testCoordinates2[i][0], testCoordinates2[i][1], testCoordinates2[i][2], Mark.EMPTY);
+            board.setField(
+                    testCoordinates2[i][0], testCoordinates2[i][1], testCoordinates2[i][2],
+                    Mark.EMPTY);
         }
 
         for (var coordinate : testCoordinates1) {
@@ -114,9 +120,9 @@ public class BoardTest {
     @Test
     void testIsFull() {
         // Fill the whole board, except for the very last value
-        for (int i = 0; i < board.QUADRANT_NUM; i++) {
-            for (int j = 0; j < board.QUADRANT_SIZE; j++) {
-                for (int k = 0; k < board.QUADRANT_SIZE; k++) {
+        for (int i = 0; i < board.quadrantNum; i++) {
+            for (int j = 0; j < board.quadrantSize; j++) {
+                for (int k = 0; k < board.quadrantSize; k++) {
                     board.setField(i, j, k, new Random().nextBoolean() ? Mark.BLACK : Mark.WHITE);
                 }
             }
@@ -125,7 +131,9 @@ public class BoardTest {
 
         assertFalse(board.isFull());
 
-        board.setField(3, 2, 2, new Random().nextBoolean() ? Mark.BLACK : Mark.WHITE); // Set the last field too
+        board.setField(
+                3, 2, 2, new Random().nextBoolean() ? Mark.BLACK :
+                         Mark.WHITE); // Set the last field too
 
         assertTrue(board.isFull());
     }
@@ -166,7 +174,16 @@ public class BoardTest {
 
     @Test
     void testHasDiagonal() {
-        // TODO
+        String[][] columns = {{"A0", "A4", "A8", "D0", "D4"}, {"C4", "C2", "B6", "B4", "B2"},
+                              {"C2", "D3", "A7", "A3", "D7"}};
+
+        for (var column : columns) {
+            for (int i = 0; i < column.length; i++) {
+                board.setField(column[i], Mark.BLACK);
+            }
+            assertTrue(board.hasDiagonal(Mark.BLACK));
+            board.reset(); // Make sure we reset the board
+        }
     }
 
     @Test

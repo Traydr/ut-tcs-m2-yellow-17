@@ -19,7 +19,7 @@ public class Listener implements Runnable {
     }
 
     // TODO : Should replace switch statement with these
-    public enum cmd {
+    public enum CMD {
         HELLO, LOGIN, MOVE, PING, PONG, LIST, NEWGAME, QUEUE, GAMEOVER, QUIT, ERROR, CHAT, WHISPER,
         CHALLENGE;
 
