@@ -48,6 +48,8 @@ public abstract class Player {
     @*/
     public abstract String determineMove(Board board);
 
+    public abstract String determineRotate(Board board);
+
     /**
      * Makes a move on the board.
      * @param board the current board

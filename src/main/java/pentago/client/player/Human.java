@@ -4,8 +4,9 @@ import pentago.game_logic.Board;
 import pentago.game_logic.Mark;
 
 import java.io.InputStreamReader;
-import java.nio.file.LinkPermission;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Human extends Player {
     /**
@@ -24,19 +25,51 @@ public class Human extends Player {
     @Override
     public String determineMove(Board board) {
         String input;
+        Pattern pattern = Pattern.compile("[A-D][0-8]");
+        Matcher matcher;
         try (Scanner scanner = new Scanner(new InputStreamReader(System.in))){
             String prompt = "> " + getName() + " (" + getMark().toString() + ")"
-                            + ", what is your choice? ";
+                            + ", what is your choice? [A-D][0-8]";
 
             System.out.println(prompt);
             input = scanner.nextLine();
 
-            boolean valid = board.isField(input) && board.isEmptyField(input);
+            matcher = pattern.matcher(input);
+            boolean valid = board.isField(input) && board.isEmptyField(input) &&
+                            matcher.find() && input.length() == 2;
             while (!valid) {
                 System.out.println("ERROR: field " + input + " is no valid choice.");
                 System.out.println(prompt);
                 input = scanner.nextLine();
-                valid = board.isField(input) && board.isEmptyField(input);
+                matcher = pattern.matcher(input);
+                valid = board.isField(input) && board.isEmptyField(input) &&
+                        matcher.find() && input.length() == 2;
+            }
+        }
+        return input;
+    }
+
+    @Override
+    public String determineRotate(Board board) {
+        String input;
+        Pattern pattern = Pattern.compile("[A-D][L|R]");
+        Matcher matcher;
+
+        try (Scanner scanner = new Scanner(new InputStreamReader(System.in))){
+            String prompt = "> " + getName() + " (" + getMark().toString() + ")"
+                            + ", rotation? [A-D][L|R] ";
+
+            System.out.println(prompt);
+            input = scanner.nextLine();
+
+            matcher = pattern.matcher(input);
+            boolean valid = matcher.find() && input.length() == 2;
+            while (!valid) {
+                System.out.println("ERROR: field " + input + " is no valid choice.");
+                System.out.println(prompt);
+                input = scanner.nextLine();
+                matcher = pattern.matcher(input);
+                valid = matcher.find() && input.length() == 2;
             }
         }
         return input;

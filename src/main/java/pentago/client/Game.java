@@ -24,6 +24,11 @@ public class Game {
 
     }
 
+    private void reset() {
+        current = 0;
+        board.reset();
+    }
+
     private String update() {
         return ("\nCurrent game situation:\n" + board.toString() + "\n");
     }
