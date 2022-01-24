@@ -4,26 +4,42 @@ import pentago.game_logic.Board;
 import pentago.game_logic.Mark;
 
 public class Bot extends Player {
+    Mark mark;
+    Strategy strategy;
+
     /**
-     * Creates a new player object with a name and mark.
-     *
-     * @param name Name of the player
+     * Creates a new Bot object with a specified strategy.
+     * @param mark
+     * @param strategy
+     */
+    /*@ requires mark == Mark.BLACK || mark == Mark.WHITE;
+        requires strategy != null;
+        ensures this.mark != null && this.strategy != null;
+    @*/
+    public Bot(Mark mark, Strategy strategy) {
+        super(strategy.getName() + "-" + mark.toString(), mark);
+        this.mark = mark;
+        this.strategy = strategy;
+    }
+
+    /**
+     * Creates a new Bot object with a mark and the naive strategy.
      * @param mark Mark of the player
      */
-    /*@ requires name != null;
-        requires mark == Mark.BLACK || mark == Mark.WHITE;
+    /*@ requires mark == Mark.BLACK || mark == Mark.WHITE;
+        ensures this.mark != null || this.strategy instanceof NaiveStrategy;
     @*/
-    public Bot(String name, Mark mark) {
-        super(name, mark);
+    public Bot(Mark mark) {
+        this(mark, new NaiveStrategy());
     }
 
     @Override
     public String determineMove(Board board) {
-        return null;
+        return strategy.determineMove(board, this.mark);
     }
 
     @Override
     public String determineRotate(Board board) {
-        return null;
+        return strategy.determineRotate(board, this.mark);
     }
 }
