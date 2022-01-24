@@ -307,9 +307,8 @@ public class Board {
      * @return Board as a string
      */
     public String toString() {
-        // TODO: Actually make this work
         StringBuilder boardString = new StringBuilder();
-        int width = 13;
+        int width = 25;
 
 
         boardString.append(("-").repeat(width) + "\n");
@@ -317,8 +316,10 @@ public class Board {
             for (int j = 0; j < 3; j++) {
                 StringBuilder row = new StringBuilder();
                 for (int k = 0; k < 6; k++) {
-                    row.append("|");
-                    row.append(this.getField(k < 3 ? 2 * i : 1 + 2 * i, k % 3, j));
+                    String fieldValue =
+                            this.getField(k < 3 ? 2 * i : 1 + 2 * i, k % 3, j).toString();
+                    row.append(String.format("|%-1s%-2s", "", fieldValue));
+
                 }
                 row.append("|\n");
                 boardString.append(row);
@@ -327,6 +328,14 @@ public class Board {
         }
 
         return boardString.toString();
+    }
+
+    public static void main(String[] args) {
+        Board board = new Board();
+        board.setField("A0", Mark.BLACK);
+        board.setField("B8", Mark.WHITE);
+        board.setField("C4", Mark.BLACK);
+        System.out.println(board);
     }
 
     /**
