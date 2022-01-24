@@ -307,8 +307,27 @@ public class Board {
      * @return Board as a string
      */
     public String toString() {
-        // TODO: Actually make this work
-        return "";
+        StringBuilder boardString = new StringBuilder();
+        int width = 25;
+
+
+        boardString.append("-".repeat(width) + "\n");
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 3; j++) {
+                StringBuilder row = new StringBuilder();
+                for (int k = 0; k < 6; k++) {
+                    String fieldValue =
+                            this.getField(k < 3 ? 2 * i : 1 + 2 * i, k % 3, j).toString();
+                    row.append(String.format("|%-1s%-2s", "", fieldValue));
+
+                }
+                row.append("|\n");
+                boardString.append(row);
+                boardString.append("-".repeat(width) + "\n");
+            }
+        }
+
+        return boardString.toString();
     }
 
     /**
