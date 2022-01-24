@@ -1,7 +1,7 @@
 package pentago.game_logic;
 
 public class CommandParser {
-    public static int clientToServer(int quadrant, int x, int y) {
+    public static int clientServerCoords(int quadrant, int x, int y) {
         int offset;
 
         switch (quadrant) {
@@ -18,5 +18,17 @@ public class CommandParser {
                 offset = 0;
         }
         return x + y * 6 + offset;
+    }
+
+    public static String serverClientCoords(int serverCoords) {
+        return "";
+    }
+
+    public static int clientServerRotate(String cmd) {
+        return 0;
+    }
+
+    public static String serverClientRotate(int serverRotate) {
+        return "";
     }
 }

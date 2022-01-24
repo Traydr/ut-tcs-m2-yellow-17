@@ -362,7 +362,7 @@ public class Board {
      * @return ArrayList of strings [A-D][0-8]
      */
     public ArrayList<String> getEmptyFields() {
-        char[] quads = new char[] {'A', 'B', 'C', 'D'};
+        char[] quads = {'A', 'B', 'C', 'D'};
         ArrayList<String> output = new ArrayList<>();
 
         for (char quad : quads) {
