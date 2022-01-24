@@ -11,7 +11,7 @@ public class CommandParser {
      * @return
      */
     public static int clientToServer(int quadrant, int x, int y) {
-        int offset;
+        int offset; // This value should hold the top left value of the quadrant
 
         switch (quadrant) {
             case 1:
@@ -26,6 +26,7 @@ public class CommandParser {
             default:
                 offset = 0;
         }
-        return x + y * 6 + offset;
+
+        return x + y * 6 + offset; // Calculate the index used in the protocol
     }
 }

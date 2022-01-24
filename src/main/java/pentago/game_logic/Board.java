@@ -260,13 +260,14 @@ public class Board {
 
         for (var possibility : possibilities) {
             int consecutive = 0;
-            for (int i = 0; i < possibility.length; i++) {
+            for (int i = 0; i < possibility.length; i++) { // Check all possible combinations of
+                // diagonals
                 if (this.getField(possibility[i]) == mark) {
                     consecutive++;
                 }
             }
             if (consecutive == 5) {
-                diagonalFound = true;
+                diagonalFound = true; // We have found a diagonal 5 in a row
             }
         }
 
@@ -310,7 +311,6 @@ public class Board {
         StringBuilder boardString = new StringBuilder();
         int width = 25;
 
-
         boardString.append("-".repeat(width) + "\n");
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 3; j++) {
@@ -318,8 +318,8 @@ public class Board {
                 for (int k = 0; k < 6; k++) {
                     String fieldValue =
                             this.getField(k < 3 ? 2 * i : 1 + 2 * i, k % 3, j).toString();
-                    row.append(String.format("|%-1s%-2s", "", fieldValue));
-
+                    row.append(String.format("|%-1s%-2s", "", fieldValue)); // Add a string with
+                    // padding
                 }
                 row.append("|\n");
                 boardString.append(row);
