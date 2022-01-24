@@ -13,6 +13,7 @@ public class PentagoClient {
         int port;
         String username;
         Network network = new Networking();
+        Game game;
 
         System.out.println("(P)reset or (C)ustom?");
         if (scanner.nextLine().equals("C")) {
@@ -54,6 +55,7 @@ public class PentagoClient {
                 continue;
             }
 
+            // Send to game class instead
             network.sendMessage(output);
         }
 
