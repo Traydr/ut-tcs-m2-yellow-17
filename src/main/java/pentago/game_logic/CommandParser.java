@@ -1,11 +1,13 @@
 package pentago.game_logic;
 
 public class CommandParser {
+
     /**
      * Changes the local coordinate representation to the protocol coordinate representation.
-     * @param quadrant quad
-     * @param x x pos
-     * @param y y pos
+     *
+     * @param quadrant The quadrant of the coordinate
+     * @param x        The horizontal position of the coordinate
+     * @param y        The vertical position of the coordinate
      * @return Coordinate from 0 to 35
      */
     public static int localToProtocolCoords(int quadrant, int x, int y) {
@@ -24,7 +26,8 @@ public class CommandParser {
             default:
                 offset = 0;
         }
-        return x + y * 6 + offset;
+
+        return x + y * 6 + offset; // Calculate the index used in the protocol
     }
 
     /**

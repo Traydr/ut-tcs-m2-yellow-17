@@ -3,6 +3,24 @@ package pentago.game_logic;
 public enum Mark {
     EMPTY, BLACK, WHITE;
 
+    /**
+     * Overrides default toString() method.
+     *
+     * @return A string that represents the state of the board.
+     *
+     * Could look something like this:
+     * -------------------------
+     * |   | ○ |   | ● |   |   |
+     * -------------------------
+     * |   |   |   |   |   |   |
+     * -------------------------
+     * |   |   |   |   |   |   |
+     * -------------------------
+     * |   |   | ○ |   |   |   |
+     * -------------------------
+     * |   |   |   | ● |   |   |
+     * -------------------------
+     */
     @Override
     public String toString() {
         switch (this) {
