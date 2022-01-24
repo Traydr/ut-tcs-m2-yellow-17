@@ -42,7 +42,7 @@ public class BoardTest {
             assertEquals(correspondingCoordinates[i][2], calculatedCoordinates[2]);
         }
 
-        // TODO: Test non-existing coordinates
+        assertNull(board.getCoords("A10"));
     }
 
     @Test
@@ -164,22 +164,6 @@ public class BoardTest {
         assertEquals(Mark.BLACK, board.getField("A8"));
     }
 
-    public static void main(String[] args) {
-        Board board = new Board();
-        board.setField("A0", Mark.BLACK);
-        board.setField("A1", Mark.WHITE);
-        board.setField("A2", Mark.BLACK);
-        board.setField("A3", Mark.WHITE);
-        board.setField("A4", Mark.WHITE);
-        board.setField("A5", Mark.BLACK);
-        board.setField("A6", Mark.BLACK);
-        board.setField("A7", Mark.WHITE);
-        board.setField("A8", Mark.BLACK);
-        System.out.println(board);
-        board.rotateQuadrant("AL");
-        System.out.println(board);
-    }
-
     @Test
     void testHasRow() {
         String[] column1 = {"A1", "A2", "B0", "B1", "B2"};
@@ -275,6 +259,18 @@ public class BoardTest {
         Collections.sort(emptyFields);
 
         assertEquals(emptyFields, board.getEmptyFields());
+    }
+
+    @Test
+    void testToString() {
+        assertFalse(board.toString().contains(Mark.BLACK.toString()));
+        assertFalse(board.toString().contains(Mark.WHITE.toString()));
+        board.setField("A0", Mark.BLACK);
+        assertTrue(board.toString().contains(Mark.BLACK.toString()));
+        assertFalse(board.toString().contains(Mark.WHITE.toString()));
+        board.setField("A1", Mark.WHITE);
+        assertTrue(board.toString().contains(Mark.BLACK.toString()));
+        assertTrue(board.toString().contains(Mark.WHITE.toString()));
     }
 
     @RepeatedTest(100)

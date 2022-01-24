@@ -32,6 +32,7 @@ public class CommandParser {
 
     /**
      * Changes the protocol coordinate representation to the local coordinate representation.
+     *
      * @param serverCoords Number from 0 to 35
      * @return an array of size 3 {quad, x, y}
      */
@@ -57,15 +58,16 @@ public class CommandParser {
         }
 
         // x coord
-        gameCoords[1] = serverCoords % 6;
+        gameCoords[1] = serverCoords % 3;
 
         // y coord
-        gameCoords[2] = serverCoords / 6;
+        gameCoords[2] = serverCoords / 6 % 3;
         return gameCoords;
     }
 
     /**
      * Changes the local rotate representation to the protocol rotate representation.
+     *
      * @param cmd [A-D][L|R]
      * @return number from 0 to 7
      */
@@ -79,6 +81,7 @@ public class CommandParser {
 
     /**
      * Changes the protocol rotate representation to the local rotate representation.
+     *
      * @param serverRotate Protocol number 0 to 7
      * @return [A-D][L|R]
      */
@@ -87,7 +90,7 @@ public class CommandParser {
         int serRot = serverRotate;
         int quadChar;
 
-        if (serverRotate % 2 != 0) {
+        if (serverRotate % 2 == 0) {
             output = "L";
             quadChar = (serverRotate / 2) + 65;
         } else {
