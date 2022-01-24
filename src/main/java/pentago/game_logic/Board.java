@@ -330,14 +330,6 @@ public class Board {
         return boardString.toString();
     }
 
-    public static void main(String[] args) {
-        Board board = new Board();
-        board.setField("A0", Mark.BLACK);
-        board.setField("B8", Mark.WHITE);
-        board.setField("C4", Mark.BLACK);
-        System.out.println(board);
-    }
-
     /**
      * Sets a field on the board to be a certain mark.
      *
