@@ -22,8 +22,7 @@ public class PentagoClient {
             port = scanner.nextInt();
             System.out.println("Username:");
             username = scanner.nextLine();
-        }
-        else {
+        } else {
             // DEBUG SO I DONT HAVE TO KEEP TYPING
             serverAddress = "130.89.253.64";
             port = 55555;
