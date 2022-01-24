@@ -27,7 +27,7 @@ public class Human extends Player {
         String input;
         Pattern pattern = Pattern.compile("[A-D][0-8]");
         Matcher matcher;
-        try (Scanner scanner = new Scanner(new InputStreamReader(System.in))){
+        try (Scanner scanner = new Scanner(new InputStreamReader(System.in))) {
             String prompt = "> " + getName() + " (" + getMark().toString() + ")"
                             + ", what is your choice? [A-D][0-8]";
 
@@ -55,7 +55,7 @@ public class Human extends Player {
         Pattern pattern = Pattern.compile("[A-D][L|R]");
         Matcher matcher;
 
-        try (Scanner scanner = new Scanner(new InputStreamReader(System.in))){
+        try (Scanner scanner = new Scanner(new InputStreamReader(System.in))) {
             String prompt = "> " + getName() + " (" + getMark().toString() + ")"
                             + ", rotation? [A-D][L|R] ";
 
