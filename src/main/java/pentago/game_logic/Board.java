@@ -125,7 +125,7 @@ public class Board {
      */
     public boolean isEmptyField(String userCoords) {
         int[] coords = getCoords(userCoords);
-        return isField(coords[0], coords[1], coords[2]);
+        return isEmptyField(coords[0], coords[1], coords[2]);
     }
 
     /**
@@ -184,6 +184,7 @@ public class Board {
                     tmpDeep[2][2] = tmpShallow[2][0];
                     break;
             }
+            tmpDeep[1][1] = tmpShallow[1][1];
             this.quadrants[quad] = tmpDeep;
         }
     }
@@ -359,14 +360,15 @@ public class Board {
 
     /**
      * Returns the string representations of all coords in an array.
+     *
      * @return ArrayList of strings [A-D][0-8]
      */
     public ArrayList<String> getEmptyFields() {
-        char[] quads = {'A', 'B', 'C', 'D'};
+        char[] quads = new char[]{'A', 'B', 'C', 'D'};
         ArrayList<String> output = new ArrayList<>();
 
         for (char quad : quads) {
-            for (int i = 0; i < quadrantNum; i++) {
+            for (int i = 0; i < Math.pow(quadrantSize, 2); i++) {
                 String coords = String.valueOf(quad) + String.valueOf(i);
                 if (isEmptyField(coords)) {
                     output.add(coords);
