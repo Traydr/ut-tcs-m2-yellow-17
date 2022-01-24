@@ -19,9 +19,8 @@ public class CommandParserTest {
         int[] serverCoordinates = {0, 11, 20, 35, 25};
 
         for (int i = 0; i < clientCoordinates.length; i++) {
-            assertEquals(serverCoordinates[i], CommandParser.clientToServer(clientCoordinates[i][0],
-                                                                            clientCoordinates[i][1],
-                                                                            clientCoordinates[i][2]));
+            assertEquals(serverCoordinates[i], CommandParser.localToProtocolCoords(
+                    clientCoordinates[i][0], clientCoordinates[i][1], clientCoordinates[i][2]));
         }
     }
 }

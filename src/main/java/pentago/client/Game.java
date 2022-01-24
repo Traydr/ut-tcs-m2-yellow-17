@@ -38,7 +38,7 @@ public class Game {
      * @return A string representing the board status
      */
     private String update() {
-        return ("\nCurrent game situation:\n" + board.toString() + "\n");
+        return "\nCurrent game situation:\n" + board.toString() + "\n";
     }
 
     /**

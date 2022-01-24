@@ -21,4 +21,9 @@ public class Bot extends Player {
     public String determineMove(Board board) {
         return null;
     }
+
+    @Override
+    public String determineRotate(Board board) {
+        return null;
+    }
 }
