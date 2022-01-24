@@ -1,5 +1,9 @@
 package pentago.client;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Scanner;
+
 public class PentagoClient {
     // Reference server 130.89.253.64 55555
 
@@ -10,17 +14,21 @@ public class PentagoClient {
         String username;
         Network network = new Networking();
 
-        System.out.println("Server Addr:");
-        //serverAddress = scanner.nextLine();
-        System.out.println("Server Port:");
-        //port = scanner.nextInt();
-
-        System.out.println("Username:");
-        username = scanner.nextLine();
-
-        // DEBUG SO I DONT HAVE TO KEEP TYPING
-        serverAddress = "130.89.253.64";
-        port = 55555;
+        System.out.println("(P)reset or (C)ustom?");
+        if (scanner.nextLine().equals("C")) {
+            System.out.println("Server Addr:");
+            serverAddress = scanner.nextLine();
+            System.out.println("Server Port:");
+            port = scanner.nextInt();
+            System.out.println("Username:");
+            username = scanner.nextLine();
+        }
+        else {
+            // DEBUG SO I DONT HAVE TO KEEP TYPING
+            serverAddress = "130.89.253.64";
+            port = 55555;
+            username = "testing-Tray";
+        }
 
         try {
             if (!network.connect(InetAddress.getByName(serverAddress), port)) {
@@ -31,7 +39,7 @@ public class PentagoClient {
         }
 
         //TODO : Make connection better
-        network.sendMessage("HELLO~" + username);
+        network.sendMessage("HELLO~" + username + "~CHAT");
         network.sendMessage("LOGIN~" + username);
 
         String output;
