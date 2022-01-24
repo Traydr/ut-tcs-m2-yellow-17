@@ -33,18 +33,18 @@ public class Listener implements Runnable {
             case "HELLO":
                 String features = "";
                 for (int i = 2; i < inputParsed.length; i++) {
-                    features = features + " | " + inputParsed[i];
+                    features = features + "\n- " + inputParsed[i];
                 }
-                System.out.println("Hello : Success" +
-                           "\nServer Name : " + inputParsed[1] +
-                           "\nSupported Features : " + features);
+                System.out.println("\nHello" +
+                           "\nServer Name:\n- " + inputParsed[1] +
+                           "\nSupported Features:" + features);
                 break;
             case "LOGIN":
-                System.out.println("Login : Success");
+                System.out.println("\nLogged In");
                 break;
             case "MOVE":
                 // TODO : Implement game functions & Ignore when server repeats moves
-                System.out.println("Server" +
+                System.out.println("\nServer" +
                            " pos:" + inputParsed[1] +
                            " rotate:" + inputParsed[2]);
                 break;
@@ -53,7 +53,7 @@ public class Listener implements Runnable {
                 network.sendMessage("PONG");
                 break;
             case "PONG":
-                System.out.println("Server is still alive!");
+                System.out.println("\nServer up!");
                 break;
             case "CHALLENGE":
                 // TODO : Implement Auth
@@ -61,37 +61,35 @@ public class Listener implements Runnable {
             case "LIST":
                 String allUsers = "";
                 for (int i = 1; i < inputParsed.length; i++) {
-                    allUsers = allUsers + " | " + inputParsed[i];
+                    allUsers = allUsers + "\n\t- " + inputParsed[i];
                 }
-                System.out.println("Currently connected: " + allUsers);
+                System.out.println("\nCONNECTED USERS:" + allUsers);
                 break;
             case "NEWGAME":
-                System.out.println("New game started:" +
-                           "\nPlayer 1: " + inputParsed[1] +
-                           "\nPlayer 2: " + inputParsed[2]);
+                System.out.println("\nNEW GAME:" +
+                                   "\n\tPLAYER 1: " + inputParsed[1] +
+                                   "\n\tPLAYER 2: " + inputParsed[2]);
                 break;
             case "GAMEOVER":
-                System.out.println("GAME OVER\nWinner: " + inputParsed[1] +
-                           "\nLoser: " + inputParsed[2]);
+                System.out.println("\nGAME OVER" +
+                                   "\n\tWINNER: " + inputParsed[1] +
+                                   "\n\tLOSER: " + inputParsed[2]);
                 break;
             case "CHAT":
-                System.out.println("FROM: " + inputParsed[1] + " | MESSAGE: " + inputParsed[2]);
+                System.out.println("\nCHAT" +
+                                   "\n\tFROM: " + inputParsed[1] +
+                                   "\n\tMESSAGE: " + inputParsed[2]);
                 break;
             case "WHISPER":
-                System.out.println("WHISPER \nFROM: " + inputParsed[1] + " | MESSAGE: " +
-                           inputParsed[2]);
+                System.out.println("\nWHISPER" +
+                                   "\n\tFROM: " + inputParsed[1] +
+                                   "\n\tMESSAGE: " + inputParsed[2]);
                 break;
-            case "QUIT":
-                if (!this.socket.isClosed()) {
-                    try {
-                        this.socket.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
+            case "CANNOTWHISPER":
+                System.out.println("\nCANNOT WHISPER TO USER");
                 break;
             case "ERROR":
-                System.out.println("ERR: " + inputParsed[1]);
+                System.out.println("\nERR:\n\t" + inputParsed[1]);
                 break;
         }
     }

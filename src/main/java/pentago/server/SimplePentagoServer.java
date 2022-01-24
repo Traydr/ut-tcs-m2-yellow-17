@@ -1,4 +1,5 @@
 package pentago.server;
 
-public class SimplePentagoServer implements PentagoServer {
+//implements PentagoServer
+public class SimplePentagoServer {
 }
