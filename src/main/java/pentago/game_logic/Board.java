@@ -311,7 +311,7 @@ public class Board {
         int width = 25;
 
 
-        boardString.append(("-").repeat(width) + "\n");
+        boardString.append("-".repeat(width) + "\n");
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 3; j++) {
                 StringBuilder row = new StringBuilder();
@@ -323,7 +323,7 @@ public class Board {
                 }
                 row.append("|\n");
                 boardString.append(row);
-                boardString.append(("-").repeat(width) + "\n");
+                boardString.append("-".repeat(width) + "\n");
             }
         }
 
