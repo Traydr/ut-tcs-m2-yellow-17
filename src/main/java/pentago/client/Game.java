@@ -50,8 +50,7 @@ public class Game {
     private String result() {
         if (board.hasWinner()) {
             Player winner = board.isWinner(players[0].getMark()) ? players[0] : players[1];
-            return ("Player " + winner.getName() + " (" + winner.getMark().toString() +
-                    ") has won!");
+            return "Player " + winner.getName() + " (" + winner.getMark().toString() + ") has won!";
         } else {
             return "Draw. There is no winner!";
         }
