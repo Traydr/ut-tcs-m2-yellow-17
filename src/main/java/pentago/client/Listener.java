@@ -18,17 +18,6 @@ public class Listener implements Runnable {
         }
     }
 
-    // TODO : Should replace switch statement with these
-    public enum CMD {
-        HELLO, LOGIN, MOVE, PING, PONG, LIST, NEWGAME, QUEUE, GAMEOVER, QUIT, ERROR, CHAT, WHISPER,
-        CHALLENGE;
-
-        @Override
-        public String toString() {
-            return this.name();
-        }
-    }
-
     void close() {
         try {
             br.close();
@@ -93,7 +82,13 @@ public class Listener implements Runnable {
                            inputParsed[2]);
                 break;
             case "QUIT":
-                // TODO : Implement disconnect
+                if (!this.socket.isClosed()) {
+                    try {
+                        this.socket.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
                 break;
             case "ERROR":
                 System.out.println("ERR: " + inputParsed[1]);
