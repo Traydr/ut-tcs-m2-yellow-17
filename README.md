@@ -2,8 +2,8 @@
 
 **Group yellow 17**
 
-* Titas Lukaitis
-* Beerd van de Streek
+* Titas Lukaitis (2749319)
+* Beerd van de Streek (2840952)
 
 ## About the repository
 
@@ -40,6 +40,9 @@ the `target/` folder.
 Optionally, you can also build the project by right-clicking the project root folder in IntelliJ (`yellow-17`) and then
 clicking `Build Module 'yellow-17'`
 
+To make sure we all get the same results, the versions of the libraries should be the same. This is ensured by placing
+all the libraries in the `./lib` folder. If needed, they can be downloaded again by following the [Download dependencies](#download-dependencies) instructions
+
 ## Run instructions
 
 There are two ways to run the program:
@@ -53,7 +56,7 @@ pop up after IntelliJ finishes compiling.
 ### Run from command line
 
 To run the program directly from the command line, you need to manually build the project first. Make sure you followed
-the Build instructions above before running.
+the [Build instructions](#build-instructions) above before running.
 
 Now the client can be started by running `java -cp target/<output-file>.jar pentago.client.PentagoClient`
 To start the server, run `java -cp target/<output-file>.jar pentago.client.SimplePentagoServer`
