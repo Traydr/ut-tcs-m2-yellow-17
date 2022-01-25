@@ -44,8 +44,12 @@ public class Listener implements Runnable {
             case "LOGIN":
                 System.out.println("Logged In");
                 break;
+            case "ALREADYLOGGEDIN":
+                System.out.println("ERR: already logged in");
+                break;
             case "MOVE":
-                // TODO : Implement game functions & Ignore when server repeats moves
+                client.game.listenerSetBoard(Integer.parseInt(inputParsed[1]),
+                                             Integer.parseInt(inputParsed[2]));
                 System.out.println("\nServer" +
                            " pos:" + inputParsed[1] +
                            " rotate:" + inputParsed[2]);
@@ -73,9 +77,21 @@ public class Listener implements Runnable {
                 client.startNewGame(inputParsed[1], inputParsed[2]);
                 break;
             case "GAMEOVER":
-                System.out.println("\nGame Over" +
-                                   "\n\tWinner: " + inputParsed[1] +
-                                   "\n\tLoser: " + inputParsed[2]);
+                switch (inputParsed[1]) {
+                    case "VICTORY":
+                        System.out.println(inputParsed[2] + " Won the game!");
+                        break;
+                    case "DISCONNECT":
+                        System.out.println(inputParsed[2] + " Won the game by disconnect!");
+                        break;
+                    case "DRAW":
+                        System.out.println("The game ended in a draw!");
+                        break;
+                    default:
+                        System.out.println("ERR: unexpected win condition");
+                        break;
+                }
+                client.endCurrentGame();
                 break;
             case "CHAT":
                 System.out.println("\nCHAT" +

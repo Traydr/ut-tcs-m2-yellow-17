@@ -4,6 +4,7 @@ import pentago.client.player.Bot;
 import pentago.client.player.Human;
 import pentago.client.player.Player;
 import pentago.game_logic.Board;
+import pentago.game_logic.CommandParser;
 import pentago.game_logic.Mark;
 
 import java.net.InetAddress;
@@ -20,6 +21,7 @@ public class PentagoClient {
     public Game game;
     public ArrayList<String> serverFeatures;
     public Player player;
+    public String moveCmd;
 
     public PentagoClient(String serverAddress, int port, String username) {
         this.serverAddress = serverAddress;
@@ -99,6 +101,10 @@ public class PentagoClient {
         this.game = new Game(humanPlayer1, humanPlayer2);
     }
 
+    public void endCurrentGame(){
+        this.game = null;
+    }
+
     public void connectToServer(String username) {
         network.sendMessage("HELLO~" + username + "~CHAT");
         network.sendMessage("LOGIN~" + username);
@@ -113,9 +119,36 @@ public class PentagoClient {
             case "list":
                 network.sendMessage("LIST");
                 break;
-            case "move": // TODO figure out how to move, store the move and rotate somewhere?
+            case "place": // TODO figure out how to move, store the move and rotate somewhere?
+                if (moveCmd != null) {
+                    System.out.println("ERR: cannot place twice");
+                    break;
+                } else if (parsedInput.length != 2) {
+                    System.out.println("ERR: too many or too few arguments");
+                    break;
+                }
+                Board tmpBoard = new Board();
+                int[] coords = tmpBoard.getCoords(parsedInput[1]);
+                moveCmd = "MOVE~" + CommandParser.localToProtocolCoords(
+                        coords[0], coords[1], coords[2]);
                 break;
             case "rotate":
+                if (moveCmd == null) {
+                    System.out.println("ERR: nothing has been placed yet");
+                    break;
+                } else if (parsedInput.length != 2) {
+                    System.out.println("ERR: too many or too few arguments");
+                    break;
+                } else if (moveCmd.length() != 7) {
+                    System.out.println("ERR: Place command invalid, please reset [rplace]");
+                    break;
+                }
+                moveCmd += "~" + CommandParser.localToProtocolRotate(parsedInput[1]);
+                network.sendMessage(moveCmd);
+                moveCmd = "";
+                break;
+            case "rplace":
+                moveCmd = "";
                 break;
             case "ping":
                 network.sendMessage("PING");
@@ -145,6 +178,20 @@ public class PentagoClient {
                 }
                 network.sendMessage(String.format("WHISPER~%s~%s", parsedInput[1], tmpWhisper));
                 break;
+            case "hint":
+                if (game == null) {
+                    System.out.println("ERR: There is no game");
+                    break;
+                }
+                System.out.println(game.getRandomMove());
+                break;
+            case "show":
+                if (game == null) {
+                    System.out.println("ERR: There is no game");
+                    break;
+                }
+                game.update();
+                break;
             default:
                 //Debug for now
                 network.sendMessage(input);
@@ -161,8 +208,10 @@ public class PentagoClient {
                              "rotate [A-D][L|R]\n\tRotates a quadrant in a specific direction",
                              "ping\n\tPings the server to see if its still alive",
                              "chat [message]\n\tsends a message to everyone on the server",
-                             "whisper [user] [message]\n\tsends a message to a specific person on the server",
+                             "whisper [user] [message]\n\tsends a message to a specific person",
                              "help\n\tDisplays this help message",
+                             "hint\n\tDisplays a possible move",
+                             "show\n\tShows the current state of the board ",
                              "quit\n\tquits out of the program"};
 
         String output = "Commands:";

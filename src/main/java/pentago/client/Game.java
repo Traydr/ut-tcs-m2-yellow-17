@@ -2,6 +2,10 @@ package pentago.client;
 
 import pentago.client.player.Player;
 import pentago.game_logic.Board;
+import pentago.game_logic.CommandParser;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 public class Game {
     public static final int NUMBER_PLAYERS = 2;
@@ -12,6 +16,7 @@ public class Game {
 
     private int current;
 
+    //TODO Check if it the local players turn
     public Game(Player p0, Player p1) {
         board = new Board();
         players = new Player[NUMBER_PLAYERS];
@@ -20,16 +25,20 @@ public class Game {
         current = 0;
     }
 
-    private void play() {
-
-    }
-
     /**
      * Resets the board. All fields will be set to {@code Mark.EMPTY}.
      */
-    private void reset() {
+    public void reset() {
         current = 0;
         board.reset();
+    }
+
+    public void listenerSetBoard(int pos, int rot) {
+
+    }
+
+    public boolean isCurrentPlayer(Player compare) {
+        return players[current] == compare;
     }
 
     /**
@@ -37,8 +46,20 @@ public class Game {
      *
      * @return A string representing the board status
      */
-    private String update() {
-        return "\nCurrent game situation:\n" + board.toString() + "\n";
+    public String update() {
+        return "Current game situation:\n" + board.toString() + "\n";
+    }
+
+    public String getRandomMove() {
+        ArrayList<String> emptyFields = board.getEmptyFields();
+        int arrSize = emptyFields.size();
+        Random random = new Random();
+
+        if (arrSize == 1) {
+            return emptyFields.get(0);
+        }
+        return "Place: " + emptyFields.get(random.nextInt(arrSize)) +
+               "\nRotate: " + CommandParser.protocolToLocalRotate(random.nextInt(8));
     }
 
     /**
@@ -47,7 +68,7 @@ public class Game {
      *
      * @return The result of the game after it is over
      */
-    private String result() {
+    public String result() {
         if (board.hasWinner()) {
             Player winner = board.isWinner(players[0].getMark()) ? players[0] : players[1];
             return "Player " + winner.getName() + " (" + winner.getMark().toString() + ") has won!";
