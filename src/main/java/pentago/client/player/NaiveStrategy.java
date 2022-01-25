@@ -1,6 +1,7 @@
 package pentago.client.player;
 
 import pentago.game_logic.Board;
+import pentago.game_logic.CommandParser;
 import pentago.game_logic.Mark;
 
 import java.util.ArrayList;
@@ -32,5 +33,17 @@ public class NaiveStrategy implements Strategy {
             return emptyFields.get(0);
         }
         return emptyFields.get(random.nextInt(arrSize));
+    }
+
+    /**
+     * Returns the string of the next rotate it wants to make randomly.
+     * @param board the current board
+     * @param mark the mark of the strategy
+     * @return rotate in form [A-D][L|R]
+     */
+    @Override
+    public String determineRotate(Board board, Mark mark) {
+        Random random = new Random();
+        return CommandParser.protocolToLocalRotate(random.nextInt(8));
     }
 }

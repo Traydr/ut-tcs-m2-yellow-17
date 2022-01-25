@@ -48,6 +48,11 @@ public abstract class Player {
     @*/
     public abstract String determineMove(Board board);
 
+    /**
+     * Determines the next rotate.
+     * @param board the current game board.
+     * @return rotate in form [A-D][L|R]
+     */
     public abstract String determineRotate(Board board);
 
     /**

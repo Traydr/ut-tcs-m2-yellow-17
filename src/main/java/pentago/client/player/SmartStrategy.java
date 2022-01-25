@@ -13,4 +13,9 @@ public class SmartStrategy implements Strategy {
     public String determineMove(Board board, Mark mark) {
         return null;
     }
+
+    @Override
+    public String determineRotate(Board board, Mark mark) {
+        return null;
+    }
 }
