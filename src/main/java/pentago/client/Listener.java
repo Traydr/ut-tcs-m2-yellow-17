@@ -63,17 +63,17 @@ public class Listener implements Runnable {
                 for (int i = 1; i < inputParsed.length; i++) {
                     allUsers = allUsers + "\n\t- " + inputParsed[i];
                 }
-                System.out.println("\nCONNECTED USERS:" + allUsers);
+                System.out.println("\nConnected:" + allUsers);
                 break;
             case "NEWGAME":
-                System.out.println("\nNEW GAME:" +
-                                   "\n\tPLAYER 1: " + inputParsed[1] +
-                                   "\n\tPLAYER 2: " + inputParsed[2]);
+                System.out.println("\nNew Game:" +
+                                   "\n\tPlayer 1: " + inputParsed[1] +
+                                   "\n\tPlayer 2: " + inputParsed[2]);
                 break;
             case "GAMEOVER":
-                System.out.println("\nGAME OVER" +
-                                   "\n\tWINNER: " + inputParsed[1] +
-                                   "\n\tLOSER: " + inputParsed[2]);
+                System.out.println("\nGame Over" +
+                                   "\n\tWinner: " + inputParsed[1] +
+                                   "\n\tLoser: " + inputParsed[2]);
                 break;
             case "CHAT":
                 System.out.println("\nCHAT" +
@@ -86,7 +86,7 @@ public class Listener implements Runnable {
                                    "\n\tMESSAGE: " + inputParsed[2]);
                 break;
             case "CANNOTWHISPER":
-                System.out.println("\nCANNOT WHISPER TO USER");
+                System.out.println("\nERR:\n\tCannot whisper to user");
                 break;
             case "ERROR":
                 System.out.println("\nERR:\n\t" + inputParsed[1]);

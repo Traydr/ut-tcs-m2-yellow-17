@@ -5,61 +5,97 @@ import java.net.UnknownHostException;
 import java.util.Scanner;
 
 public class PentagoClient {
-    // Reference server 130.89.253.64 55555
+    public String serverAddress;
+    public int port;
+    public String username;
+    public Network network;
+    public Game game;
 
+    public PentagoClient(String serverAddress, int port, String username) {
+        this.serverAddress = serverAddress;
+        this.port = port;
+        this.username = username;
+        this.network = new Networking();
+    }
+
+    public PentagoClient() {
+        this("130.89.253.64", 55555, "Default-Username-Tray");
+    }
+
+    //TODO Save the features of the server
+    //TODO Make sure client can only do the functions of the server
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        String serverAddress;
-        int port;
-        String username;
-        Network network = new Networking();
-        Game game;
+        PentagoClient client;
 
         System.out.println("(P)reset or (C)ustom?");
         if (scanner.nextLine().equals("C")) {
-            System.out.println("Server Addr:");
-            serverAddress = scanner.nextLine();
+            System.out.println("Server Address:");
+            String serverAddress = scanner.nextLine();
             System.out.println("Server Port:");
-            port = scanner.nextInt();
+            int port = scanner.nextInt();
+
             System.out.println("Username:");
-            username = scanner.nextLine();
+            String username = scanner.nextLine();
+
+            while (username.contains("~")) {
+                System.out.println("ERR: Invalid username cannot contain \"~\" characters" +
+                                   "\nPlease try again:");
+                username = scanner.nextLine();
+            }
+
+            client = new PentagoClient(serverAddress, port, username);
+
         } else {
-            // DEBUG SO I DONT HAVE TO KEEP TYPING
-            serverAddress = "130.89.253.64";
-            port = 55555;
-            username = "testing-Tray";
+            client = new PentagoClient();
         }
 
         try {
-            if (!network.connect(InetAddress.getByName(serverAddress), port)) {
+            if (!client.network.connect(InetAddress.getByName(client.serverAddress), client.port)) {
                 System.out.println("ERR: BAD CONNECTION");
             }
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
 
-        //TODO : Make connection better
-        network.sendMessage("HELLO~" + username + "~CHAT");
-        network.sendMessage("LOGIN~" + username);
+        connectToServer(client.network, client.username);
 
         String output;
         while (scanner.hasNextLine()) {
-            // TODO : Add exception for ~ chars so that user can't us them
             output = scanner.nextLine();
             if (output.equals("quit")) {
                 break;
-            } else if (output.equals("")) {
+            } else if (output.contains("~")) {
+                System.out.println("\nInput cannot contain \"~\" characters");
                 continue;
-            } else if (output.equals("help")) {
-                displayHelp();
-                continue;
+            } else {
+                parseInput(client.network, output);
             }
-
-            // Send to game class instead
-            network.sendMessage(output);
         }
 
         scanner.close();
+    }
+
+    public static void connectToServer(Network net, String username) {
+        net.sendMessage("HELLO~" + username + "~CHAT");
+        net.sendMessage("LOGIN~" + username);
+    }
+
+    public static void parseInput(Network net, String input) {
+        String[] parsedInput = input.split(" ");
+        switch (input) {
+            case "help":
+                break;
+            case "move":
+                break;
+            case "rotate":
+                break;
+            case "ping":
+                break;
+            default:
+                System.out.println("Unknown Command: " + parsedInput[0]);
+                break;
+        }
     }
 
     public static void displayHelp() {
