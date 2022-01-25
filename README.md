@@ -1,11 +1,11 @@
 # Software Systems programming project
 
-## Group yellow 17
+**Group yellow 17**
 
 * Titas Lukaitis
 * Beerd van de Streek
 
-### About the repository
+## About the repository
 
 This repository contains the two main components of the project:
 
@@ -14,17 +14,17 @@ This repository contains the two main components of the project:
 
 These can be found in the packages named `client` and `server` respectively.
 
-### Testing
+## Testing
 
 This project uses JUnit tests. The dependencies used for this are specified in the `pom.xml` file. There are two ways to
 run the tests:
 
-#### Testing in the IDE
+### Testing in the IDE
 
 IntelliJ supports JUnit testing. To run the tests, you can either go to the specific test method or class and click the
 green arrow on the left, or you can `right-click` the desired folder and click `Run 'tests in '<folder>''`
 
-#### Run the tests with Maven
+### Run the tests with Maven
 
 In order to run the tests from a command line, you can use Maven. In the project root folder, simply run `mvn verify`.
 Maven will search for tests in the project, and run them.
@@ -32,7 +32,7 @@ Maven will search for tests in the project, and run them.
 This way of running tests is used in our GitLab pipelines to automatically test the code before merging it. (
 See `.gitlab-ci.yml`)
 
-### Build instructions
+## Build instructions
 
 To build the project, you can run `mvn package` in the project root folder. This will put the compiled program in
 the `target/` folder.
@@ -40,17 +40,17 @@ the `target/` folder.
 Optionally, you can also build the project by right-clicking the project root folder in IntelliJ (`yellow-17`) and then
 clicking `Build Module 'yellow-17'`
 
-### Run instructions
+## Run instructions
 
 There are two ways to run the program:
 
-#### Run directly in IntelliJ
+### Run directly in IntelliJ
 
 To run the program directly from IntelliJ, you can go to the desired package (`client` or `server`) and find the main
 method. Now click the green arrow to the left of it to run the program in IntelliJ. A `run` window should automatically
 pop up after IntelliJ finishes compiling.
 
-#### Run from command line
+### Run from command line
 
 To run the program directly from the command line, you need to manually build the project first. Make sure you followed
 the Build instructions above before running.
