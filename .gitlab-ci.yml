@@ -7,3 +7,11 @@ test:
   image: maven:latest
   script:
     - mvn verify
+build:
+  stage: build
+  image: maven:latest
+  script:
+    - mvn package
+  artifacts:
+    paths:
+      - target/*.jar
