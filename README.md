@@ -60,3 +60,8 @@ To start the server, run `java -cp target/<output-file>.jar pentago.client.Simpl
 
 **Note:** Make sure to replace `<output-file>` by the actual output file. This should be something
 like `yellow17-1.0-SNAPSHOT`
+
+### Download dependencies
+
+To make sure we include the needed dependencies in the repository, we should download them to a local folder. You can do
+that by running `mvn dependency:copy-dependencies -DoutputDirectory=$OUTPUT_DIR`. We use `OUTPUT_DIR=./lib` here
