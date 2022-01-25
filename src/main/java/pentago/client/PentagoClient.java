@@ -1,6 +1,5 @@
 package pentago.client;
 
-import pentago.client.player.Bot;
 import pentago.client.player.Human;
 import pentago.client.player.Player;
 import pentago.game_logic.Board;
@@ -66,7 +65,8 @@ public class PentagoClient {
         }
 
         try {
-            if (!client.network.connect(InetAddress.getByName(client.serverAddress), client.port, client)) {
+            if (!client.network.connect(
+                    InetAddress.getByName(client.serverAddress), client.port, client)) {
                 System.out.println("ERR: bad connection");
                 System.exit(1);
             }
@@ -101,7 +101,7 @@ public class PentagoClient {
         this.game = new Game(humanPlayer1, humanPlayer2);
     }
 
-    public void endCurrentGame(){
+    public void endCurrentGame() {
         this.game = null;
     }
 
@@ -129,8 +129,8 @@ public class PentagoClient {
                 }
                 Board tmpBoard = new Board();
                 int[] coords = tmpBoard.getCoords(parsedInput[1]);
-                moveCmd = "MOVE~" + CommandParser.localToProtocolCoords(
-                        coords[0], coords[1], coords[2]);
+                moveCmd = "MOVE~" +
+                          CommandParser.localToProtocolCoords(coords[0], coords[1], coords[2]);
                 break;
             case "rotate":
                 if (moveCmd == null) {
@@ -139,13 +139,14 @@ public class PentagoClient {
                 } else if (parsedInput.length != 2) {
                     System.out.println("ERR: too many or too few arguments");
                     break;
-                } else if (moveCmd.length() != 7) {
-                    System.out.println("ERR: Place command invalid, please reset [rplace]");
-                    break;
+                    //                } else if (moveCmd.length() != 7) {
+                    //                    System.out.println("ERR: Place command invalid, please
+                    //                    reset [rplace]");
+                    //                    break;
                 }
                 moveCmd += "~" + CommandParser.localToProtocolRotate(parsedInput[1]);
                 network.sendMessage(moveCmd);
-                moveCmd = "";
+                moveCmd = null;
                 break;
             case "rplace":
                 moveCmd = "";
@@ -194,7 +195,7 @@ public class PentagoClient {
                 break;
             default:
                 //Debug for now
-                network.sendMessage(input);
+                //network.sendMessage(input);
                 System.out.println("Unknown Command: " + parsedInput[0]);
                 break;
         }

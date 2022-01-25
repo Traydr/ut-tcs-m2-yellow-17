@@ -3,6 +3,7 @@ package pentago.client;
 import pentago.client.player.Player;
 import pentago.game_logic.Board;
 import pentago.game_logic.CommandParser;
+import pentago.game_logic.Mark;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -34,7 +35,12 @@ public class Game {
     }
 
     public void listenerSetBoard(int pos, int rot) {
-
+        int[] localCoords = CommandParser.protocolToLocalCoords(pos);
+        board.setField(
+                localCoords[0], localCoords[1], localCoords[2],
+                current % 2 == 0 ? Mark.BLACK : Mark.WHITE);
+        current++;
+        board.rotateQuadrant(CommandParser.protocolToLocalRotate(rot));
     }
 
     public boolean isCurrentPlayer(Player compare) {
@@ -58,8 +64,8 @@ public class Game {
         if (arrSize == 1) {
             return emptyFields.get(0);
         }
-        return "Place: " + emptyFields.get(random.nextInt(arrSize)) +
-               "\nRotate: " + CommandParser.protocolToLocalRotate(random.nextInt(8));
+        return "Place: " + emptyFields.get(random.nextInt(arrSize)) + "\nRotate: " +
+               CommandParser.protocolToLocalRotate(random.nextInt(8));
     }
 
     /**
