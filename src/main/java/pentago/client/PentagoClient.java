@@ -1,5 +1,6 @@
 package pentago.client;
 
+import pentago.client.player.Bot;
 import pentago.client.player.Human;
 import pentago.client.player.Player;
 import pentago.game_logic.Board;
@@ -22,16 +23,17 @@ public class PentagoClient {
     public Player player;
     public String moveCmd;
 
-    public PentagoClient(String serverAddress, int port, String username) {
+    public PentagoClient(String serverAddress, int port, String username, Player player) {
         this.serverAddress = serverAddress;
         this.port = port;
         this.username = username;
         this.network = new Networking();
         this.serverFeatures = new ArrayList<>();
+        this.player = player;
     }
 
-    public PentagoClient(int randNum) {
-        this("130.89.253.64", 55555, "Default-Username-Tray" + randNum);
+    public PentagoClient(int randNum, Player player) {
+        this("130.89.253.64", 55555, "Default-Username-Tray" + randNum, player);
     }
 
     //TODO Save the features of the server
@@ -40,6 +42,16 @@ public class PentagoClient {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         PentagoClient client;
+        Player player;
+
+        System.out.println("(H)uman or (B)ot");
+        if (scanner.nextLine().equals("B")) {
+            player = new Bot(Mark.BLACK);
+            System.out.println("Playing as bot");
+        } else {
+            player = new Human("Human", Mark.BLACK);
+            System.out.println("Playing as human");
+        }
 
         System.out.println("(P)reset or (C)ustom?");
         if (scanner.nextLine().equals("C")) {
@@ -57,11 +69,11 @@ public class PentagoClient {
                 username = scanner.nextLine();
             }
 
-            client = new PentagoClient(serverAddress, port, username);
+            client = new PentagoClient(serverAddress, port, username, player);
 
         } else {
             Random random = new Random();
-            client = new PentagoClient(random.nextInt(999999));
+            client = new PentagoClient(random.nextInt(999999), player);
         }
 
         try {
@@ -199,6 +211,18 @@ public class PentagoClient {
                 System.out.println("Unknown Command: " + parsedInput[0]);
                 break;
         }
+    }
+
+    public void makePlayerDoMove() {
+        int[] coords = game.board.getCoords(player.determineMove(game.board));
+        int move = CommandParser.localToProtocolCoords(coords[0], coords[1], coords[2]);
+        int rotate = CommandParser.localToProtocolRotate(player.determineRotate(game.board));
+
+        network.sendMessage("MOVE~" + move + "~" + rotate);
+
+        System.out.println("We've moved");
+
+        player.isOurTurn = !player.isOurTurn;
     }
 
     public void displayHelp() {

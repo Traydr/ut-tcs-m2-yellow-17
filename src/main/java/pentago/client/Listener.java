@@ -1,5 +1,8 @@
 package pentago.client;
 
+import pentago.client.player.Bot;
+import pentago.client.player.Player;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -53,6 +56,11 @@ public class Listener implements Runnable {
                                              Integer.parseInt(inputParsed[2]));
                 System.out.println(
                         "\nServer" + " pos:" + inputParsed[1] + " rotate:" + inputParsed[2]);
+                client.player.isOurTurn = !client.player.isOurTurn;
+                if (client.player instanceof Bot && client.player.isOurTurn) {
+                    client.makePlayerDoMove();
+                }
+                System.out.println(client.game.update());
                 break;
             case "PING":
                 network.sendMessage("PONG");
@@ -75,8 +83,11 @@ public class Listener implements Runnable {
                         "\nNew Game:" + "\n\tPlayer 1: " + inputParsed[1] + "\n\tPlayer 2: " +
                         inputParsed[2]);
                 client.startNewGame(inputParsed[1], inputParsed[2]);
-                System.out.println(client.username.equals(inputParsed[1]) ? "It's our turn" :
-                                   "It's the other player's turn");
+                boolean areWeStarting = client.username.equals(inputParsed[1]);
+                System.out.println(areWeStarting ? "It's our turn" : "It's the other player's turn");
+                if (areWeStarting && client.player instanceof Bot) {
+                    client.makePlayerDoMove();
+                }
                 break;
             case "GAMEOVER":
                 switch (inputParsed[1]) {
@@ -122,7 +133,7 @@ public class Listener implements Runnable {
         try {
             String output;
             while ((output = br.readLine()) != null) {
-                System.out.println("[SEVER]" + output);
+                System.out.println("[SERVER]" + output);
                 messageParser(output);
             }
         } catch (IOException e) {

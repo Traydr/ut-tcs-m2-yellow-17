@@ -11,7 +11,7 @@ import java.util.Random;
 public class Game {
     public static final int NUMBER_PLAYERS = 2;
 
-    private final Board board;
+    public final Board board;
 
     public Player[] players;
 
