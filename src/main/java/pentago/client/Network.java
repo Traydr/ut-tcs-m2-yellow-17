@@ -9,7 +9,7 @@ public interface Network {
      * @param port
      * @return true on success, false on failure
      */
-    boolean connect(InetAddress address, int port);
+    boolean connect(InetAddress address, int port, PentagoClient client);
 
     /**
      *

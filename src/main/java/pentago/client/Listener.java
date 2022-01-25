@@ -7,10 +7,12 @@ public class Listener implements Runnable {
     Socket socket = null;
     BufferedReader br = null;
     Network network = null;
+    PentagoClient client = null;
 
-    Listener(Socket sock, Network net) {
+    Listener(Socket sock, Network net, PentagoClient client) {
         this.socket = sock;
         this.network = net;
+        this.client = client;
         try {
             this.br = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
         } catch (IOException e) {
@@ -35,12 +37,12 @@ public class Listener implements Runnable {
                 for (int i = 2; i < inputParsed.length; i++) {
                     features = features + "\n- " + inputParsed[i];
                 }
-                System.out.println("\nHello" +
+                System.out.println("Connected" +
                            "\nServer Name:\n- " + inputParsed[1] +
                            "\nSupported Features:" + features);
                 break;
             case "LOGIN":
-                System.out.println("\nLogged In");
+                System.out.println("Logged In");
                 break;
             case "MOVE":
                 // TODO : Implement game functions & Ignore when server repeats moves
@@ -49,7 +51,6 @@ public class Listener implements Runnable {
                            " rotate:" + inputParsed[2]);
                 break;
             case "PING":
-                // TODO : Implement this in a better way
                 network.sendMessage("PONG");
                 break;
             case "PONG":
@@ -69,6 +70,7 @@ public class Listener implements Runnable {
                 System.out.println("\nNew Game:" +
                                    "\n\tPlayer 1: " + inputParsed[1] +
                                    "\n\tPlayer 2: " + inputParsed[2]);
+                client.startNewGame(inputParsed[1], inputParsed[2]);
                 break;
             case "GAMEOVER":
                 System.out.println("\nGame Over" +

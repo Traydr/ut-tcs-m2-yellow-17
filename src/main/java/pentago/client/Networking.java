@@ -10,11 +10,11 @@ public class Networking implements Network {
     Listener listener;
 
     @Override
-    public boolean connect(InetAddress address, int port) {
+    public boolean connect(InetAddress address, int port, PentagoClient client) {
         try {
             this.socket = new Socket(address, port);
             this.bw = new BufferedWriter(new OutputStreamWriter(this.socket.getOutputStream()));
-            listener = new Listener(this.socket, this);
+            listener = new Listener(this.socket, this, client);
             Thread thread = new Thread(listener);
             thread.start();
             return true;
