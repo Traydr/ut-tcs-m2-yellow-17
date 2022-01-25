@@ -97,7 +97,7 @@ public class PentagoClient {
         // TODO Redo this
         // TODO Make a network player probably
         Player humanPlayer1 = new Human(player1, Mark.WHITE);
-        Player humanPlayer2 = new Human(player2, Mark.WHITE);
+        Player humanPlayer2 = new Human(player2, Mark.BLACK);
         this.game = new Game(humanPlayer1, humanPlayer2);
     }
 
@@ -190,7 +190,7 @@ public class PentagoClient {
                     System.out.println("ERR: There is no game");
                     break;
                 }
-                game.update();
+                System.out.println(game.update());
                 break;
             default:
                 //Debug for now
