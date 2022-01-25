@@ -2,6 +2,7 @@ package pentago.client;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class PentagoClient {
@@ -10,12 +11,14 @@ public class PentagoClient {
     public String username;
     public Network network;
     public Game game;
+    public ArrayList<String> serverFeatures;
 
     public PentagoClient(String serverAddress, int port, String username) {
         this.serverAddress = serverAddress;
         this.port = port;
         this.username = username;
         this.network = new Networking();
+        this.serverFeatures = new ArrayList<>();
     }
 
     public PentagoClient() {
@@ -58,7 +61,7 @@ public class PentagoClient {
             e.printStackTrace();
         }
 
-        connectToServer(client.network, client.username);
+        client.connectToServer(client.username);
 
         String output;
         while (scanner.hasNextLine()) {
@@ -69,39 +72,65 @@ public class PentagoClient {
                 System.out.println("\nInput cannot contain \"~\" characters");
                 continue;
             } else {
-                parseInput(client.network, output);
+                client.parseInput(output);
             }
         }
 
         scanner.close();
     }
 
-    public static void connectToServer(Network net, String username) {
-        net.sendMessage("HELLO~" + username + "~CHAT");
-        net.sendMessage("LOGIN~" + username);
+    public void connectToServer(String username) {
+        network.sendMessage("HELLO~" + username + "~CHAT");
+        network.sendMessage("LOGIN~" + username);
     }
 
-    public static void parseInput(Network net, String input) {
+    public void parseInput(String input) {
         String[] parsedInput = input.split(" ");
-        switch (input) {
+        switch (parsedInput[0]) {
             case "help":
+                displayHelp();
                 break;
-            case "move":
+            case "move": // TODO figure out how to move, store the move and rotate somewhere?
                 break;
             case "rotate":
                 break;
             case "ping":
+                network.sendMessage("PING");
+                break;
+            case "queue":
+                network.sendMessage("QUEUE");
+                break;
+            case "chat":
+                String tmp = "";
+                for (int i = 1; i < parsedInput.length; i++) {
+                    tmp += " " + parsedInput[i];
+                }
+                network.sendMessage("CHAT~" + tmp);
                 break;
             default:
-                System.out.println("Unknown Command: " + parsedInput[0]);
+                //Debug for now
+                network.sendMessage(input);
+                //System.out.println("Unknown Command: " + parsedInput[0]);
                 break;
         }
     }
 
-    public static void displayHelp() {
-        // TODO : Make these simpler for the user
-        System.out.println("Commands: \n" + "HELLO~<client description>[~extension]*\n" +
-                           "LOGIN~<username>\n" + "LIST\n" + "QUEUE\n" + "MOVE~<A>~<B>\n" +
-                           "PING\n" + "PONG\n" + "QUIT\n");
+    public void displayHelp() {
+        //TODO Format this to look nicer
+        String[] commands = {"list - Lists all users currently connected to the server",
+                             "queue - Queues up for a new game",
+                             "move [A-D][0-8] - Places a piece down a piece on the position",
+                             "rotate [A-D][L|R] - Rotates a quadrant in a specific direction",
+                             "ping - Pings the server to see if its still alive",
+                             "chat - sends a message to everyone on the server",
+                             "whisper - sends a message to a specific person on the server",
+                             "help - Displays this help message",
+                             "quit - quits out of the program"};
+
+        String output = "Commands:";
+        for (String command : commands) {
+            output += "\n" + command;
+        }
+        System.out.println(output);
     }
 }
