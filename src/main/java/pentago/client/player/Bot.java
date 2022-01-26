@@ -34,12 +34,7 @@ public class Bot extends Player {
     }
 
     @Override
-    public String determineMove(Board board) {
+    public String[] determineMove(Board board) {
         return strategy.determineMove(board, this.mark);
-    }
-
-    @Override
-    public String determineRotate(Board board) {
-        return strategy.determineRotate(board, this.mark);
     }
 }

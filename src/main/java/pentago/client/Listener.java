@@ -1,7 +1,6 @@
 package pentago.client;
 
 import pentago.client.player.Bot;
-import pentago.client.player.Player;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -62,7 +61,6 @@ public class Listener implements Runnable {
                     client.makePlayerDoMove();
                 }
                 botMoveCounter += 1;
-                System.out.println(client.game.update());
                 break;
             case "PING":
                 network.sendMessage("PONG");
@@ -86,16 +84,23 @@ public class Listener implements Runnable {
                         inputParsed[2]);
                 client.startNewGame(inputParsed[1], inputParsed[2]);
                 boolean areWeStarting = client.username.equals(inputParsed[1]);
-                System.out.println(areWeStarting ? "It's our turn" : "It's the other player's turn");
+                System.out.println(
+                        areWeStarting ? "It's our turn" : "It's the other player's turn");
                 if (areWeStarting && client.player instanceof Bot) {
                     client.makePlayerDoMove();
                     botMoveCounter += 1;
                 }
                 break;
             case "GAMEOVER":
+                System.out.println(client.game.update());
                 switch (inputParsed[1]) {
                     case "VICTORY":
-                        System.out.println(inputParsed[2] + " Won the game!");
+                        if (client.username.equals(inputParsed[2])) {
+                            System.out.println("We won!!");
+                        } else {
+                            System.out.println("We lost...");
+                        }
+                        ;
                         break;
                     case "DISCONNECT":
                         System.out.println(inputParsed[2] + " Won the game by disconnect!");
@@ -116,9 +121,9 @@ public class Listener implements Runnable {
                 // <-------- DEBUG -------->
                 break;
             case "CHAT":
-                System.out.println("\nCHAT" +
-                                   "\n\tFROM: " + inputParsed[1] +
-                                   "\n\tMESSAGE: " + inputParsed[2]);
+                //                System.out.println("\nCHAT" +
+                //                                   "\n\tFROM: " + inputParsed[1] +
+                //                                   "\n\tMESSAGE: " + inputParsed[2]);
                 break;
             case "WHISPER":
                 System.out.println("\nWHISPER" + "\n\tFROM: " + inputParsed[1] + "\n\tMESSAGE: " +
@@ -142,7 +147,7 @@ public class Listener implements Runnable {
         try {
             String output;
             while ((output = br.readLine()) != null) {
-                System.out.println("[SERVER]" + output);
+                //                System.out.println("[SERVER]" + output);
                 messageParser(output);
             }
         } catch (IOException e) {

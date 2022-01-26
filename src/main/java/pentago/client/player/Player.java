@@ -46,21 +46,15 @@ public abstract class Player {
     /*@ requires board != null && board.isFull() == false;
         ensures board.isField(\result) && board.getField(\result) == Mark.EMPTY;
     @*/
-    public abstract String determineMove(Board board);
-
-    /**
-     * Determines the next rotate.
-     * @param board the current game board.
-     * @return rotate in form [A-D][L|R]
-     */
-    public abstract String determineRotate(Board board);
+    public abstract String[] determineMove(Board board);
 
     /**
      * Makes a move on the board.
      * @param board the current board
      */
     public void makeMove(Board board) {
-        String choice = determineMove(board);
-        board.setField(choice, getMark());
+        String[] move = determineMove(board);
+        board.setField(move[0], getMark());
+        board.rotateQuadrant(move[1]);
     }
 }

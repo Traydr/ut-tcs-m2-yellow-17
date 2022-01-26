@@ -23,7 +23,7 @@ public class Human extends Player {
     }
 
     @Override
-    public String determineMove(Board board) {
+    public String[] determineMove(Board board) {
         String input;
         Pattern pattern = Pattern.compile("[A-D][0-8]");
         Matcher matcher;
@@ -46,32 +46,31 @@ public class Human extends Player {
                         matcher.find() && input.length() == 2;
             }
         }
-        return input;
-    }
 
-    @Override
-    public String determineRotate(Board board) {
-        String input;
-        Pattern pattern = Pattern.compile("[A-D][L|R]");
-        Matcher matcher;
+
+
+        String rotateInput;
+        Pattern rotatePattern = Pattern.compile("[A-D][L|R]");
+        Matcher rotateMatcher;
 
         try (Scanner scanner = new Scanner(new InputStreamReader(System.in))) {
             String prompt = "> " + getName() + " (" + getMark().toString() + ")"
                             + ", rotation? [A-D][L|R] ";
 
             System.out.println(prompt);
-            input = scanner.nextLine();
+            rotateInput = scanner.nextLine();
 
-            matcher = pattern.matcher(input);
-            boolean valid = matcher.find() && input.length() == 2;
+            rotateMatcher = rotatePattern.matcher(rotateInput);
+            boolean valid = rotateMatcher.find() && rotateInput.length() == 2;
             while (!valid) {
-                System.out.println("ERROR: field " + input + " is no valid choice.");
+                System.out.println("ERROR: field " + rotateInput + " is no valid choice.");
                 System.out.println(prompt);
-                input = scanner.nextLine();
-                matcher = pattern.matcher(input);
-                valid = matcher.find() && input.length() == 2;
+                rotateInput = scanner.nextLine();
+                rotateMatcher = rotatePattern.matcher(rotateInput);
+                valid = rotateMatcher.find() && rotateInput.length() == 2;
             }
         }
-        return input;
+
+        return new String[]{input, rotateInput};
     }
 }
