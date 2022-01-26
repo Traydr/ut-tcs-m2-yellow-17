@@ -57,7 +57,8 @@ public class Listener implements Runnable {
                 client.game.listenerSetBoard(Integer.parseInt(inputParsed[1]),
                                              Integer.parseInt(inputParsed[2]));
                 //TODO Implement a new way of telling the server what move was made
-                if (client.player instanceof Bot && botMoveCounter % 2 == 0) {
+                if (client.player instanceof Bot && botMoveCounter % 2 == 0 &&
+                    !client.game.board.gameOver()) {
                     client.makePlayerDoMove();
                 }
                 botMoveCounter += 1;
@@ -108,7 +109,7 @@ public class Listener implements Runnable {
                 }
                 botMoveCounter = 0;
                 client.endCurrentGame();
-                // <-------- DEBUG -------->
+                // <-------- DEBUG --------> Maybe?
                 if (client.player instanceof Bot) {
                     network.sendMessage("QUEUE");
                 }
