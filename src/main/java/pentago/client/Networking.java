@@ -1,6 +1,8 @@
 package pentago.client;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 
@@ -10,11 +12,11 @@ public class Networking implements Network {
     Listener listener;
 
     @Override
-    public boolean connect(InetAddress address, int port) {
+    public boolean connect(InetAddress address, int port, PentagoClient client) {
         try {
             this.socket = new Socket(address, port);
             this.bw = new BufferedWriter(new OutputStreamWriter(this.socket.getOutputStream()));
-            listener = new Listener(this.socket, this);
+            listener = new Listener(this.socket, this, client);
             Thread thread = new Thread(listener);
             thread.start();
             return true;
@@ -26,11 +28,11 @@ public class Networking implements Network {
     @Override
     public void close() {
         try {
+            this.bw.close();
+            this.listener.close();
             if (!this.socket.isClosed()) {
                 this.socket.close();
             }
-            this.bw.close();
-            this.listener.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -38,8 +40,10 @@ public class Networking implements Network {
 
     @Override
     public boolean sendMessage(String message) {
-        // TODO : Change so more commands are accepted
         try {
+            // <-------- DEBUG -------->
+            //System.out.println("[SENDING]" + message);
+            // <-------- DEBUG -------->
             bw.write(message + "\n");
             bw.flush();
             return true;
