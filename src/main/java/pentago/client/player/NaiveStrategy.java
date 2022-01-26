@@ -29,7 +29,7 @@ public class NaiveStrategy implements Strategy {
         int arrSize = emptyFields.size();
         Random random = new Random();
 
-        if (arrSize == 1) {
+        if (arrSize <= 2) {
             return emptyFields.get(0);
         }
         return emptyFields.get(random.nextInt(arrSize));

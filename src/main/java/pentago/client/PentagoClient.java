@@ -122,6 +122,7 @@ public class PentagoClient {
         network.sendMessage("LOGIN~" + username);
     }
 
+    //TODO Add quit command
     public void parseInput(String input) {
         String[] parsedInput = input.split(" ");
         switch (parsedInput[0]) {
@@ -205,9 +206,10 @@ public class PentagoClient {
                 }
                 System.out.println(game.update());
                 break;
+            case "quit":
+                network.sendMessage("QUIT");
+                break;
             default:
-                //Debug for now
-                //network.sendMessage(input);
                 System.out.println("Unknown Command: " + parsedInput[0]);
                 break;
         }
@@ -221,8 +223,6 @@ public class PentagoClient {
         network.sendMessage("MOVE~" + move + "~" + rotate);
 
         System.out.println("We've moved");
-
-        player.isOurTurn = !player.isOurTurn;
     }
 
     public void displayHelp() {

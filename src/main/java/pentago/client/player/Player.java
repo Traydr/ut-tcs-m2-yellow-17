@@ -6,7 +6,6 @@ import pentago.game_logic.Mark;
 public abstract class Player {
     private final String name;
     private final Mark mark;
-    public boolean isOurTurn;
 
     /**
      * Creates a new player object with a name and mark.

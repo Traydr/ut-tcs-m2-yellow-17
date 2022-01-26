@@ -13,6 +13,7 @@ public class Listener implements Runnable {
     BufferedReader br = null;
     Network network = null;
     PentagoClient client = null;
+    int botMoveCounter;
 
     Listener(Socket sock, Network net, PentagoClient client) {
         this.socket = sock;
@@ -23,6 +24,7 @@ public class Listener implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        this.botMoveCounter = 0;
     }
 
     void close() {
@@ -54,12 +56,11 @@ public class Listener implements Runnable {
             case "MOVE":
                 client.game.listenerSetBoard(Integer.parseInt(inputParsed[1]),
                                              Integer.parseInt(inputParsed[2]));
-                System.out.println(
-                        "\nServer" + " pos:" + inputParsed[1] + " rotate:" + inputParsed[2]);
-                client.player.isOurTurn = !client.player.isOurTurn;
-                if (client.player instanceof Bot && client.player.isOurTurn) {
+                //TODO Implement a new way of telling the server what move was made
+                if (client.player instanceof Bot && botMoveCounter % 2 == 0) {
                     client.makePlayerDoMove();
                 }
+                botMoveCounter += 1;
                 System.out.println(client.game.update());
                 break;
             case "PING":
@@ -87,6 +88,7 @@ public class Listener implements Runnable {
                 System.out.println(areWeStarting ? "It's our turn" : "It's the other player's turn");
                 if (areWeStarting && client.player instanceof Bot) {
                     client.makePlayerDoMove();
+                    botMoveCounter += 1;
                 }
                 break;
             case "GAMEOVER":
@@ -104,12 +106,18 @@ public class Listener implements Runnable {
                         System.out.println("ERR: unexpected win condition");
                         break;
                 }
+                botMoveCounter = 0;
                 client.endCurrentGame();
+                // <-------- DEBUG -------->
+                if (client.player instanceof Bot) {
+                    network.sendMessage("QUEUE");
+                }
+                // <-------- DEBUG -------->
                 break;
             case "CHAT":
-                //                System.out.println("\nCHAT" +
-                //                                   "\n\tFROM: " + inputParsed[1] +
-                //                                   "\n\tMESSAGE: " + inputParsed[2]);
+                System.out.println("\nCHAT" +
+                                   "\n\tFROM: " + inputParsed[1] +
+                                   "\n\tMESSAGE: " + inputParsed[2]);
                 break;
             case "WHISPER":
                 System.out.println("\nWHISPER" + "\n\tFROM: " + inputParsed[1] + "\n\tMESSAGE: " +

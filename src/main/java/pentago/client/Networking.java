@@ -40,6 +40,7 @@ public class Networking implements Network {
     public boolean sendMessage(String message) {
         // TODO : Change so more commands are accepted
         try {
+            System.out.println("[SENDING]" + message);
             bw.write(message + "\n");
             bw.flush();
             return true;
