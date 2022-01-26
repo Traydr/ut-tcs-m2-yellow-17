@@ -7,7 +7,6 @@ import pentago.game_logic.Board;
 import pentago.game_logic.CommandParser;
 import pentago.game_logic.Mark;
 
-import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -88,7 +87,7 @@ public class PentagoClient {
             System.exit(2);
         }
 
-        client.connectToServer(client.username);
+        client.connectToServer();
 
         String output;
         while (scanner.hasNextLine() && client.network != null) {
@@ -118,7 +117,7 @@ public class PentagoClient {
         this.game = null;
     }
 
-    public void connectToServer(String username) {
+    public void connectToServer() {
         network.sendMessage("HELLO~" + username + "~CHAT");
         network.sendMessage("LOGIN~" + username);
     }

@@ -1,7 +1,6 @@
 package pentago.client;
 
 import pentago.client.player.Bot;
-import pentago.client.player.Player;
 
 import java.io.BufferedReader;
 import java.io.IOException;
