@@ -90,7 +90,7 @@ public class PentagoClient {
         client.connectToServer(client.username);
 
         String output;
-        while (scanner.hasNextLine()) {
+        while (scanner.hasNextLine() && client.network != null) {
             output = scanner.nextLine();
             if (output.equals("quit")) {
                 break;
@@ -106,8 +106,6 @@ public class PentagoClient {
     }
 
     public void startNewGame(String player1, String player2) {
-        // TODO Redo this
-        // TODO Make a network player probably
         Player humanPlayer1 = new Human(player1, Mark.WHITE);
         Player humanPlayer2 = new Human(player2, Mark.BLACK);
         this.game = new Game(humanPlayer1, humanPlayer2);
@@ -122,7 +120,6 @@ public class PentagoClient {
         network.sendMessage("LOGIN~" + username);
     }
 
-    //TODO Add quit command
     public void parseInput(String input) {
         String[] parsedInput = input.split(" ");
         switch (parsedInput[0]) {
@@ -132,7 +129,7 @@ public class PentagoClient {
             case "list":
                 network.sendMessage("LIST");
                 break;
-            case "place": // TODO figure out how to move, store the move and rotate somewhere?
+            case "place":
                 if (moveCmd != null) {
                     System.out.println("ERR: cannot place twice");
                     break;
@@ -152,10 +149,6 @@ public class PentagoClient {
                 } else if (parsedInput.length != 2) {
                     System.out.println("ERR: too many or too few arguments");
                     break;
-                    //                } else if (moveCmd.length() != 7) {
-                    //                    System.out.println("ERR: Place command invalid, please
-                    //                    reset [rplace]");
-                    //                    break;
                 }
                 moveCmd += "~" + CommandParser.localToProtocolRotate(parsedInput[1]);
                 network.sendMessage(moveCmd);
@@ -208,6 +201,8 @@ public class PentagoClient {
                 break;
             case "quit":
                 network.sendMessage("QUIT");
+                network.close();
+                network = null;
                 break;
             default:
                 System.out.println("Unknown Command: " + parsedInput[0]);
@@ -221,8 +216,6 @@ public class PentagoClient {
         int rotate = CommandParser.localToProtocolRotate(player.determineRotate(game.board));
 
         network.sendMessage("MOVE~" + move + "~" + rotate);
-
-        System.out.println("We've moved");
     }
 
     public void displayHelp() {

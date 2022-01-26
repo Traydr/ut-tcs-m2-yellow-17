@@ -53,7 +53,7 @@ public class Game {
      * @return A string representing the board status
      */
     public String update() {
-        return "Current game situation:\n" + board.toString() + "\n";
+        return board.toString() + "\n";
     }
 
     public String getRandomMove() {

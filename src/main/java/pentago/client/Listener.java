@@ -42,9 +42,9 @@ public class Listener implements Runnable {
             case "HELLO":
                 String features = "";
                 for (int i = 2; i < inputParsed.length; i++) {
-                    features = features + "\n- " + inputParsed[i];
+                    features = features + "\n\t" + inputParsed[i];
                 }
-                System.out.println("Connected" + "\nServer Name:\n- " + inputParsed[1] +
+                System.out.println("Connected" + "\nServer Name:\n\t" + inputParsed[1] +
                                    "\nSupported Features:" + features);
                 break;
             case "LOGIN":
@@ -56,7 +56,6 @@ public class Listener implements Runnable {
             case "MOVE":
                 client.game.listenerSetBoard(Integer.parseInt(inputParsed[1]),
                                              Integer.parseInt(inputParsed[2]));
-                //TODO Implement a new way of telling the server what move was made
                 if (client.player instanceof Bot && botMoveCounter % 2 == 0 &&
                     !client.game.board.gameOver()) {
                     client.makePlayerDoMove();
@@ -68,7 +67,7 @@ public class Listener implements Runnable {
                 network.sendMessage("PONG");
                 break;
             case "PONG":
-                System.out.println("\nServer up!");
+                System.out.println("Server up!");
                 break;
             case "CHALLENGE":
                 // TODO : Implement Auth
@@ -78,11 +77,11 @@ public class Listener implements Runnable {
                 for (int i = 1; i < inputParsed.length; i++) {
                     allUsers = allUsers + "\n\t- " + inputParsed[i];
                 }
-                System.out.println("\nConnected:" + allUsers);
+                System.out.println("Connected:" + allUsers);
                 break;
             case "NEWGAME":
                 System.out.println(
-                        "\nNew Game:" + "\n\tPlayer 1: " + inputParsed[1] + "\n\tPlayer 2: " +
+                        "New Game:" + "\n\tPlayer 1: " + inputParsed[1] + "\n\tPlayer 2: " +
                         inputParsed[2]);
                 client.startNewGame(inputParsed[1], inputParsed[2]);
                 boolean areWeStarting = client.username.equals(inputParsed[1]);
@@ -116,33 +115,34 @@ public class Listener implements Runnable {
                 // <-------- DEBUG -------->
                 break;
             case "CHAT":
-                System.out.println("\nCHAT" +
+                System.out.println("CHAT" +
                                    "\n\tFROM: " + inputParsed[1] +
                                    "\n\tMESSAGE: " + inputParsed[2]);
                 break;
             case "WHISPER":
-                System.out.println("\nWHISPER" + "\n\tFROM: " + inputParsed[1] + "\n\tMESSAGE: " +
+                System.out.println("WHISPER" + "\n\tFROM: " + inputParsed[1] + "\n\tMESSAGE: " +
                                    inputParsed[2]);
                 break;
             case "CANNOTWHISPER":
-                System.out.println("\nERR:\n\tCannot whisper to user");
+                System.out.println("ERR:\n\tCannot whisper to user");
                 break;
             case "ERROR":
-                System.out.println("\nERR:\n\t" + inputParsed[1]);
+                System.out.println("ERR:\n\t" + inputParsed[1]);
                 break;
         }
     }
 
     @Override
     public void run() {
-        // TODO : Make this parse all commands, not just output them
         if (this.socket.isClosed()) {
             return;
         }
         try {
             String output;
             while ((output = br.readLine()) != null) {
-                System.out.println("[SERVER]" + output);
+                // <-------- DEBUG -------->
+                //System.out.println("[SERVER]" + output);
+                // <-------- DEBUG -------->
                 messageParser(output);
             }
         } catch (IOException e) {

@@ -38,9 +38,10 @@ public class Networking implements Network {
 
     @Override
     public boolean sendMessage(String message) {
-        // TODO : Change so more commands are accepted
         try {
-            System.out.println("[SENDING]" + message);
+            // <-------- DEBUG -------->
+            //System.out.println("[SENDING]" + message);
+            // <-------- DEBUG -------->
             bw.write(message + "\n");
             bw.flush();
             return true;
