@@ -54,8 +54,9 @@ public class Listener implements Runnable {
                 System.out.println("ERR: already logged in");
                 break;
             case "MOVE":
-                client.game.listenerSetBoard(Integer.parseInt(inputParsed[1]),
-                                             Integer.parseInt(inputParsed[2]));
+                client.game.listenerSetBoard(
+                        Integer.parseInt(inputParsed[1]),
+                        Integer.parseInt(inputParsed[2]));
                 if (client.player instanceof Bot && botMoveCounter % 2 == 0 &&
                     !client.game.board.gameOver()) {
                     client.makePlayerDoMove();
@@ -85,7 +86,8 @@ public class Listener implements Runnable {
                         inputParsed[2]);
                 client.startNewGame(inputParsed[1], inputParsed[2]);
                 boolean areWeStarting = client.username.equals(inputParsed[1]);
-                System.out.println(areWeStarting ? "It's our turn" : "It's the other player's turn");
+                System.out.println(
+                        areWeStarting ? "It's our turn" : "It's the other player's turn");
                 if (areWeStarting && client.player instanceof Bot) {
                     client.makePlayerDoMove();
                     botMoveCounter += 1;

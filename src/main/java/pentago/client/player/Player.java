@@ -9,6 +9,7 @@ public abstract class Player {
 
     /**
      * Creates a new player object with a name and mark.
+     *
      * @param name Name of the player
      * @param mark Mark of the player
      */
@@ -24,6 +25,7 @@ public abstract class Player {
 
     /**
      * Returns the name of the player.
+     *
      * @return Player name
      */
     public String getName() {
@@ -32,6 +34,7 @@ public abstract class Player {
 
     /**
      * Returns the mark of the player.
+     *
      * @return Player mark
      */
     public Mark getMark() {
@@ -40,6 +43,7 @@ public abstract class Player {
 
     /**
      * Determines the field for the next move.
+     *
      * @param board The current game board
      * @return the players' choice
      */
@@ -50,6 +54,7 @@ public abstract class Player {
 
     /**
      * Determines the next rotate.
+     *
      * @param board the current game board.
      * @return rotate in form [A-D][L|R]
      */
@@ -57,6 +62,7 @@ public abstract class Player {
 
     /**
      * Makes a move on the board.
+     *
      * @param board the current board
      */
     public void makeMove(Board board) {

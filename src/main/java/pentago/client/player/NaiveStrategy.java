@@ -10,6 +10,7 @@ import java.util.Random;
 public class NaiveStrategy implements Strategy {
     /**
      * Returns the name of the naive bot.
+     *
      * @return name of naive bot
      */
     @Override
@@ -19,8 +20,9 @@ public class NaiveStrategy implements Strategy {
 
     /**
      * Return the string coords of the move it wants to make.
+     *
      * @param board The current game board
-     * @param mark The bots mark
+     * @param mark  The bots mark
      * @return [A-D][0-8] coordinate
      */
     @Override
@@ -37,8 +39,9 @@ public class NaiveStrategy implements Strategy {
 
     /**
      * Returns the string of the next rotate it wants to make randomly.
+     *
      * @param board the current board
-     * @param mark the mark of the strategy
+     * @param mark  the mark of the strategy
      * @return rotate in form [A-D][L|R]
      */
     @Override
