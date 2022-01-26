@@ -26,11 +26,11 @@ public class Networking implements Network {
     @Override
     public void close() {
         try {
+            this.bw.close();
+            this.listener.close();
             if (!this.socket.isClosed()) {
                 this.socket.close();
             }
-            this.bw.close();
-            this.listener.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

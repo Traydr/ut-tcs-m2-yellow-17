@@ -7,6 +7,7 @@ import pentago.game_logic.Board;
 import pentago.game_logic.CommandParser;
 import pentago.game_logic.Mark;
 
+import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -102,7 +103,9 @@ public class PentagoClient {
             }
         }
 
+        client.network.close();
         scanner.close();
+        System.out.println("Quitting!");
     }
 
     public void startNewGame(String player1, String player2) {
@@ -198,11 +201,6 @@ public class PentagoClient {
                     break;
                 }
                 System.out.println(game.update());
-                break;
-            case "quit":
-                network.sendMessage("QUIT");
-                network.close();
-                network = null;
                 break;
             default:
                 System.out.println("Unknown Command: " + parsedInput[0]);

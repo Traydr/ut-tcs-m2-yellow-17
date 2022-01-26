@@ -146,7 +146,6 @@ public class Listener implements Runnable {
                 messageParser(output);
             }
         } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }
