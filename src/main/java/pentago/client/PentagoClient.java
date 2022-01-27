@@ -1,6 +1,9 @@
 package pentago.client;
 
-import pentago.client.player.*;
+import pentago.client.player.Bot;
+import pentago.client.player.Human;
+import pentago.client.player.Player;
+import pentago.client.player.SmartStrategy;
 import pentago.game_logic.Board;
 import pentago.game_logic.CommandParser;
 import pentago.game_logic.Mark;
@@ -47,7 +50,7 @@ public class PentagoClient {
         if (input.equals("B")) {
             player = new Bot(Mark.BLACK);
             System.out.println("Playing as naive bot");
-        } else if(input.equals("S")) {
+        } else if (input.equals("S")) {
             player = new Bot(Mark.BLACK, new SmartStrategy());
             System.out.println("Playing as smart bot");
         } else {
