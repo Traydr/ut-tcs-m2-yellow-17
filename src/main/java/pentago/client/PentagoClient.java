@@ -172,7 +172,7 @@ public class PentagoClient {
                 }
                 String tmpChat = "";
                 for (int i = 1; i < parsedInput.length; i++) {
-                    tmpChat += " " + parsedInput[i];
+                    tmpChat += parsedInput[i] + " ";
                 }
                 network.sendMessage("CHAT~" + tmpChat);
                 break;
