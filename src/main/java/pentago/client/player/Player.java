@@ -9,7 +9,7 @@ public abstract class Player {
 
     /**
      * Creates a new player object with a name and mark.
-     *
+     *t
      * @param name Name of the player
      * @param mark Mark of the player
      */
