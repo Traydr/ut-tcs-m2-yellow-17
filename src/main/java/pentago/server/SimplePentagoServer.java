@@ -29,7 +29,11 @@ public class SimplePentagoServer implements PentagoServer{
 
     public void removeClient(ClientHandler clientHandler) {
         synchronized (clients) {
-            clients.remove(clientHandler);
+            if (clients.contains(clientHandler)) {
+                clients.remove(clientHandler);
+                return;
+            }
+            System.out.println("ERR:\n\tAttempted to remove client, but it did not exist");
         }
     }
 

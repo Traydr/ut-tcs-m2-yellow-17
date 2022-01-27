@@ -6,9 +6,9 @@ import java.net.Socket;
 
 public class AcceptConnection implements Runnable{
     ServerSocket serverSocket;
-    PentagoServer gameServer;
+    SimplePentagoServer gameServer;
 
-    public AcceptConnection(ServerSocket serverSocket, PentagoServer gameServer) {
+    public AcceptConnection(ServerSocket serverSocket, SimplePentagoServer gameServer) {
         this.serverSocket = serverSocket;
         this.gameServer = gameServer;
     }
