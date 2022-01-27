@@ -53,15 +53,13 @@ public class Listener implements Runnable {
                 System.out.println("ERR: already logged in");
                 break;
             case "MOVE":
-                client.game.listenerSetBoard(
-                        Integer.parseInt(inputParsed[1]),
-                        Integer.parseInt(inputParsed[2]));
+                client.game.listenerSetBoard(Integer.parseInt(inputParsed[1]),
+                                             Integer.parseInt(inputParsed[2]));
                 if (client.player instanceof Bot && botMoveCounter % 2 == 0 &&
                     !client.game.board.gameOver()) {
                     client.makePlayerDoMove();
                 }
                 botMoveCounter += 1;
-                System.out.println(client.game.update());
                 break;
             case "PING":
                 network.sendMessage("PONG");
@@ -93,9 +91,14 @@ public class Listener implements Runnable {
                 }
                 break;
             case "GAMEOVER":
+                System.out.println(client.game.update());
                 switch (inputParsed[1]) {
                     case "VICTORY":
-                        System.out.println(inputParsed[2] + " Won the game!");
+                        if (client.username.equals(inputParsed[2])) {
+                            System.out.println("We won!!");
+                        } else {
+                            System.out.println("We lost...");
+                        }
                         break;
                     case "DISCONNECT":
                         System.out.println(inputParsed[2] + " Won the game by disconnect!");
@@ -116,9 +119,8 @@ public class Listener implements Runnable {
                 // <-------- DEBUG -------->
                 break;
             case "CHAT":
-                System.out.println("CHAT" +
-                                   "\n\tFROM: " + inputParsed[1] +
-                                   "\n\tMESSAGE: " + inputParsed[2]);
+                System.out.println(
+                        "CHAT" + "\n\tFROM: " + inputParsed[1] + "\n\tMESSAGE: " + inputParsed[2]);
                 break;
             case "WHISPER":
                 System.out.println("WHISPER" + "\n\tFROM: " + inputParsed[1] + "\n\tMESSAGE: " +

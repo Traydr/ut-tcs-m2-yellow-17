@@ -3,6 +3,7 @@ package pentago.client;
 import pentago.client.player.Bot;
 import pentago.client.player.Human;
 import pentago.client.player.Player;
+import pentago.client.player.SmartStrategy;
 import pentago.game_logic.Board;
 import pentago.game_logic.CommandParser;
 import pentago.game_logic.Mark;
@@ -44,10 +45,14 @@ public class PentagoClient {
         PentagoClient client;
         Player player;
 
-        System.out.println("(H)uman or (B)ot");
-        if (scanner.nextLine().equals("B")) {
+        System.out.println("(H)uman, (B)ot or (S)mart bot");
+        String input = scanner.nextLine();
+        if (input.equals("B")) {
             player = new Bot(Mark.BLACK);
-            System.out.println("Playing as bot");
+            System.out.println("Playing as naive bot");
+        } else if (input.equals("S")) {
+            player = new Bot(Mark.BLACK, new SmartStrategy());
+            System.out.println("Playing as smart bot");
         } else {
             player = new Human("Human", Mark.BLACK);
             System.out.println("Playing as human");
@@ -208,11 +213,12 @@ public class PentagoClient {
     }
 
     public void makePlayerDoMove() {
-        int[] coords = game.board.getCoords(player.determineMove(game.board));
-        int move = CommandParser.localToProtocolCoords(coords[0], coords[1], coords[2]);
-        int rotate = CommandParser.localToProtocolRotate(player.determineRotate(game.board));
+        String[] move = player.determineMove(game.board);
+        int[] coords = game.board.getCoords(move[0]);
+        int place = CommandParser.localToProtocolCoords(coords[0], coords[1], coords[2]);
+        int rotate = CommandParser.localToProtocolRotate(move[1]);
 
-        network.sendMessage("MOVE~" + move + "~" + rotate);
+        network.sendMessage("MOVE~" + place + "~" + rotate);
     }
 
     public void displayHelp() {

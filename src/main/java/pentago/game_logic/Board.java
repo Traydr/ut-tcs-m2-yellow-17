@@ -378,4 +378,23 @@ public class Board {
 
         return output;
     }
+
+    /**
+     * This function creates a deep copy of the board, meaning that it is a completely new object,
+     * without any connection to the old one.
+     *
+     * @return A deep copy of the board.
+     */
+    public Board deepCopy() {
+        Board newBoard = new Board();
+        for (int i = 0; i < this.quadrantNum; i++) {
+            for (int j = 0; j < this.quadrantSize; j++) {
+                for (int k = 0; k < this.quadrantSize; k++) {
+                    newBoard.setField(i, j, k, this.getField(i, j, k) == Mark.BLACK ? Mark.BLACK :
+                                               Mark.WHITE);
+                }
+            }
+        }
+        return newBoard;
+    }
 }
