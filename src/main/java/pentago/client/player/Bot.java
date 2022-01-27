@@ -9,6 +9,7 @@ public class Bot extends Player {
 
     /**
      * Creates a new Bot object with a specified strategy.
+     *
      * @param mark
      * @param strategy
      */
@@ -24,6 +25,7 @@ public class Bot extends Player {
 
     /**
      * Creates a new Bot object with a mark and the naive strategy.
+     *
      * @param mark Mark of the player
      */
     /*@ requires mark == Mark.BLACK || mark == Mark.WHITE;

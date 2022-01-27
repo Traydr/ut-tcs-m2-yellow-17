@@ -4,7 +4,6 @@ import java.net.InetAddress;
 
 public interface Network {
     /**
-     *
      * @param address
      * @param port
      * @return true on success, false on failure
@@ -17,7 +16,6 @@ public interface Network {
     void close();
 
     /**
-     *
      * @param message
      * @return true on success, false on failure
      */

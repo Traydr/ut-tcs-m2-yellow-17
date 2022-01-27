@@ -31,7 +31,7 @@ public class PentagoClient {
     }
 
     public PentagoClient(int randNum, Player player) {
-        this("130.89.253.64", 55555, "Default-Username-Tray" + randNum, player);
+        this("130.89.253.64", 55555, "Tray-" + randNum, player);
     }
 
     //TODO Save the features of the server
@@ -75,7 +75,7 @@ public class PentagoClient {
 
         } else {
             Random random = new Random();
-            client = new PentagoClient(random.nextInt(999999), player);
+            client = new PentagoClient(random.nextInt(999), player);
         }
 
         try {
@@ -89,10 +89,10 @@ public class PentagoClient {
             System.exit(2);
         }
 
-        client.connectToServer(client.username);
+        client.connectToServer();
 
         String output;
-        while (scanner.hasNextLine()) {
+        while (scanner.hasNextLine() && client.network != null) {
             output = scanner.nextLine();
             if (output.equals("quit")) {
                 break;
@@ -104,12 +104,12 @@ public class PentagoClient {
             }
         }
 
+        client.network.close();
         scanner.close();
+        System.out.println("Quitting!");
     }
 
     public void startNewGame(String player1, String player2) {
-        // TODO Redo this
-        // TODO Make a network player probably
         Player humanPlayer1 = new Human(player1, Mark.WHITE);
         Player humanPlayer2 = new Human(player2, Mark.BLACK);
         this.game = new Game(humanPlayer1, humanPlayer2);
@@ -119,12 +119,11 @@ public class PentagoClient {
         this.game = null;
     }
 
-    public void connectToServer(String username) {
+    public void connectToServer() {
         network.sendMessage("HELLO~" + username + "~CHAT");
         network.sendMessage("LOGIN~" + username);
     }
 
-    //TODO Add quit command
     public void parseInput(String input) {
         String[] parsedInput = input.split(" ");
         switch (parsedInput[0]) {
@@ -134,7 +133,7 @@ public class PentagoClient {
             case "list":
                 network.sendMessage("LIST");
                 break;
-            case "place": // TODO figure out how to move, store the move and rotate somewhere?
+            case "place":
                 if (moveCmd != null) {
                     System.out.println("ERR: cannot place twice");
                     break;
@@ -154,10 +153,6 @@ public class PentagoClient {
                 } else if (parsedInput.length != 2) {
                     System.out.println("ERR: too many or too few arguments");
                     break;
-                    //                } else if (moveCmd.length() != 7) {
-                    //                    System.out.println("ERR: Place command invalid, please
-                    //                    reset [rplace]");
-                    //                    break;
                 }
                 moveCmd += "~" + CommandParser.localToProtocolRotate(parsedInput[1]);
                 network.sendMessage(moveCmd);
@@ -207,9 +202,6 @@ public class PentagoClient {
                     break;
                 }
                 System.out.println(game.update());
-                break;
-            case "quit":
-                network.sendMessage("QUIT");
                 break;
             default:
                 System.out.println("Unknown Command: " + parsedInput[0]);
