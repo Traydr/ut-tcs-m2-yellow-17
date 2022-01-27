@@ -381,7 +381,7 @@ public class Board {
 
     /**
      * This function creates a deep copy of the board, meaning that it is a completely new object,
-     * without any connection to the old one
+     * without any connection to the old one.
      *
      * @return A deep copy of the board.
      */

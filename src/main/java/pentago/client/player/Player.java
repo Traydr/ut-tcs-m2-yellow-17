@@ -9,7 +9,7 @@ public abstract class Player {
 
     /**
      * Creates a new player object with a name and mark.
-     *
+     *t
      * @param name Name of the player
      * @param mark Mark of the player
      */
@@ -52,14 +52,6 @@ public abstract class Player {
     @*/
 
     public abstract String[] determineMove(Board board);
-
-    /**
-     * Determines the next rotate.
-     *
-     * @param board the current game board.
-     * @return rotate in form [A-D][L|R]
-     */
-    public abstract String determineRotate(Board board);
 
     /**
      * Makes a move on the board.
