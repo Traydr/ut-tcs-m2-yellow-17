@@ -33,7 +33,7 @@ public class PentagoClient {
     }
 
     public PentagoClient(int randNum, Player player) {
-        this("130.89.253.64", 55555, "Default-Username-Tray" + randNum, player);
+        this("130.89.253.64", 55555, "Tray-" + randNum, player);
     }
 
     //TODO Save the features of the server
@@ -73,7 +73,7 @@ public class PentagoClient {
 
         } else {
             Random random = new Random();
-            client = new PentagoClient(random.nextInt(999999), player);
+            client = new PentagoClient(random.nextInt(999), player);
         }
 
         try {
