@@ -9,7 +9,7 @@ public abstract class Player {
 
     /**
      * Creates a new player object with a name and mark.
-     *t
+     *
      * @param name Name of the player
      * @param mark Mark of the player
      */
@@ -50,7 +50,6 @@ public abstract class Player {
     /*@ requires board != null && board.isFull() == false;
         ensures board.isField(\result) && board.getField(\result) == Mark.EMPTY;
     @*/
-
     public abstract String[] determineMove(Board board);
 
     /**
