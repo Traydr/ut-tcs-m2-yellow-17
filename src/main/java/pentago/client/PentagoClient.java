@@ -229,8 +229,8 @@ public class PentagoClient {
                              "rotate [A-D][L|R]\n\tRotates a quadrant in a specific direction",
                              "ping\n\tPings the server to see if its still alive",
                              "chat [message]" + (this.serverFeatures.contains("CHAT") ? "" :
-                                                 " (Not supported by this server)") + "\n" +
-                             "\tsends" + " a message to " + "everyone on" + " " + "the" + " server",
+                                                 " (Not supported by this server)") +
+                             "\n\tsends a message to everyone on the server",
                              "whisper [user] [message]\n\tsends a message to a specific person",
                              "help\n\tDisplays this help message",
                              "hint\n\tDisplays a possible move",
