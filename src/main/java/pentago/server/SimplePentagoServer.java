@@ -4,10 +4,12 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 
 public class SimplePentagoServer implements PentagoServer{
-    ServerSocket serverSocket;
-    List<ClientHandler> clients = new ArrayList<>();
+    private ServerSocket serverSocket;
+    private List<ClientHandler> clients = new ArrayList<>();
+    private Queue<ClientHandler> queue;
 
     @Override
     public void start() {
@@ -35,6 +37,31 @@ public class SimplePentagoServer implements PentagoServer{
             }
             System.out.println("ERR:\n\tAttempted to remove client, but it did not exist");
         }
+    }
+
+    public ArrayList<String> allClientUsernames() {
+        ArrayList<String> output = new ArrayList<>();
+
+        for (ClientHandler client : clients) {
+            output.add(client.getUsername());
+        }
+        return output;
+    }
+
+    public void addToQueue(ClientHandler clientHandler) {
+        synchronized (queue) {
+            queue.add(clientHandler);
+        }
+    }
+
+    public ClientHandler removeFromQueue() {
+        synchronized (queue) {
+            return queue.remove();
+        }
+    }
+
+    public int getQueueLength() {
+        return queue.size();
     }
 
     @Override
