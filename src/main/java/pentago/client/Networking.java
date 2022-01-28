@@ -5,14 +5,18 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.Scanner;
 
 public class Networking implements Network {
     Socket socket = null;
     BufferedWriter bw;
     Listener listener;
+    PentagoClient client;
 
     @Override
-    public boolean connect(InetAddress address, int port, PentagoClient client) {
+    public boolean connect(InetAddress address, int port, PentagoClient pentagoClient) {
+        this.client = pentagoClient;
         try {
             this.socket = new Socket(address, port);
             this.bw = new BufferedWriter(new OutputStreamWriter(this.socket.getOutputStream()));
@@ -48,9 +52,30 @@ public class Networking implements Network {
             bw.flush();
             return true;
         } catch (IOException e) {
-            e.printStackTrace();
-            close();
-            return false;
+            System.out.println("It looks like the pipe to the server is closed...");
+            System.out.println("Do you want to reconnect? Y/n");
+            Scanner scanner = new Scanner(System.in);
+            String input = scanner.nextLine();
+            if (input.equals("n")) {
+                close();
+                scanner.close();
+                return false;
+            } else {
+                System.out.println("Reconnecting...");
+                try {
+                    if (!client.network.connect(
+                            InetAddress.getByName(client.serverAddress), client.port, client)) {
+                        System.out.println("ERR: bad connection");
+                        System.exit(1);
+                    }
+                } catch (UnknownHostException exception) {
+                    System.out.println("ERR: no connection");
+                    System.exit(2);
+                }
+
+                client.connectToServer();
+                return true;
+            }
         }
     }
 }
