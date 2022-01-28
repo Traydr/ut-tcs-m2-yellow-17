@@ -15,8 +15,8 @@ public class Networking implements Network {
     PentagoClient client;
 
     @Override
-    public boolean connect(InetAddress address, int port, PentagoClient client) {
-        this.client = client;
+    public boolean connect(InetAddress address, int port, PentagoClient pentagoClient) {
+        this.client = pentagoClient;
         try {
             this.socket = new Socket(address, port);
             this.bw = new BufferedWriter(new OutputStreamWriter(this.socket.getOutputStream()));
