@@ -61,7 +61,35 @@ public class SimplePentagoServer implements PentagoServer{
     }
 
     public int getQueueLength() {
-        return queue.size();
+        synchronized (queue) {
+            return queue.size();
+        }
+    }
+
+    public void sendChat(ClientHandler sender, String message) {
+        synchronized (clients) {
+            for (ClientHandler client : clients) {
+                if (client == sender) {
+                    continue;
+                }
+                client.sendMessage("CHAT~" + sender.getUsername() + "~" + message);
+            }
+        }
+    }
+
+    public void sendWhisper(ClientHandler sender, String receiver, String message) {
+        if (sender.getUsername().equals(receiver)) {
+            return;
+        }
+
+        synchronized (clients) {
+            for (ClientHandler client : clients) {
+                if (!client.getUsername().equals(receiver)) {
+                    continue;
+                }
+                client.sendMessage("WHISPER~" + sender.getUsername() + "~" + message);
+            }
+        }
     }
 
     @Override

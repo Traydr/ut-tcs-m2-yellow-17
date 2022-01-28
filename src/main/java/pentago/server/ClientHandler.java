@@ -46,6 +46,10 @@ public class ClientHandler implements Runnable {
         }
     }
 
+    public void sendError(String message) {
+        sendMessage("ERROR~" + message);
+    }
+
     public void close() {
         try {
             if (!socket.isClosed()) {
@@ -64,7 +68,7 @@ public class ClientHandler implements Runnable {
         switch (parsedInput[0]) {
             case "HELLO":
                 if (helloPased) {
-                    sendMessage("ERROR~Unexpected [HELLO]");
+                    sendError("Unexpected [HELLO]");
                     close();
                     break;
                 }
@@ -81,7 +85,7 @@ public class ClientHandler implements Runnable {
                     close();
                     break;
                 } else if (parsedInput.length != 2) {
-                    sendMessage("ERROR~Too many or too few arguments");
+                    sendError("Too many or too few arguments");
                 }
                 username = parsedInput[1];
                 break;
@@ -104,6 +108,18 @@ public class ClientHandler implements Runnable {
                 break;
             case "PONG":
                 // TODO Implement time out?
+                break;
+            case "CHAT":
+                if (parsedInput.length != 2) {
+                    sendMessage("ERROR~Too many or too few arguments");
+                }
+                server.sendChat(this, parsedInput[1]);
+                break;
+            case "WHISPER":
+                if (parsedInput.length != 3) {
+                    sendMessage("ERROR~Too many or too few arguments");
+                }
+                server.sendWhisper(this, parsedInput[1], parsedInput[2]);
                 break;
             case "QUIT":
                 close();
