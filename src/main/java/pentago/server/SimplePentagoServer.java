@@ -31,6 +31,10 @@ public class SimplePentagoServer implements PentagoServer{
 
     public void removeClient(ClientHandler clientHandler) {
         synchronized (clients) {
+            if (queue.contains(clientHandler)) {
+                queue.remove(clientHandler);
+            }
+
             if (clients.contains(clientHandler)) {
                 clients.remove(clientHandler);
                 return;
@@ -39,7 +43,7 @@ public class SimplePentagoServer implements PentagoServer{
         }
     }
 
-    public ArrayList<String> allClientUsernames() {
+    public List<String> getAllUsernames() {
         ArrayList<String> output = new ArrayList<>();
 
         for (ClientHandler client : clients) {
@@ -54,7 +58,7 @@ public class SimplePentagoServer implements PentagoServer{
         }
     }
 
-    public ClientHandler removeFromQueue() {
+    public ClientHandler getNextInQueue() {
         synchronized (queue) {
             return queue.remove();
         }
@@ -90,6 +94,15 @@ public class SimplePentagoServer implements PentagoServer{
                 client.sendMessage("WHISPER~" + sender.getUsername() + "~" + message);
             }
         }
+    }
+
+    public boolean isUsernameInUse(String name) {
+        for (ClientHandler client : clients) {
+            if (client.getUsername().equals(name)){
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

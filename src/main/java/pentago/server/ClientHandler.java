@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class ClientHandler implements Runnable {
@@ -79,18 +80,18 @@ public class ClientHandler implements Runnable {
                 sendMessage("HELLO~" + serverName + features);
                 break;
             case "LOGIN":
-                // TODO Check that username isn't already in use
-                if (loggedIn) {
+                if (parsedInput.length != 2) {
+                    sendError("Too many or too few arguments");
+                    break;
+                } else if (loggedIn || server.isUsernameInUse(parsedInput[1])) {
                     sendMessage("ALREADYLOGGEDIN");
                     close();
                     break;
-                } else if (parsedInput.length != 2) {
-                    sendError("Too many or too few arguments");
                 }
                 username = parsedInput[1];
                 break;
             case "LIST":
-                ArrayList<String> allUsernames = server.allClientUsernames();
+                List<String> allUsernames = server.getAllUsernames();
                 String output = "LIST";
                 for (String name : allUsernames) {
                     output += "~" + name;
