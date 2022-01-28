@@ -42,6 +42,7 @@ public class Listener implements Runnable {
                 String features = "";
                 for (int i = 2; i < inputParsed.length; i++) {
                     features = features + "\n\t" + inputParsed[i];
+                    client.addServerFeature(inputParsed[i]);
                 }
                 System.out.println("Connected" + "\nServer Name:\n\t" + inputParsed[1] +
                                    "\nSupported Features:" + features);
