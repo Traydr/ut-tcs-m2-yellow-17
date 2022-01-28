@@ -37,9 +37,6 @@ public class PentagoClient {
         this("130.89.253.64", 55555, "Tray-" + randNum, player);
     }
 
-    //TODO Save the features of the server
-    //TODO Make sure client can only do the functions of the server
-    //TODO Let person choose to if they either want a bot or human to play
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         PentagoClient client;
@@ -171,6 +168,9 @@ public class PentagoClient {
                 network.sendMessage("QUEUE");
                 break;
             case "chat":
+                if (!serverFeatures.contains("CHAT")) {
+                    System.out.println("ERR: The server does not support chatting");
+                }
                 if (parsedInput.length == 1) {
                     System.out.println("ERR: no chat message");
                     break;
@@ -240,5 +240,9 @@ public class PentagoClient {
             output += "\n" + command;
         }
         System.out.println(output);
+    }
+
+    public void addServerFeature(String feature) {
+        this.serverFeatures.add(feature);
     }
 }
