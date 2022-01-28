@@ -84,7 +84,7 @@ public class PentagoClient {
                 System.out.println("ERR: bad connection");
                 System.exit(1);
             }
-        } catch (UnknownHostException e) {
+        } catch (UnknownHostException exception) {
             System.out.println("ERR: no connection");
             System.exit(2);
         }
