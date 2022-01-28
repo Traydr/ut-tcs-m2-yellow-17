@@ -70,6 +70,17 @@ public class SimplePentagoServer implements PentagoServer{
         }
     }
 
+    public void startNewGame() {
+        synchronized (queue) {
+            if (queue.size() < 2) {
+                return;
+            }
+            ClientHandler player1 = getNextInQueue();
+            ClientHandler player2 = getNextInQueue();
+        }
+        // TODO Start new game here & thread for game
+    }
+
     public void sendChat(ClientHandler sender, String message) {
         synchronized (clients) {
             for (ClientHandler client : clients) {

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+// TODO Cleanup the class and make it more structured
 public class ClientHandler implements Runnable {
     private Socket socket;
     private SimplePentagoServer server;
@@ -18,6 +19,8 @@ public class ClientHandler implements Runnable {
     private boolean loggedIn;
     private String serverName;
     private ArrayList<String> supportedFeatures;
+    private ArrayList<String> clientSupportedFeatures;
+    private Game game;
 
     public ClientHandler(Socket socket, SimplePentagoServer server) throws IOException {
         this.socket = socket;
@@ -25,6 +28,7 @@ public class ClientHandler implements Runnable {
         this.writer = new BufferedWriter(new OutputStreamWriter(this.socket.getOutputStream()));
         helloPased = false;
         loggedIn = false;
+        clientSupportedFeatures = new ArrayList<>();
 
         // TODO Decide where to place server name & how features are handled
         // <---------- DEBUG ---------->
@@ -68,11 +72,22 @@ public class ClientHandler implements Runnable {
 
         switch (parsedInput[0]) {
             case "HELLO":
+                // Receiving the HELLO
                 if (helloPased) {
                     sendError("Unexpected [HELLO]");
                     close();
                     break;
+                } else if (parsedInput.length >= 2) {
+                    sendError("Too few arguments");
                 }
+
+                if (parsedInput.length > 2) {
+                    for (int i = 2; i < parsedInput.length; i++) {
+                        clientSupportedFeatures.add(parsedInput[i]);
+                    }
+                }
+
+                // Sending back HELLO
                 String features = "";
                 for (String feature : supportedFeatures) {
                     features += "~" + feature;
@@ -82,10 +97,10 @@ public class ClientHandler implements Runnable {
             case "LOGIN":
                 if (parsedInput.length != 2) {
                     sendError("Too many or too few arguments");
+                    close();
                     break;
                 } else if (loggedIn || server.isUsernameInUse(parsedInput[1])) {
                     sendMessage("ALREADYLOGGEDIN");
-                    close();
                     break;
                 }
                 username = parsedInput[1];
