@@ -4,7 +4,7 @@ import pentago.game_logic.Board;
 import pentago.game_logic.Mark;
 
 public abstract class Player {
-    private final String name;
+    private String name;
     private final Mark mark;
 
     /**
@@ -33,6 +33,15 @@ public abstract class Player {
     }
 
     /**
+     * Updates the name of the player.
+     *
+     * @param name The new name of the player
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
      * Returns the mark of the player.
      *
      * @return Player mark
@@ -50,15 +59,7 @@ public abstract class Player {
     /*@ requires board != null && board.isFull() == false;
         ensures board.isField(\result) && board.getField(\result) == Mark.EMPTY;
     @*/
-    public abstract String determineMove(Board board);
-
-    /**
-     * Determines the next rotate.
-     *
-     * @param board the current game board.
-     * @return rotate in form [A-D][L|R]
-     */
-    public abstract String determineRotate(Board board);
+    public abstract String[] determineMove(Board board);
 
     /**
      * Makes a move on the board.
@@ -66,7 +67,8 @@ public abstract class Player {
      * @param board the current board
      */
     public void makeMove(Board board) {
-        String choice = determineMove(board);
-        board.setField(choice, getMark());
+        String[] move = determineMove(board);
+        board.setField(move[0], getMark());
+        board.rotateQuadrant(move[1]);
     }
 }

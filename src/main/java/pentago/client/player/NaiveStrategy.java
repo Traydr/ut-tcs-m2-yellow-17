@@ -23,30 +23,16 @@ public class NaiveStrategy implements Strategy {
      *
      * @param board The current game board
      * @param mark  The bots mark
-     * @return [A-D][0-8] coordinate
+     * @return [A-D][0-8] coordinate together with [A-D][L|R] rotate
      */
     @Override
-    public String determineMove(Board board, Mark mark) {
+    public String[] determineMove(Board board, Mark mark) {
         ArrayList<String> emptyFields = board.getEmptyFields();
         int arrSize = emptyFields.size();
         Random random = new Random();
 
-        if (arrSize <= 2) {
-            return emptyFields.get(0);
-        }
-        return emptyFields.get(random.nextInt(arrSize));
-    }
-
-    /**
-     * Returns the string of the next rotate it wants to make randomly.
-     *
-     * @param board the current board
-     * @param mark  the mark of the strategy
-     * @return rotate in form [A-D][L|R]
-     */
-    @Override
-    public String determineRotate(Board board, Mark mark) {
-        Random random = new Random();
-        return CommandParser.protocolToLocalRotate(random.nextInt(8));
+        return new String[]{arrSize < 1 ? emptyFields.get(0) :
+                            emptyFields.get(random.nextInt(arrSize)),
+                            CommandParser.protocolToLocalRotate(random.nextInt(8))};
     }
 }

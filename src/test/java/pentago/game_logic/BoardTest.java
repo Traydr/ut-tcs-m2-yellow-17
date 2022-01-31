@@ -273,6 +273,22 @@ public class BoardTest {
         assertTrue(board.toString().contains(Mark.WHITE.toString()));
     }
 
+    @Test
+    void testDeepCopy() {
+        for (int i = 0; i < board.quadrantNum; i++) {
+            for (int j = 0; j < board.quadrantSize; j++) {
+                for (int k = 0; k < board.quadrantSize; k++) {
+                    board.setField(i, j, k, new Random().nextBoolean() ? Mark.BLACK : Mark.WHITE);
+                }
+            }
+        }
+
+        Board copiedBoard = board.deepCopy();
+        assertNotEquals(board, copiedBoard); // Check if it is not the same Object
+        assertEquals(board.toString(), copiedBoard.toString()); // Check if the toString results
+        // in the same output for both boards
+    }
+
     @RepeatedTest(100)
     void testFullGame() {
         Mark mark = Mark.BLACK;
