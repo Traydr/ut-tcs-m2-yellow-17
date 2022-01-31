@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -61,6 +62,7 @@ public class ClientHandler implements Runnable {
 
     public void sendError(String message) {
         sendMessage("ERROR~" + message);
+        close();
     }
 
     public void close() {
@@ -87,10 +89,10 @@ public class ClientHandler implements Runnable {
                 // Receiving the HELLO
                 if (helloPased) {
                     sendError("Unexpected [HELLO]");
-                    close();
                     break;
-                } else if (parsedInput.length >= 2) {
+                } else if (parsedInput.length <= 2) {
                     sendError("Too few arguments");
+                    break;
                 }
 
                 if (parsedInput.length > 2) {
@@ -108,8 +110,8 @@ public class ClientHandler implements Runnable {
                 break;
             case "LOGIN":
                 if (parsedInput.length != 2) {
-                    sendError("Too many or too few arguments");
-                    close();
+                    System.out.println(Arrays.toString(parsedInput));
+                    sendError("Login: too many or too few arguments");
                     break;
                 } else if (loggedIn || server.isUsernameInUse(parsedInput[1])) {
                     sendMessage("ALREADYLOGGEDIN");
@@ -130,8 +132,7 @@ public class ClientHandler implements Runnable {
                 break;
             case "MOVE":
                 if (parsedInput.length != 3) {
-                    sendError("Move has too few or too many arguments");
-                    close();
+                    sendError("Move: too many or too few arguments");
                     break;
                 }
 
@@ -146,7 +147,6 @@ public class ClientHandler implements Runnable {
 
                 if (!game.setBoard(move, rotate, this)) {
                     sendError("It is not your turn");
-                    close();
                     break;
                 }
 
@@ -160,13 +160,13 @@ public class ClientHandler implements Runnable {
                 break;
             case "CHAT":
                 if (parsedInput.length != 2) {
-                    sendMessage("ERROR~Too many or too few arguments");
+                    sendError("Chat: too many or too few arguments");
                 }
                 server.sendChat(this, parsedInput[1]);
                 break;
             case "WHISPER":
                 if (parsedInput.length != 3) {
-                    sendMessage("ERROR~Too many or too few arguments");
+                    sendError("Whisper: too many or too few arguments");
                 }
                 server.sendWhisper(this, parsedInput[1], parsedInput[2]);
                 break;
@@ -174,7 +174,7 @@ public class ClientHandler implements Runnable {
                 close();
                 break;
             default:
-                sendMessage("ERROR~Unrecognised command: " + parsedInput[0]);
+                sendError("ERROR~Unrecognised command: " + parsedInput[0]);
                 break;
         }
     }

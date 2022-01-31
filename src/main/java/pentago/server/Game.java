@@ -10,6 +10,7 @@ public class Game {
     private int current;
     private ClientHandler[] players;
 
+    //TODO Redo java doc
     public Game(ClientHandler player1, ClientHandler player2) {
         board = new Board();
         players = new ClientHandler[NUMBER_PLAYERS];
@@ -38,10 +39,19 @@ public class Game {
         }
 
         int[] localCoords = CommandParser.protocolToLocalCoords(pos);
+        if (!board.isEmptyField(localCoords[0], localCoords[1], localCoords[2])) {
+            player.sendError("This field is already occupied");
+            return false;
+        }
+
         board.setField(localCoords[0], localCoords[1], localCoords[2],
                        current % 2 == 0 ? Mark.BLACK : Mark.WHITE);
         current++;
         board.rotateQuadrant(CommandParser.protocolToLocalRotate(rot));
+
+        for (ClientHandler p : players) {
+            p.sendMessage("MOVE~" + pos + "~" + rot);
+        }
         return true;
     }
 
