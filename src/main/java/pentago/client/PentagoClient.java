@@ -76,7 +76,7 @@ public class PentagoClient {
                 System.out.println("Server Address:");
                 String serverAddress = scanner.nextLine();
                 System.out.println("Server Port:");
-                int port = scanner.nextInt();
+                int port = Integer.parseInt(scanner.nextLine());
 
                 System.out.println("Username:");
                 String username = scanner.nextLine();
