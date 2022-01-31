@@ -152,6 +152,10 @@ public class PentagoClient {
                     break;
                 }
 
+                if(this.game.board.getField(parsedInput[1]) != Mark.EMPTY) {
+                    System.out.println("There is already a mark there");
+                    break;
+                }
                 Board tmpBoard = new Board();
                 int[] coords = tmpBoard.getCoords(parsedInput[1]);
                 moveCmd = "MOVE~" +
