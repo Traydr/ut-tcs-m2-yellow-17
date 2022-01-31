@@ -2,14 +2,11 @@ package pentago.server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
-import java.util.Random;
+import java.util.*;
 
 public class SimplePentagoServer implements PentagoServer{
     private ServerSocket serverSocket;
-    private List<ClientHandler> clients = new ArrayList<>();
+    private List<ClientHandler> clients;
     private Queue<ClientHandler> queue;
 
     @Override
@@ -17,6 +14,8 @@ public class SimplePentagoServer implements PentagoServer{
         try {
             serverSocket = new ServerSocket(0);
             System.out.println("Server: " + serverSocket.getLocalSocketAddress());
+            clients = new ArrayList<>();
+            queue = new ArrayDeque<>();
             Thread accept = new Thread(new AcceptConnection(serverSocket, this));
             accept.start();
         } catch (IOException e) {
@@ -114,8 +113,12 @@ public class SimplePentagoServer implements PentagoServer{
         }
     }
 
-    public boolean isUsernameInUse(String name) {
+    public boolean isUsernameInUse(String name, ClientHandler request) {
         for (ClientHandler client : clients) {
+            if (client == request) {
+                continue;
+            }
+
             if (client.getUsername().equals(name)){
                 return true;
             }

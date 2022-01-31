@@ -113,7 +113,7 @@ public class ClientHandler implements Runnable {
                     System.out.println(Arrays.toString(parsedInput));
                     sendError("Login: too many or too few arguments");
                     break;
-                } else if (loggedIn || server.isUsernameInUse(parsedInput[1])) {
+                } else if (loggedIn || server.isUsernameInUse(parsedInput[1], this)) {
                     sendMessage("ALREADYLOGGEDIN");
                     break;
                 }
