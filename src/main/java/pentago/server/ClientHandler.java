@@ -53,8 +53,13 @@ public class ClientHandler implements Runnable {
 
     public void sendMessage(String message) {
         try {
-            this.writer.write(message + "\n");
-            this.writer.flush();
+            if (!this.socket.isClosed()) {
+                this.writer.write(message + "\n");
+                this.writer.flush();
+                return;
+            }
+            game.checkWinner();
+            close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -129,6 +134,7 @@ public class ClientHandler implements Runnable {
                 break;
             case "QUEUE":
                 server.addToQueue(this);
+                server.startNewGame();
                 break;
             case "MOVE":
                 if (parsedInput.length != 3) {

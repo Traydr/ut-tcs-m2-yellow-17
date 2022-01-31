@@ -16,6 +16,7 @@ public class SimplePentagoServer implements PentagoServer{
             System.out.println("Server: " + serverSocket.getLocalSocketAddress());
             clients = new ArrayList<>();
             queue = new ArrayDeque<>();
+
             Thread accept = new Thread(new AcceptConnection(serverSocket, this));
             accept.start();
         } catch (IOException e) {
@@ -71,20 +72,25 @@ public class SimplePentagoServer implements PentagoServer{
         ClientHandler player2;
 
         synchronized (queue) {
-            if (queue.size() < 2) {
+            if (queue.size() <= 1) {
                 return;
             }
             player1 = getNextInQueue();
             player2 = getNextInQueue();
         }
 
+        String message;
         if (random.nextInt(2) == 0) {
             game = new Game(player1, player2);
+            message = "NEWGAME~" + player1.getUsername() + "~" + player2.getUsername();
         } else {
             game = new Game(player2, player1);
+            message = "NEWGAME~" + player2.getUsername() + "~" + player1.getUsername();
         }
         player1.setGame(game);
         player2.setGame(game);
+        player1.sendMessage(message);
+        player2.sendMessage(message);
     }
 
     public void sendChat(ClientHandler sender, String message) {

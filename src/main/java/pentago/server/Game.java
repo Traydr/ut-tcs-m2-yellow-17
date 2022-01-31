@@ -66,6 +66,7 @@ public class Game {
     }
 
     public void checkWinner() {
+        // TODO Check for disconnects
         if (players[0] == null) {
             players[1].sendMessage("GAMEOVER~DISCONNECT~" + players[1].getUsername());
             players[1].endGame();
