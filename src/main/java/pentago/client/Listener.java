@@ -90,7 +90,7 @@ public class Listener implements Runnable {
                 System.out.println(
                         areWeStarting ? "It's our turn" : "It's the other player's turn");
                 if (areWeStarting) {
-                    if(client.player instanceof Bot) {
+                    if (client.player instanceof Bot) {
                         client.makePlayerDoMove();
                     }
                     moveCounter += 1;
