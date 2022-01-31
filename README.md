@@ -41,7 +41,8 @@ Optionally, you can also build the project by right-clicking the project root fo
 clicking `Build Module 'yellow-17'`
 
 To make sure we all get the same results, the versions of the libraries should be the same. This is ensured by placing
-all the libraries in the `./lib` folder. If needed, they can be downloaded again by following the [Download dependencies](#download-dependencies) instructions
+all the libraries in the `./lib` folder. If needed, they can be downloaded again by following
+the [Download dependencies](#download-dependencies) instructions
 
 ## Run instructions
 
@@ -63,6 +64,19 @@ To start the server, run `java -cp target/<output-file>.jar pentago.client.Simpl
 
 **Note:** Make sure to replace `<output-file>` by the actual output file. This should be something
 like `yellow17-1.0-SNAPSHOT`
+
+### Command line arguments (optional)
+
+It is possible to add command line arguments when starting the program. When this is used, you'll skip some questions at
+the start of the program. The following flags can be used:
+
+- `--human` Sets player type to human
+- `--naive-bot` Sets player type to naive bot
+- `--smart-bot` Sets player type to smart bot
+- `--preset` Automatically connects to the reference server
+
+When using `<command> --smart-bot --preset` for example, the client will automatically start playing games using the
+smart bot without any user input.
 
 ### Download dependencies
 
