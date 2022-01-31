@@ -8,6 +8,7 @@ public class Server {
         server.start();
         System.out.println(server.getPort());
 
+        // TODO Don't think this works perfectly
         String isClosing = "";
         while (!isClosing.equals("quit")) {
             try (Scanner scanner = new Scanner(System.in)) {

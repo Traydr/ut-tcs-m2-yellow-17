@@ -42,6 +42,10 @@ public class ClientHandler implements Runnable {
         return username;
     }
 
+    public void setGame(Game game) {
+        this.game = game;
+    }
+
     public void sendMessage(String message) {
         try {
             this.writer.write(message + "\n");
@@ -117,6 +121,18 @@ public class ClientHandler implements Runnable {
                 server.addToQueue(this);
                 break;
             case "MOVE":
+                if (parsedInput.length != 3) {
+                    sendError("Move has too few or too many arguments");
+                    close();
+                    break;
+                }
+                int move = Integer.parseInt(parsedInput[1]);
+                int rotate = Integer.parseInt(parsedInput[2]);
+                if (move < 0 || move > 35 || rotate < 0 || rotate > 8) {
+                    sendError("Move or rotate have invalid numbers");
+                    close();
+                    break;
+                }
                 // TODO Implement movement
                 break;
             case "PING":

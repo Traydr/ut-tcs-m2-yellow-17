@@ -5,6 +5,7 @@ import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Random;
 
 public class SimplePentagoServer implements PentagoServer{
     private ServerSocket serverSocket;
@@ -64,21 +65,27 @@ public class SimplePentagoServer implements PentagoServer{
         }
     }
 
-    public int getQueueLength() {
-        synchronized (queue) {
-            return queue.size();
-        }
-    }
-
     public void startNewGame() {
+        Random random = new Random();
+        Game game;
+        ClientHandler player1;
+        ClientHandler player2;
+
         synchronized (queue) {
             if (queue.size() < 2) {
                 return;
             }
-            ClientHandler player1 = getNextInQueue();
-            ClientHandler player2 = getNextInQueue();
+            player1 = getNextInQueue();
+            player2 = getNextInQueue();
         }
-        // TODO Start new game here & thread for game
+
+        if (random.nextInt(2) == 0) {
+            game = new Game(player1, player2);
+        } else {
+            game = new Game(player2, player1);
+        }
+        player1.setGame(game);
+        player2.setGame(game);
     }
 
     public void sendChat(ClientHandler sender, String message) {

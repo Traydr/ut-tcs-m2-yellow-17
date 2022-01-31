@@ -7,15 +7,15 @@ import pentago.game_logic.Mark;
 
 public class Game {
     public static final int NUMBER_PLAYERS = 2;
-    public Player[] players;
     private final Board board;
     private int current;
+    private ClientHandler[] players;
 
-    public Game(Player p0, Player p1) {
+    public Game(ClientHandler player1, ClientHandler player2) {
         board = new Board();
-        players = new Player[NUMBER_PLAYERS];
-        players[0] = p0;
-        players[1] = p1;
+        players = new ClientHandler[NUMBER_PLAYERS];
+        players[0] = player1;
+        players[1] = player2;
         current = 0;
     }
 
@@ -31,13 +31,19 @@ public class Game {
      * Actually make a move in the board.
      * @param pos The integer representation of the place in the board (See protocol documentation)
      * @param rot The integer representation of the rotation (See protocol documentation)
+     * @return true if move went through, false if not
      */
-    public void setBoard(int pos, int rot) {
+    public boolean setBoard(int pos, int rot, ClientHandler player) {
+        if (player != players[current % 2]) {
+            return false;
+        }
+
         int[] localCoords = CommandParser.protocolToLocalCoords(pos);
         board.setField(localCoords[0], localCoords[1], localCoords[2],
                        current % 2 == 0 ? Mark.BLACK : Mark.WHITE);
         current++;
         board.rotateQuadrant(CommandParser.protocolToLocalRotate(rot));
+        return true;
     }
 
     /**
