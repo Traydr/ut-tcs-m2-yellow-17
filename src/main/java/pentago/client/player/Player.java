@@ -33,7 +33,7 @@ public abstract class Player {
     }
 
     /**
-     * Updates the name of the player
+     * Updates the name of the player.
      *
      * @param name The new name of the player
      */

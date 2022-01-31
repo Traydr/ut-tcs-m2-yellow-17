@@ -153,7 +153,7 @@ public class PentagoClient {
 
     public void parseInput(String input) {
         String[] parsedInput = input.split(" ");
-        if(!isValidName && !parsedInput[0].equals("setname")) {
+        if (!isValidName && !parsedInput[0].equals("setname")) {
             System.out.println("Expected [setname] command. Please set a name before continuing");
             return;
         }
@@ -222,6 +222,7 @@ public class PentagoClient {
             case "setname":
                 player.setName(parsedInput[1]);
                 this.login();
+                break;
             case "ping":
                 network.sendMessage("PING");
                 break;
