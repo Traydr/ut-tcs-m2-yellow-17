@@ -10,9 +10,7 @@ import pentago.game_logic.Mark;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,40 +43,57 @@ public class PentagoClient {
         PentagoClient client;
         Player player;
 
-        System.out.println("(H)uman, (B)ot or (S)mart bot");
-        String input = scanner.nextLine();
-        if (input.equals("B")) {
-            player = new Bot(Mark.BLACK);
-            System.out.println("Playing as naive bot");
-        } else if (input.equals("S")) {
-            player = new Bot(Mark.BLACK, new SmartStrategy());
-            System.out.println("Playing as smart bot");
-        } else {
+        List argsList = Arrays.asList(args);
+        if (argsList.contains("--human")) {
+            System.out.println("Player: Human");
             player = new Human("Human", Mark.BLACK);
-            System.out.println("Playing as human");
+        } else if (argsList.contains("--naive-bot")) {
+            System.out.println("Player: Naive bot");
+            player = new Bot(Mark.BLACK);
+        } else if (argsList.contains("--smart-bot")) {
+            System.out.println("Player: Smart bot");
+            player = new Bot(Mark.BLACK, new SmartStrategy());
+        } else {
+            System.out.println("(H)uman, (B)ot or (S)mart bot");
+            String input = scanner.nextLine();
+            if (input.equals("B")) {
+                player = new Bot(Mark.BLACK);
+                System.out.println("Player: Naive bot");
+            } else if (input.equals("S")) {
+                player = new Bot(Mark.BLACK, new SmartStrategy());
+                System.out.println("Player: Smart bot");
+            } else {
+                player = new Human("Human", Mark.BLACK);
+                System.out.println("Player: Human");
+            }
         }
 
-        System.out.println("(P)reset or (C)ustom?");
-        if (scanner.nextLine().equals("C")) {
-            System.out.println("Server Address:");
-            String serverAddress = scanner.nextLine();
-            System.out.println("Server Port:");
-            int port = scanner.nextInt();
-
-            System.out.println("Username:");
-            String username = scanner.nextLine();
-
-            while (username.contains("~")) {
-                System.out.println("ERR: invalid username cannot contain \"~\" characters" +
-                                   "\nPlease try again:");
-                username = scanner.nextLine();
-            }
-
-            client = new PentagoClient(serverAddress, port, username, player);
-
-        } else {
+        if (argsList.contains("--preset")) {
             Random random = new Random();
             client = new PentagoClient(random.nextInt(999), player);
+        } else {
+            System.out.println("(P)reset or (C)ustom?");
+            if (scanner.nextLine().equals("C")) {
+                System.out.println("Server Address:");
+                String serverAddress = scanner.nextLine();
+                System.out.println("Server Port:");
+                int port = scanner.nextInt();
+
+                System.out.println("Username:");
+                String username = scanner.nextLine();
+
+                while (username.contains("~")) {
+                    System.out.println("ERR: invalid username cannot contain \"~\" characters" +
+                                       "\nPlease try again:");
+                    username = scanner.nextLine();
+                }
+
+                client = new PentagoClient(serverAddress, port, username, player);
+
+            } else {
+                Random random = new Random();
+                client = new PentagoClient(random.nextInt(999), player);
+            }
         }
 
         try {
@@ -94,7 +109,7 @@ public class PentagoClient {
 
         client.connectToServer();
 
-        if(client.player instanceof Bot) {
+        if (client.player instanceof Bot) {
             System.out.println("Automatically queueing...");
             client.network.sendMessage("QUEUE");
         }
