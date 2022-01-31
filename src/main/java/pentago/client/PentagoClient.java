@@ -91,6 +91,11 @@ public class PentagoClient {
 
         client.connectToServer();
 
+        if(client.player instanceof Bot) {
+            System.out.println("Automatically queueing...");
+            client.network.sendMessage("QUEUE");
+        }
+
         String output;
         while (scanner.hasNextLine() && client.network != null) {
             output = scanner.nextLine();

@@ -113,11 +113,10 @@ public class Listener implements Runnable {
                 }
                 botMoveCounter = 0;
                 client.endCurrentGame();
-                // <-------- DEBUG --------> Maybe?
                 if (client.player instanceof Bot) {
+                    System.out.println("Queueing again...");
                     network.sendMessage("QUEUE");
                 }
-                // <-------- DEBUG -------->
                 break;
             case "CHAT":
                 System.out.println(
