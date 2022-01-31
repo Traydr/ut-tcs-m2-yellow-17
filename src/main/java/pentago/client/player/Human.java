@@ -24,53 +24,6 @@ public class Human extends Player {
 
     @Override
     public String[] determineMove(Board board) {
-        String input;
-        Pattern pattern = Pattern.compile("[A-D][0-8]");
-        Matcher matcher;
-        try (Scanner scanner = new Scanner(new InputStreamReader(System.in))) {
-            String prompt = "> " + getName() + " (" + getMark().toString() + ")"
-                            + ", what is your choice? [A-D][0-8]";
-
-            System.out.println(prompt);
-            input = scanner.nextLine();
-
-            matcher = pattern.matcher(input);
-            boolean valid = board.isField(input) && board.isEmptyField(input) &&
-                            matcher.find() && input.length() == 2;
-            while (!valid) {
-                System.out.println("ERROR: field " + input + " is no valid choice.");
-                System.out.println(prompt);
-                input = scanner.nextLine();
-                matcher = pattern.matcher(input);
-                valid = board.isField(input) && board.isEmptyField(input) &&
-                        matcher.find() && input.length() == 2;
-            }
-        }
-
-
-
-        String rotateInput;
-        Pattern rotatePattern = Pattern.compile("[A-D][L|R]");
-        Matcher rotateMatcher;
-
-        try (Scanner scanner = new Scanner(new InputStreamReader(System.in))) {
-            String prompt = "> " + getName() + " (" + getMark().toString() + ")"
-                            + ", rotation? [A-D][L|R] ";
-
-            System.out.println(prompt);
-            rotateInput = scanner.nextLine();
-
-            rotateMatcher = rotatePattern.matcher(rotateInput);
-            boolean valid = rotateMatcher.find() && rotateInput.length() == 2;
-            while (!valid) {
-                System.out.println("ERROR: field " + rotateInput + " is no valid choice.");
-                System.out.println(prompt);
-                rotateInput = scanner.nextLine();
-                rotateMatcher = rotatePattern.matcher(rotateInput);
-                valid = rotateMatcher.find() && rotateInput.length() == 2;
-            }
-        }
-
-        return new String[]{input, rotateInput};
+        return new String[0];
     }
 }

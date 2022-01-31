@@ -13,6 +13,8 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PentagoClient {
     public String serverAddress;
@@ -141,6 +143,15 @@ public class PentagoClient {
                     System.out.println("ERR: too many or too few arguments");
                     break;
                 }
+
+                Pattern movePattern = Pattern.compile("[A-D][0-8]");
+                Matcher moveMatcher = movePattern.matcher(parsedInput[1]);
+                boolean isValidMove = moveMatcher.find();
+                if (!isValidMove) {
+                    System.out.println("This is not a valid move");
+                    break;
+                }
+
                 Board tmpBoard = new Board();
                 int[] coords = tmpBoard.getCoords(parsedInput[1]);
                 moveCmd = "MOVE~" +
@@ -154,6 +165,15 @@ public class PentagoClient {
                     System.out.println("ERR: too many or too few arguments");
                     break;
                 }
+
+                Pattern rotatePattern = Pattern.compile("[A-D][L|R]");
+                Matcher rotateMatcher = rotatePattern.matcher(parsedInput[1]);
+                boolean isValidRotate = rotateMatcher.find();
+                if (!isValidRotate) {
+                    System.out.println("This is not a valid rotation command");
+                    break;
+                }
+
                 moveCmd += "~" + CommandParser.localToProtocolRotate(parsedInput[1]);
                 network.sendMessage(moveCmd);
                 moveCmd = null;
@@ -225,7 +245,7 @@ public class PentagoClient {
         //TODO Format this to look nicer
         String[] commands = {"list\n\tLists all users currently connected to the server",
                              "queue\n\tQueues up for a new game",
-                             "move [A-D][0-8]\n\tPlaces a piece down a piece on the position",
+                             "place [A-D][0-8]\n\tPlaces a piece down a piece on the position",
                              "rotate [A-D][L|R]\n\tRotates a quadrant in a specific direction",
                              "ping\n\tPings the server to see if its still alive",
                              "chat [message]" + (this.serverFeatures.contains("CHAT") ? "" :
