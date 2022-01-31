@@ -78,21 +78,21 @@ public class PentagoClient {
                 System.out.println("Server Port:");
                 int port = Integer.parseInt(scanner.nextLine());
 
-                System.out.println("Username:");
-                String username = scanner.nextLine();
-
-                while (username.contains("~")) {
-                    System.out.println("ERR: invalid username cannot contain \"~\" characters" +
-                                       "\nPlease try again:");
-                    username = scanner.nextLine();
-                }
-
                 client = new PentagoClient(serverAddress, port, player);
 
             } else {
                 Random random = new Random();
                 client = new PentagoClient(player);
             }
+        }
+
+        System.out.println("Username:");
+        String username = scanner.nextLine();
+
+        while (username.contains("~")) {
+            System.out.println("ERR: invalid username cannot contain \"~\" characters" +
+                               "\nPlease try again:");
+            username = scanner.nextLine();
         }
 
         try {
