@@ -1,6 +1,5 @@
 package pentago.server;
 
-import pentago.client.player.Player;
 import pentago.game_logic.Board;
 import pentago.game_logic.CommandParser;
 import pentago.game_logic.Mark;
@@ -54,5 +53,35 @@ public class Game {
      */
     public Mark winner() {
         return board.hasWinner() ? (board.isWinner(Mark.BLACK) ? Mark.BLACK : Mark.WHITE) : null;
+    }
+
+    public void checkWinner() {
+        if (players[0] == null) {
+            players[1].sendMessage("GAMEOVER~DISCONNECT~" + players[1].getUsername());
+            players[1].endGame();
+        } else if (players[1] == null) {
+            players[0].sendMessage("GAMEOVER~DISCONNECT~" + players[0].getUsername());
+            players[0].endGame();
+        }
+
+        if (!board.hasWinner()) {
+            return;
+        }
+        Mark mWinner = winner();
+
+        if (mWinner == null) {
+            for (ClientHandler player : players) {
+                player.sendMessage("GAMEOVER~DRAW");
+                player.endGame();
+            }
+            return;
+        }
+
+        ClientHandler output = mWinner == Mark.BLACK ? players[0] : players[1];
+        for (ClientHandler player : players) {
+            player.sendMessage("GAMEOVER~VICTORY~" + output.getUsername());
+            player.endGame();
+        }
+        return;
     }
 }

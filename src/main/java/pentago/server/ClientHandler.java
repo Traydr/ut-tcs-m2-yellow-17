@@ -46,6 +46,10 @@ public class ClientHandler implements Runnable {
         this.game = game;
     }
 
+    public void endGame() {
+        this.game = null;
+    }
+
     public void sendMessage(String message) {
         try {
             this.writer.write(message + "\n");
@@ -63,6 +67,10 @@ public class ClientHandler implements Runnable {
         try {
             if (!socket.isClosed()) {
                 socket.close();
+            }
+
+            if (game != null) {
+                //TODO win game by disconnect
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -126,14 +134,23 @@ public class ClientHandler implements Runnable {
                     close();
                     break;
                 }
+
                 int move = Integer.parseInt(parsedInput[1]);
                 int rotate = Integer.parseInt(parsedInput[2]);
+
                 if (move < 0 || move > 35 || rotate < 0 || rotate > 8) {
                     sendError("Move or rotate have invalid numbers");
                     close();
                     break;
                 }
-                // TODO Implement movement
+
+                if (!game.setBoard(move, rotate, this)) {
+                    sendError("It is not your turn");
+                    close();
+                    break;
+                }
+
+                game.checkWinner();
                 break;
             case "PING":
                 sendMessage("PONG");
@@ -166,12 +183,10 @@ public class ClientHandler implements Runnable {
     public void run() {
         server.addClient(this);
         try (Scanner scanner = new Scanner(new InputStreamReader(this.socket.getInputStream()))) {
-            // Read HELLO and LOGIN
-
             String input;
             while (scanner.hasNextLine()) {
                 input = scanner.nextLine();
-                // TODO parse input
+                parseClient(input);
             }
         } catch (IOException e) {
             e.printStackTrace();
