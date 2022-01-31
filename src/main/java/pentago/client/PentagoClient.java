@@ -25,6 +25,7 @@ public class PentagoClient {
     public ArrayList<String> serverFeatures;
     public Player player;
     public String moveCmd;
+    int moveCounter = 0;
 
     public PentagoClient(String serverAddress, int port, String username, Player player) {
         this.serverAddress = serverAddress;
@@ -141,6 +142,11 @@ public class PentagoClient {
                     break;
                 } else if (parsedInput.length != 2) {
                     System.out.println("ERR: too many or too few arguments");
+                    break;
+                }
+
+                if (moveCounter % 2 == 0) {
+                    System.out.println("It is not your turn!");
                     break;
                 }
 
