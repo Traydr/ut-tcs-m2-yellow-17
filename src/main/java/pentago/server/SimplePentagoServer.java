@@ -10,9 +10,9 @@ public class SimplePentagoServer implements PentagoServer{
     private Queue<ClientHandler> queue;
 
     @Override
-    public void start() {
+    public void start(int port) {
         try {
-            serverSocket = new ServerSocket(0);
+            serverSocket = new ServerSocket(port);
             System.out.println("Server: " + serverSocket.getLocalSocketAddress());
             clients = new ArrayList<>();
             queue = new ArrayDeque<>();
