@@ -12,7 +12,7 @@ public class Listener implements Runnable {
     BufferedReader br = null;
     Network network = null;
     PentagoClient client = null;
-    int botMoveCounter;
+    int moveCounter;
 
     Listener(Socket sock, Network net, PentagoClient client) {
         this.socket = sock;
@@ -23,7 +23,7 @@ public class Listener implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.botMoveCounter = 0;
+        this.moveCounter = 0;
     }
 
     void close() {
@@ -56,11 +56,14 @@ public class Listener implements Runnable {
             case "MOVE":
                 client.game.listenerSetBoard(Integer.parseInt(inputParsed[1]),
                                              Integer.parseInt(inputParsed[2]));
-                if (client.player instanceof Bot && botMoveCounter % 2 == 0 &&
+                if (client.player instanceof Bot && moveCounter % 2 == 0 &&
                     !client.game.board.gameOver()) {
                     client.makePlayerDoMove();
                 }
-                botMoveCounter += 1;
+                moveCounter += 1;
+                System.out.println(client.game.update());
+                System.out.println(moveCounter % 2 == 1 ? "It's now your turn" :
+                                   "It's now the other player's turn");
                 break;
             case "PING":
                 network.sendMessage("PONG");
@@ -86,9 +89,11 @@ public class Listener implements Runnable {
                 boolean areWeStarting = client.username.equals(inputParsed[1]);
                 System.out.println(
                         areWeStarting ? "It's our turn" : "It's the other player's turn");
-                if (areWeStarting && client.player instanceof Bot) {
-                    client.makePlayerDoMove();
-                    botMoveCounter += 1;
+                if (areWeStarting) {
+                    if(client.player instanceof Bot) {
+                        client.makePlayerDoMove();
+                    }
+                    moveCounter += 1;
                 }
                 break;
             case "GAMEOVER":
@@ -111,7 +116,7 @@ public class Listener implements Runnable {
                         System.out.println("ERR: unexpected win condition");
                         break;
                 }
-                botMoveCounter = 0;
+                moveCounter = 0;
                 client.endCurrentGame();
                 // <-------- DEBUG --------> Maybe?
                 if (client.player instanceof Bot) {
