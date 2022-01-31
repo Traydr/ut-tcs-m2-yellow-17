@@ -50,7 +50,10 @@ public class Listener implements Runnable {
                 System.out.println("Logged In");
                 break;
             case "ALREADYLOGGEDIN":
-                System.out.println("ERR: already logged in");
+                System.out.println(
+                        "This username already exists! Please use the [setname] command to set a " +
+                        "new name");
+                client.isValidName = false;
                 break;
             case "MOVE":
                 client.game.listenerSetBoard(Integer.parseInt(inputParsed[1]),
@@ -85,7 +88,7 @@ public class Listener implements Runnable {
                         "New Game:" + "\n\tPlayer 1: " + inputParsed[1] + "\n\tPlayer 2: " +
                         inputParsed[2]);
                 client.startNewGame(inputParsed[1], inputParsed[2]);
-                boolean areWeStarting = client.username.equals(inputParsed[1]);
+                boolean areWeStarting = client.player.getName().equals(inputParsed[1]);
                 System.out.println(
                         areWeStarting ? "It's our turn" : "It's the other player's turn");
                 if (areWeStarting) {
@@ -99,7 +102,7 @@ public class Listener implements Runnable {
                 System.out.println(client.game.update());
                 switch (inputParsed[1]) {
                     case "VICTORY":
-                        if (client.username.equals(inputParsed[2])) {
+                        if (client.player.getName().equals(inputParsed[2])) {
                             System.out.println("We won!!");
                         } else {
                             System.out.println("We lost...");

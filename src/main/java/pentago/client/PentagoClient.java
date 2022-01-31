@@ -17,25 +17,24 @@ import java.util.regex.Pattern;
 public class PentagoClient {
     public String serverAddress;
     public int port;
-    public String username;
     public Network network;
     public Game game;
     public ArrayList<String> serverFeatures;
     public Player player;
     public String moveCmd;
     int moveCounter = 0;
+    boolean isValidName = false;
 
-    public PentagoClient(String serverAddress, int port, String username, Player player) {
+    public PentagoClient(String serverAddress, int port, Player player) {
         this.serverAddress = serverAddress;
         this.port = port;
-        this.username = username;
         this.network = new Networking();
         this.serverFeatures = new ArrayList<>();
         this.player = player;
     }
 
-    public PentagoClient(int randNum, Player player) {
-        this("130.89.253.64", 55555, "Tray-" + randNum, player);
+    public PentagoClient(Player player) {
+        this("130.89.253.64", 55555, player);
     }
 
     public static void main(String[] args) {
@@ -70,30 +69,30 @@ public class PentagoClient {
 
         if (argsList.contains("--preset")) {
             Random random = new Random();
-            client = new PentagoClient(random.nextInt(999), player);
+            client = new PentagoClient(player);
         } else {
             System.out.println("(P)reset or (C)ustom?");
             if (scanner.nextLine().equals("C")) {
                 System.out.println("Server Address:");
                 String serverAddress = scanner.nextLine();
                 System.out.println("Server Port:");
-                int port = scanner.nextInt();
+                int port = Integer.parseInt(scanner.nextLine());
 
-                System.out.println("Username:");
-                String username = scanner.nextLine();
-
-                while (username.contains("~")) {
-                    System.out.println("ERR: invalid username cannot contain \"~\" characters" +
-                                       "\nPlease try again:");
-                    username = scanner.nextLine();
-                }
-
-                client = new PentagoClient(serverAddress, port, username, player);
+                client = new PentagoClient(serverAddress, port, player);
 
             } else {
                 Random random = new Random();
-                client = new PentagoClient(random.nextInt(999), player);
+                client = new PentagoClient(player);
             }
+        }
+
+        System.out.println("Username:");
+        String username = scanner.nextLine();
+
+        while (username.contains("~")) {
+            System.out.println("ERR: invalid username cannot contain \"~\" characters" +
+                               "\nPlease try again:");
+            username = scanner.nextLine();
         }
 
         try {
@@ -143,12 +142,21 @@ public class PentagoClient {
     }
 
     public void connectToServer() {
-        network.sendMessage("HELLO~" + username + "~CHAT");
-        network.sendMessage("LOGIN~" + username);
+        network.sendMessage("HELLO~" + player.getName() + "~CHAT");
+        this.login();
+    }
+
+    public void login() {
+        network.sendMessage("LOGIN~" + player.getName());
+        this.isValidName = true;
     }
 
     public void parseInput(String input) {
         String[] parsedInput = input.split(" ");
+        if (!isValidName && !parsedInput[0].equals("setname")) {
+            System.out.println("Expected [setname] command. Please set a name before continuing");
+            return;
+        }
         switch (parsedInput[0]) {
             case "help":
                 displayHelp();
@@ -210,6 +218,10 @@ public class PentagoClient {
                 break;
             case "rplace":
                 moveCmd = "";
+                break;
+            case "setname":
+                player.setName(parsedInput[1]);
+                this.login();
                 break;
             case "ping":
                 network.sendMessage("PING");

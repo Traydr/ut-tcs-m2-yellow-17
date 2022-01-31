@@ -4,7 +4,7 @@ import pentago.game_logic.Board;
 import pentago.game_logic.Mark;
 
 public abstract class Player {
-    private final String name;
+    private String name;
     private final Mark mark;
 
     /**
@@ -30,6 +30,15 @@ public abstract class Player {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * Updates the name of the player.
+     *
+     * @param name The new name of the player
+     */
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**
