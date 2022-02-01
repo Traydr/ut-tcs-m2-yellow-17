@@ -1,0 +1,4 @@
+pentago.client
+pentago.client.player
+pentago.game_logic
+pentago.server
