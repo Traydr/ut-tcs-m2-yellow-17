@@ -1,11 +1,11 @@
 package pentago.client.player;
 
-import pentago.game_logic.Board;
 import pentago.game_logic.Mark;
 
 public abstract class Player {
     private String name;
     private final Mark mark;
+    private Strategy strategy;
 
     /**
      * Creates a new player object with a name and mark.
@@ -18,9 +18,14 @@ public abstract class Player {
         ensures this.name == name;
         ensures this.mark == mark;
     @*/
-    public Player(String name, Mark mark) {
+    public Player(String name, Mark mark, Strategy strategy) {
         this.name = name;
         this.mark = mark;
+        this.strategy = strategy;
+    }
+
+    public Player(String name, Mark mark) {
+        this(name, mark, new NaiveStrategy());
     }
 
     /**
@@ -51,24 +56,11 @@ public abstract class Player {
     }
 
     /**
-     * Determines the field for the next move.
+     * Returns the strategy of the bot.
      *
-     * @param board The current game board
-     * @return the players' choice
+     * @return Strategy of the bot
      */
-    /*@ requires board != null && board.isFull() == false;
-        ensures board.isField(\result) && board.getField(\result) == Mark.EMPTY;
-    @*/
-    public abstract String[] determineMove(Board board);
-
-    /**
-     * Makes a move on the board.
-     *
-     * @param board the current board
-     */
-    public void makeMove(Board board) {
-        String[] move = determineMove(board);
-        board.setField(move[0], getMark());
-        board.rotateQuadrant(move[1]);
+    public Strategy getStrategy() {
+        return this.strategy;
     }
 }
