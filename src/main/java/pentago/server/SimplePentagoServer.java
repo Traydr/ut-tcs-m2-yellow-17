@@ -96,7 +96,7 @@ public class SimplePentagoServer implements PentagoServer {
     public void sendChat(ClientHandler sender, String message) {
         synchronized (clients) {
             for (ClientHandler client : clients) {
-                if (client == sender) {
+                if (client == sender && !client.clientSupportedFeatures.contains("CHAT")) {
                     continue;
                 }
                 client.sendMessage("CHAT~" + sender.getUsername() + "~" + message);
@@ -111,7 +111,8 @@ public class SimplePentagoServer implements PentagoServer {
 
         synchronized (clients) {
             for (ClientHandler client : clients) {
-                if (!client.getUsername().equals(receiver)) {
+                if (!client.getUsername().equals(receiver) &&
+                    !client.clientSupportedFeatures.contains("CHAT")) {
                     continue;
                 }
                 client.sendMessage("WHISPER~" + sender.getUsername() + "~" + message);

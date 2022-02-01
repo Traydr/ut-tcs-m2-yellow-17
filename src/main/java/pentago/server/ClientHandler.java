@@ -20,7 +20,7 @@ public class ClientHandler implements Runnable {
     private boolean loggedIn;
     private String serverName;
     private ArrayList<String> supportedFeatures;
-    private ArrayList<String> clientSupportedFeatures;
+    public ArrayList<String> clientSupportedFeatures;
     private Game game;
 
     public ClientHandler(Socket socket, SimplePentagoServer server) throws IOException {
