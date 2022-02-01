@@ -35,6 +35,11 @@ public class Bot extends Player {
         this(mark, new NaiveStrategy());
     }
 
+    /**
+     * Gets the strategy assigned to the bot to calculate its next move
+     * @param board The current game board
+     * @return A move to be made
+     */
     @Override
     public String[] determineMove(Board board) {
         return strategy.determineMove(board, this.mark);

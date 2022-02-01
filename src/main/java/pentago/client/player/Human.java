@@ -17,6 +17,11 @@ public class Human extends Player {
         super(name, mark);
     }
 
+    /**
+     * Currently this method is not used when a human player is playing
+     * @param board The current game board
+     * @return an empty string array
+     */
     @Override
     public String[] determineMove(Board board) {
         return new String[0];

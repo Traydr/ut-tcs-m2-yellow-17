@@ -13,6 +13,12 @@ public class Listener implements Runnable {
     Network network = null;
     PentagoClient client = null;
 
+    /**
+     * Constructs a new listener object
+     * @param sock the socket connecting to the server
+     * @param net the network object
+     * @param client the client object
+     */
     Listener(Socket sock, Network net, PentagoClient client) {
         this.socket = sock;
         this.network = net;
@@ -25,6 +31,9 @@ public class Listener implements Runnable {
         this.client.moveCounter = 0;
     }
 
+    /**
+     * Closes the listener by closing the buffered reader
+     */
     void close() {
         try {
             br.close();
@@ -33,7 +42,11 @@ public class Listener implements Runnable {
         }
     }
 
-    public void messageParser(String input) {
+    /**
+     * Parses the messages from the server
+     * @param input protocol messages from the server
+     */
+    private void messageParser(String input) {
         String[] inputParsed = input.split("~");
 
         switch (inputParsed[0]) {
@@ -142,6 +155,9 @@ public class Listener implements Runnable {
         }
     }
 
+    /**
+     * Reads from the socket until it closes.
+     */
     @Override
     public void run() {
         if (this.socket.isClosed()) {
@@ -150,9 +166,6 @@ public class Listener implements Runnable {
         try {
             String output;
             while ((output = br.readLine()) != null) {
-                // <-------- DEBUG -------->
-                //System.out.println("[SERVER]" + output);
-                // <-------- DEBUG -------->
                 messageParser(output);
             }
         } catch (IOException e) {

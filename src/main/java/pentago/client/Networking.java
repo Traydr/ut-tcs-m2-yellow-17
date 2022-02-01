@@ -14,6 +14,14 @@ public class Networking implements Network {
     Listener listener;
     PentagoClient client;
 
+    /**
+     * Tries to connect to a specific server.
+     *
+     * @param address       Address of the server
+     * @param port          port of the server
+     * @param pentagoClient The client that is making the connection
+     * @return true if the connection was successful, false otherwise
+     */
     @Override
     public boolean connect(InetAddress address, int port, PentagoClient pentagoClient) {
         this.client = pentagoClient;
@@ -29,6 +37,9 @@ public class Networking implements Network {
         }
     }
 
+    /**
+     * Closes the connection to the server by closing the writer, listener and socket
+     */
     @Override
     public void close() {
         try {
@@ -42,12 +53,15 @@ public class Networking implements Network {
         }
     }
 
+    /**
+     * Sends a message to the server
+     *
+     * @param message message to be sent
+     * @return true if successful, false otherwiser
+     */
     @Override
     public boolean sendMessage(String message) {
         try {
-            // <-------- DEBUG -------->
-            //System.out.println("[SENDING]" + message);
-            // <-------- DEBUG -------->
             bw.write(message + "\n");
             bw.flush();
             return true;
