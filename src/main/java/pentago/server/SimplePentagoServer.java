@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.*;
 
-public class SimplePentagoServer implements PentagoServer{
+public class SimplePentagoServer implements PentagoServer {
     private ServerSocket serverSocket;
     private List<ClientHandler> clients;
     private Queue<ClientHandler> queue;
@@ -125,7 +125,7 @@ public class SimplePentagoServer implements PentagoServer{
                 continue;
             }
 
-            if (client.getUsername().equals(name)){
+            if (client.getUsername().equals(name)) {
                 return true;
             }
         }

@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class AcceptConnection implements Runnable{
+public class AcceptConnection implements Runnable {
     ServerSocket serverSocket;
     SimplePentagoServer gameServer;
 
