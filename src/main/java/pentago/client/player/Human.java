@@ -18,7 +18,7 @@ public class Human extends Player {
     }
 
     /**
-     * Currently this method is not used when a human player is playing
+     * Currently this method is not used when a human player is playing.
      * @param board The current game board
      * @return an empty string array
      */

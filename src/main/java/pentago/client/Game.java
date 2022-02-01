@@ -52,7 +52,7 @@ public class Game {
     }
 
     /**
-     * Gets a random move to be made
+     * Gets a random move to be made.
      * @return String in the form of "Place: [A-D][0-8] \n Rotate: [A-D][L|R]"
      */
     public String getRandomMove() {

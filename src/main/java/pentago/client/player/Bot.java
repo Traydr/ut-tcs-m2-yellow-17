@@ -36,7 +36,7 @@ public class Bot extends Player {
     }
 
     /**
-     * Gets the strategy assigned to the bot to calculate its next move
+     * Gets the strategy assigned to the bot to calculate its next move.
      * @param board The current game board
      * @return A move to be made
      */

@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class Server {
     /**
-     * Starts a new server object and listens for a port and quit, for when to stop the server
+     * Starts a new server object and listens for a port and quit, for when to stop the server.
      * @param args
      */
     public static void main(String[] args) {

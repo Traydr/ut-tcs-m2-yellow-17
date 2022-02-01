@@ -14,7 +14,7 @@ public class Listener implements Runnable {
     PentagoClient client = null;
 
     /**
-     * Constructs a new listener object
+     * Constructs a new listener object.
      * @param sock the socket connecting to the server
      * @param net the network object
      * @param client the client object
@@ -32,7 +32,7 @@ public class Listener implements Runnable {
     }
 
     /**
-     * Closes the listener by closing the buffered reader
+     * Closes the listener by closing the buffered reader.
      */
     void close() {
         try {
@@ -43,7 +43,7 @@ public class Listener implements Runnable {
     }
 
     /**
-     * Parses the messages from the server
+     * Parses the messages from the server.
      * @param input protocol messages from the server
      */
     private void messageParser(String input) {

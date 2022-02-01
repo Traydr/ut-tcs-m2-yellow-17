@@ -11,7 +11,7 @@ public class Game {
     private ClientHandler[] players;
 
     /**
-     * Constructor for a new game object
+     * Constructor for a new game object.
      *
      * @param player1 first player
      * @param player2 second player
@@ -92,8 +92,8 @@ public class Game {
     }
 
     /**
-     * Checks if there is a winner, it then either does nothing if no one has won and the board is
-     * not full, else it sends a corresponding gameover message
+     * Checks if there is a winner, it does nothing if there is no winner and the board is not full.
+     * Otherwise, it responds with the corresponding game over message.
      */
     public void checkWinner() {
         if (!board.hasWinner() && !board.isFull()) {

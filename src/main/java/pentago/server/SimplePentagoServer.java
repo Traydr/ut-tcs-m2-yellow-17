@@ -10,7 +10,7 @@ public class SimplePentagoServer implements PentagoServer {
     private Queue<ClientHandler> queue;
 
     /**
-     * Starts the server
+     * Starts the server.
      *
      * @param port port on which the server should listen on
      */
@@ -128,7 +128,7 @@ public class SimplePentagoServer implements PentagoServer {
     }
 
     /**
-     * Sends a chat to all connected clients that support the CHAT feature
+     * Sends a chat to all connected clients that support the CHAT feature.
      *
      * @param sender  The client that is sending the message
      * @param message The message itself
@@ -169,7 +169,7 @@ public class SimplePentagoServer implements PentagoServer {
     }
 
     /**
-     * Checks whether a certain username is already being used by another client
+     * Checks whether a certain username is already being used by another client.
      *
      * @param name    The name of the client
      * @param request The client itself
@@ -199,7 +199,7 @@ public class SimplePentagoServer implements PentagoServer {
     }
 
     /**
-     * Stops the server by closing the socket
+     * Stops the server by closing the socket.
      */
     @Override
     public void stop() {

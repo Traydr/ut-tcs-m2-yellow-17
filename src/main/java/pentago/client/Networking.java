@@ -38,7 +38,7 @@ public class Networking implements Network {
     }
 
     /**
-     * Closes the connection to the server by closing the writer, listener and socket
+     * Closes the connection to the server by closing the writer, listener and socket.
      */
     @Override
     public void close() {
@@ -54,7 +54,7 @@ public class Networking implements Network {
     }
 
     /**
-     * Sends a message to the server
+     * Sends a message to the server.
      *
      * @param message message to be sent
      * @return true if successful, false otherwiser
