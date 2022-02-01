@@ -35,7 +35,15 @@ public class Bot extends Player {
         this(mark, new NaiveStrategy());
     }
 
-    @Override
+    /**
+     * Determines the field for the next move.
+     *
+     * @param board The current game board
+     * @return the players' choice
+     */
+    /*@ requires board != null && board.isFull() == false;
+        ensures board.isField(\result) && board.getField(\result) == Mark.EMPTY;
+    @*/
     public String[] determineMove(Board board) {
         return strategy.determineMove(board, this.mark);
     }

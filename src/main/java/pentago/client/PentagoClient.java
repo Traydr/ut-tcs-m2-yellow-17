@@ -277,7 +277,8 @@ public class PentagoClient {
     }
 
     public void makePlayerDoMove() {
-        String[] move = player.determineMove(game.board);
+        Bot bot = new Bot(this.player.getMark(), this.player.getStrategy());
+        String[] move = bot.determineMove(this.game.board);
         int[] coords = game.board.getCoords(move[0]);
         int place = CommandParser.localToProtocolCoords(coords[0], coords[1], coords[2]);
         int rotate = CommandParser.localToProtocolRotate(move[1]);
