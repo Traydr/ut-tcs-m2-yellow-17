@@ -1,5 +1,6 @@
 package pentago.client.player;
 
+import pentago.game_logic.Board;
 import pentago.game_logic.Mark;
 
 public class Human extends Player {
@@ -21,7 +22,6 @@ public class Human extends Player {
      * @param board The current game board
      * @return an empty string array
      */
-    @Override
     public String[] determineMove(Board board) {
         return new String[0];
     }
