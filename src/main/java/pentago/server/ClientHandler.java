@@ -162,6 +162,7 @@ public class ClientHandler implements Runnable {
                     break;
                 }
                 username = parsedInput[1];
+                sendMessage("LOGIN");
                 break;
             case "LIST":
                 List<String> allUsernames = server.getAllUsernames();
