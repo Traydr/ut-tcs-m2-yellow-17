@@ -36,14 +36,10 @@ public class Bot extends Player {
     }
 
     /**
-     * Determines the field for the next move.
-     *
+     * Gets the strategy assigned to the bot to calculate its next move.
      * @param board The current game board
-     * @return the players' choice
+     * @return A move to be made
      */
-    /*@ requires board != null && board.isFull() == false;
-        ensures board.isField(\result) && board.getField(\result) == Mark.EMPTY;
-    @*/
     public String[] determineMove(Board board) {
         return strategy.determineMove(board, this.mark);
     }

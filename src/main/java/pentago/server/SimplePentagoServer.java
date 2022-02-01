@@ -9,6 +9,11 @@ public class SimplePentagoServer implements PentagoServer {
     private List<ClientHandler> clients;
     private Queue<ClientHandler> queue;
 
+    /**
+     * Starts the server.
+     *
+     * @param port port on which the server should listen on
+     */
     @Override
     public void start(int port) {
         try {
@@ -24,12 +29,22 @@ public class SimplePentagoServer implements PentagoServer {
         }
     }
 
+    /**
+     * Adds a new client to the list of connected clients.
+     *
+     * @param clientHandler the client to add
+     */
     public void addClient(ClientHandler clientHandler) {
         synchronized (clients) {
             clients.add(clientHandler);
         }
     }
 
+    /**
+     * Removes a specific client from the list of connected clients.
+     *
+     * @param clientHandler the client to remove
+     */
     public void removeClient(ClientHandler clientHandler) {
         synchronized (clients) {
             if (queue.contains(clientHandler)) {
@@ -44,6 +59,11 @@ public class SimplePentagoServer implements PentagoServer {
         }
     }
 
+    /**
+     * Returns a list of all connected clients usernames.
+     *
+     * @return a list of strings containing usernames
+     */
     public List<String> getAllUsernames() {
         ArrayList<String> output = new ArrayList<>();
 
@@ -53,18 +73,32 @@ public class SimplePentagoServer implements PentagoServer {
         return output;
     }
 
+    /**
+     * Adds a client to the queue waiting for a new game to start.
+     *
+     * @param clientHandler the client to add
+     */
     public void addToQueue(ClientHandler clientHandler) {
         synchronized (queue) {
             queue.add(clientHandler);
         }
     }
 
+    /**
+     * Returns the first client in queue.
+     *
+     * @return client in queue pos 1
+     */
     public ClientHandler getNextInQueue() {
         synchronized (queue) {
             return queue.remove();
         }
     }
 
+    /**
+     * Starts a new game and randomly assigns which player should go first. It then sends the new
+     * game info to the clients.
+     */
     public void startNewGame() {
         Random random = new Random();
         Game game;
@@ -93,10 +127,17 @@ public class SimplePentagoServer implements PentagoServer {
         player2.sendMessage(message);
     }
 
+    /**
+     * Sends a chat to all connected clients that support the CHAT feature.
+     *
+     * @param sender  The client that is sending the message
+     * @param message The message itself
+     */
     public void sendChat(ClientHandler sender, String message) {
         synchronized (clients) {
             for (ClientHandler client : clients) {
-                if (client == sender) {
+                // TODO Transfer this clientSupportedFeatures check to ClientHandler
+                if (client == sender && !client.clientSupportedFeatures.contains("CHAT")) {
                     continue;
                 }
                 client.sendMessage("CHAT~" + sender.getUsername() + "~" + message);
@@ -104,6 +145,13 @@ public class SimplePentagoServer implements PentagoServer {
         }
     }
 
+    /**
+     * Sends a whisper to a specific client.
+     *
+     * @param sender   the client sending the message
+     * @param receiver the client receiving the message
+     * @param message  the message to be sent
+     */
     public void sendWhisper(ClientHandler sender, String receiver, String message) {
         if (sender.getUsername().equals(receiver)) {
             return;
@@ -111,7 +159,8 @@ public class SimplePentagoServer implements PentagoServer {
 
         synchronized (clients) {
             for (ClientHandler client : clients) {
-                if (!client.getUsername().equals(receiver)) {
+                if (!client.getUsername().equals(receiver) &&
+                    !client.clientSupportedFeatures.contains("CHAT")) {
                     continue;
                 }
                 client.sendMessage("WHISPER~" + sender.getUsername() + "~" + message);
@@ -119,6 +168,13 @@ public class SimplePentagoServer implements PentagoServer {
         }
     }
 
+    /**
+     * Checks whether a certain username is already being used by another client.
+     *
+     * @param name    The name of the client
+     * @param request The client itself
+     * @return true if the username is already in user, otherwise false
+     */
     public boolean isUsernameInUse(String name, ClientHandler request) {
         for (ClientHandler client : clients) {
             if (client == request) {
@@ -132,11 +188,19 @@ public class SimplePentagoServer implements PentagoServer {
         return false;
     }
 
+    /**
+     * Returns the port of the server.
+     *
+     * @return port
+     */
     @Override
     public int getPort() {
         return serverSocket.getLocalPort();
     }
 
+    /**
+     * Stops the server by closing the socket.
+     */
     @Override
     public void stop() {
         try {

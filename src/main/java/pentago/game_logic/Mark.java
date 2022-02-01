@@ -4,7 +4,7 @@ public enum Mark {
     EMPTY, BLACK, WHITE;
 
     /**
-     * Overrides default toString() method.
+     * Overrides default toString() method. Currently messed up due to code formatter.
      *
      * @return A string that represents the state of the board.
      * <p>

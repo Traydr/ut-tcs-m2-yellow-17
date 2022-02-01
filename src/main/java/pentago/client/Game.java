@@ -42,10 +42,6 @@ public class Game {
         board.rotateQuadrant(CommandParser.protocolToLocalRotate(rot));
     }
 
-    //    public boolean isCurrentPlayer(Player compare) {
-    //        return players[current] == compare;
-    //    }
-
     /**
      * Updates the user on the current game situation by displaying the board.
      *
@@ -55,6 +51,10 @@ public class Game {
         return board.toString() + "\n";
     }
 
+    /**
+     * Gets a random move to be made.
+     * @return String in the form of "Place: [A-D][0-8] \n Rotate: [A-D][L|R]"
+     */
     public String getRandomMove() {
         ArrayList<String> emptyFields = board.getEmptyFields();
         int arrSize = emptyFields.size();

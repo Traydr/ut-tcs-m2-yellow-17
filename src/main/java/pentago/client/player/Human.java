@@ -1,5 +1,6 @@
 package pentago.client.player;
 
+import pentago.game_logic.Board;
 import pentago.game_logic.Mark;
 
 public class Human extends Player {
@@ -14,5 +15,14 @@ public class Human extends Player {
     @*/
     public Human(String name, Mark mark) {
         super(name, mark);
+    }
+
+    /**
+     * Currently this method is not used when a human player is playing.
+     * @param board The current game board
+     * @return an empty string array
+     */
+    public String[] determineMove(Board board) {
+        return new String[0];
     }
 }

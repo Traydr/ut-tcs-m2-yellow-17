@@ -19,12 +19,19 @@ public class PentagoClient {
     public int port;
     public Network network;
     public Game game;
-    public ArrayList<String> serverFeatures;
+    private ArrayList<String> serverFeatures;
     public Player player;
-    public String moveCmd;
-    int moveCounter = 0;
-    boolean isValidName = false;
+    private String moveCmd;
+    public int moveCounter = 0;
+    public boolean isValidName = false;
 
+    /**
+     * Constructor for a new PentagoClient object.
+     *
+     * @param serverAddress The ip address for the server
+     * @param port          The port the server is running on
+     * @param player        The type of player that is playing it
+     */
     public PentagoClient(String serverAddress, int port, Player player) {
         this.serverAddress = serverAddress;
         this.port = port;
@@ -33,10 +40,21 @@ public class PentagoClient {
         this.player = player;
     }
 
+    /**
+     * Constructor for a PentagoClient object that connects to the reference server.
+     *
+     * @param player The type of player that is playing it
+     */
     public PentagoClient(Player player) {
         this("130.89.253.64", 55555, player);
     }
 
+    /**
+     * Main function where the user specifies how the user wants to play. What the username should
+     * be, what ip address and port do they want to connect to,
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         PentagoClient client;
@@ -133,27 +151,47 @@ public class PentagoClient {
         System.out.println("Quitting!");
     }
 
+    /**
+     * Starts a new game for the client side code to keep track of.
+     *
+     * @param player1 Player 1 name
+     * @param player2 Player 2 name
+     */
     public void startNewGame(String player1, String player2) {
         Player humanPlayer1 = new Human(player1, Mark.WHITE);
         Player humanPlayer2 = new Human(player2, Mark.BLACK);
         this.game = new Game(humanPlayer1, humanPlayer2);
     }
 
+    /**
+     * Ends the current game.
+     */
     public void endCurrentGame() {
         this.game = null;
     }
 
+    /**
+     * Performs the first time connect to the server.
+     */
     public void connectToServer() {
         network.sendMessage("HELLO~" + player.getName() + "~CHAT");
         this.login();
     }
 
+    /**
+     * Logs in to the server.
+     */
     public void login() {
         network.sendMessage("LOGIN~" + player.getName());
         this.isValidName = true;
     }
 
-    public void parseInput(String input) {
+    /**
+     * Parses the input from the user and translates it into commands.
+     *
+     * @param input user input
+     */
+    private void parseInput(String input) {
         String[] parsedInput = input.split(" ");
         if (!isValidName && !parsedInput[0].equals("setname")) {
             System.out.println("Expected [setname] command. Please set a name before continuing");
@@ -276,6 +314,9 @@ public class PentagoClient {
         }
     }
 
+    /**
+     * Makes a bot do a move and then sends it to the server.
+     */
     public void makePlayerDoMove() {
         Bot bot = new Bot(this.player.getMark(), this.player.getStrategy());
         String[] move = bot.determineMove(this.game.board);
@@ -286,8 +327,10 @@ public class PentagoClient {
         network.sendMessage("MOVE~" + place + "~" + rotate);
     }
 
+    /**
+     * Displays the help message to the user.
+     */
     public void displayHelp() {
-        //TODO Format this to look nicer
         String[] commands = {"list\n\tLists all users currently connected to the server",
                              "queue\n\tQueues up for a new game",
                              "place [A-D][0-8]\n\tPlaces a piece down a piece on the position",
@@ -296,11 +339,15 @@ public class PentagoClient {
                              "chat [message]" + (this.serverFeatures.contains("CHAT") ? "" :
                                                  " (Not supported by this server)") +
                              "\n\tsends a message to everyone on the server",
-                             "whisper [user] [message]\n\tsends a message to a specific person",
+                             "whisper [user] [message]" +
+                             (this.serverFeatures.contains("CHAT") ? "" :
+                              "(Not supported by this server)") +
+                             "\n\tsends a message to a specific person",
                              "help\n\tDisplays this help message",
                              "hint\n\tDisplays a possible move",
                              "show\n\tShows the current state of the board ",
                              "quit\n\tquits out of the program"};
+
 
         String output = "Commands:";
         for (String command : commands) {
@@ -309,6 +356,11 @@ public class PentagoClient {
         System.out.println(output);
     }
 
+    /**
+     * Adds a server feature the list of server features.
+     *
+     * @param feature name of a feature
+     */
     public void addServerFeature(String feature) {
         this.serverFeatures.add(feature);
     }

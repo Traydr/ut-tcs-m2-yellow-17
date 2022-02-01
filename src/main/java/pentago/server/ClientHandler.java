@@ -20,9 +20,16 @@ public class ClientHandler implements Runnable {
     private boolean loggedIn;
     private String serverName;
     private ArrayList<String> supportedFeatures;
-    private ArrayList<String> clientSupportedFeatures;
+    public ArrayList<String> clientSupportedFeatures;
     private Game game;
 
+    /**
+     * A constructor for the client handler object.
+     *
+     * @param socket The socket that is connected to a user
+     * @param server The server object
+     * @throws IOException
+     */
     public ClientHandler(Socket socket, SimplePentagoServer server) throws IOException {
         this.socket = socket;
         this.server = server;
@@ -39,18 +46,36 @@ public class ClientHandler implements Runnable {
         // <---------- DEBUG ---------->
     }
 
+    /**
+     * Returns the username of the client.
+     *
+     * @return username
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     * Sets a new game objects.
+     *
+     * @param game
+     */
     public void setGame(Game game) {
         this.game = game;
     }
 
+    /**
+     * Ends the game by turning this into a null reference.
+     */
     public void endGame() {
         this.game = null;
     }
 
+    /**
+     * Sends a message to this specific client.
+     *
+     * @param message the message to be sent to the client
+     */
     public void sendMessage(String message) {
         try {
             if (!this.socket.isClosed()) {
@@ -65,11 +90,20 @@ public class ClientHandler implements Runnable {
         }
     }
 
+    /**
+     * Sends a message with the "ERROR~" prefix.
+     *
+     * @param message error message to be sent
+     */
     public void sendError(String message) {
         sendMessage("ERROR~" + message);
         close();
     }
 
+    /**
+     * Closes the connection with the client, if the user was in a game it sends a win by.
+     * disconnect
+     */
     public void close() {
         try {
             if (!socket.isClosed()) {
@@ -86,6 +120,11 @@ public class ClientHandler implements Runnable {
         }
     }
 
+    /**
+     * Parses the data received from the client.
+     *
+     * @param input String of chars received from the user
+     */
     public void parseClient(String input) {
         String[] parsedInput = input.split("~");
 
@@ -183,6 +222,9 @@ public class ClientHandler implements Runnable {
         }
     }
 
+    /**
+     * Adds the client to the server, keeps reading from the socket until it is closed.
+     */
     @Override
     public void run() {
         server.addClient(this);
