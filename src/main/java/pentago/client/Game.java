@@ -11,7 +11,7 @@ import java.util.Random;
 public class Game {
     private static final int NUMBER_PLAYERS = 2;
     private final Board board;
-    private Player[] players;
+    private final Player[] players;
     private int current;
 
     /**
@@ -116,7 +116,7 @@ public class Game {
 
     /**
      * Returns if the game is over.
-     * @return true if gameover, otherwise false
+     * @return true if game over, otherwise false
      */
     public boolean isGameOver() {
         return board.gameOver();

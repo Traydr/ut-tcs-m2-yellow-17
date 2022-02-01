@@ -53,9 +53,9 @@ public class Listener implements Runnable {
 
         switch (inputParsed[0]) {
             case "HELLO":
-                String features = "";
+                StringBuilder features = new StringBuilder();
                 for (int i = 2; i < inputParsed.length; i++) {
-                    features = features + "\n\t" + inputParsed[i];
+                    features.append("\n\t").append(inputParsed[i]);
                     client.addServerFeature(inputParsed[i]);
                 }
                 System.out.println("Connected" + "\nServer Name:\n\t" + inputParsed[1] +
@@ -154,6 +154,9 @@ public class Listener implements Runnable {
                 break;
             case "ERROR":
                 System.out.println("ERR:\n\t" + inputParsed[1]);
+                break;
+            default:
+                System.out.println("ERR:\n\tUnexpected message from server: " + inputParsed[0]);
                 break;
         }
     }

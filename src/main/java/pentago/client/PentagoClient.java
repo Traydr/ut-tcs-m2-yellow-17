@@ -155,10 +155,6 @@ public class PentagoClient {
         return serverAddress;
     }
 
-    public void setServerAddress(String serverAddress) {
-        this.serverAddress = serverAddress;
-    }
-
     public int getPort() {
         return port;
     }
@@ -183,14 +179,6 @@ public class PentagoClient {
         this.game = game;
     }
 
-    public ArrayList<String> getServerFeatures() {
-        return serverFeatures;
-    }
-
-    public void setServerFeatures(ArrayList<String> serverFeatures) {
-        this.serverFeatures = serverFeatures;
-    }
-
     public Player getPlayer() {
         return player;
     }
@@ -199,24 +187,12 @@ public class PentagoClient {
         this.player = player;
     }
 
-    public String getMoveCmd() {
-        return moveCmd;
-    }
-
-    public void setMoveCmd(String moveCmd) {
-        this.moveCmd = moveCmd;
-    }
-
     public int getMoveCounter() {
         return moveCounter;
     }
 
     public void setMoveCounter(int moveCounter) {
         this.moveCounter = moveCounter;
-    }
-
-    public boolean isValidName() {
-        return isValidName;
     }
 
     public void setValidName(boolean validName) {
