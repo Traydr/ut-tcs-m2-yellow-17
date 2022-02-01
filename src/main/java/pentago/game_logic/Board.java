@@ -8,14 +8,12 @@ public class Board {
     private final int characterOffset = 65;
 
     private Mark[][][] quadrants;
-    private boolean isTurnFirstPlayer;
 
     /**
      * This creates an empty board and set it that its the first players turn.
      */
     public Board() {
         this.quadrants = new Mark[quadrantNum][quadrantSize][quadrantSize];
-        this.isTurnFirstPlayer = true;
         this.reset(); // Initialize the board by filling it in with empty marks
     }
 

@@ -95,6 +95,8 @@ public class PentagoClient {
             username = scanner.nextLine();
         }
 
+        player.setName(username);
+
         try {
             if (!client.network.connect(
                     InetAddress.getByName(client.serverAddress), client.port, client)) {

@@ -36,16 +36,15 @@ public class Game {
 
     public void listenerSetBoard(int pos, int rot) {
         int[] localCoords = CommandParser.protocolToLocalCoords(pos);
-        board.setField(
-                localCoords[0], localCoords[1], localCoords[2],
-                current % 2 == 0 ? Mark.BLACK : Mark.WHITE);
+        board.setField(localCoords[0], localCoords[1], localCoords[2],
+                       current % 2 == 0 ? Mark.BLACK : Mark.WHITE);
         current++;
         board.rotateQuadrant(CommandParser.protocolToLocalRotate(rot));
     }
 
-    public boolean isCurrentPlayer(Player compare) {
-        return players[current] == compare;
-    }
+    //    public boolean isCurrentPlayer(Player compare) {
+    //        return players[current] == compare;
+    //    }
 
     /**
      * Updates the user on the current game situation by displaying the board.
