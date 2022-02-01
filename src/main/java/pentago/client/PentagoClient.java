@@ -15,15 +15,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PentagoClient {
-    public String serverAddress;
-    public int port;
-    public Network network;
-    public Game game;
+    private String serverAddress;
+    private int port;
+    private Network network;
+    private Game game;
     private ArrayList<String> serverFeatures;
-    public Player player;
+    private Player player;
     private String moveCmd;
-    public int moveCounter = 0;
-    public boolean isValidName = false;
+    private int moveCounter = 0;
+    private boolean isValidName = false;
 
     /**
      * Constructor for a new PentagoClient object.
@@ -151,6 +151,78 @@ public class PentagoClient {
         System.out.println("Quitting!");
     }
 
+    public String getServerAddress() {
+        return serverAddress;
+    }
+
+    public void setServerAddress(String serverAddress) {
+        this.serverAddress = serverAddress;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    public Network getNetwork() {
+        return network;
+    }
+
+    public void setNetwork(Network network) {
+        this.network = network;
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
+
+    public ArrayList<String> getServerFeatures() {
+        return serverFeatures;
+    }
+
+    public void setServerFeatures(ArrayList<String> serverFeatures) {
+        this.serverFeatures = serverFeatures;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public String getMoveCmd() {
+        return moveCmd;
+    }
+
+    public void setMoveCmd(String moveCmd) {
+        this.moveCmd = moveCmd;
+    }
+
+    public int getMoveCounter() {
+        return moveCounter;
+    }
+
+    public void setMoveCounter(int moveCounter) {
+        this.moveCounter = moveCounter;
+    }
+
+    public boolean isValidName() {
+        return isValidName;
+    }
+
+    public void setValidName(boolean validName) {
+        isValidName = validName;
+    }
+
     /**
      * Starts a new game for the client side code to keep track of.
      *
@@ -226,7 +298,7 @@ public class PentagoClient {
                     break;
                 }
 
-                if (this.game.board.getField(parsedInput[1]) != Mark.EMPTY) {
+                if (this.game.getBoard().getField(parsedInput[1]) != Mark.EMPTY) {
                     System.out.println("There is already a mark there");
                     break;
                 }
@@ -319,8 +391,8 @@ public class PentagoClient {
      */
     public void makePlayerDoMove() {
         Bot bot = new Bot(this.player.getMark(), this.player.getStrategy());
-        String[] move = bot.determineMove(this.game.board);
-        int[] coords = game.board.getCoords(move[0]);
+        String[] move = bot.determineMove(this.game.getBoard());
+        int[] coords = game.getBoard().getCoords(move[0]);
         int place = CommandParser.localToProtocolCoords(coords[0], coords[1], coords[2]);
         int rotate = CommandParser.localToProtocolRotate(move[1]);
 
