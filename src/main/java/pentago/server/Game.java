@@ -10,7 +10,12 @@ public class Game {
     private int current;
     private ClientHandler[] players;
 
-    //TODO Redo java doc
+    /**
+     * Constructor for a new game object
+     *
+     * @param player1 first player
+     * @param player2 second player
+     */
     public Game(ClientHandler player1, ClientHandler player2) {
         board = new Board();
         players = new ClientHandler[NUMBER_PLAYERS];
@@ -28,10 +33,14 @@ public class Game {
     }
 
     /**
-     * Actually make a move in the board.
-     * @param pos The integer representation of the place in the board (See protocol documentation)
-     * @param rot The integer representation of the rotation (See protocol documentation)
-     * @return true if move went through, false if not
+     * Sets a position on the board, while also checking to make sure that it is a valid move. Sends
+     * an error back to the client if the move is incorrect. Sends a message to both clients if the
+     * move went through.
+     *
+     * @param pos    The position where to place the mark
+     * @param rot    Which square to rotate in which direction
+     * @param player The player that made the move
+     * @return true if the move went through, false if otherwise
      */
     public boolean setBoard(int pos, int rot, ClientHandler player) {
         if (player != players[current % 2]) {
@@ -66,6 +75,12 @@ public class Game {
         return board.hasWinner() ? (board.isWinner(Mark.BLACK) ? Mark.BLACK : Mark.WHITE) : null;
     }
 
+    /**
+     * Gets the player that disconnected and sends a gameover message to the other player. It also
+     * ends the game.
+     *
+     * @param discPlayer the player that disconnected
+     */
     public void winByDisconnect(ClientHandler discPlayer) {
         if (players[0] == discPlayer) {
             players[1].sendMessage("GAMEOVER~DISCONNECT~" + players[1].getUsername());
@@ -76,6 +91,10 @@ public class Game {
         }
     }
 
+    /**
+     * Checks if there is a winner, it then either does nothing if no one has won and the board is
+     * not full, else it sends a corresponding gameover message
+     */
     public void checkWinner() {
         if (!board.hasWinner() && !board.isFull()) {
             return;

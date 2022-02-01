@@ -8,11 +8,19 @@ public class AcceptConnection implements Runnable {
     ServerSocket serverSocket;
     SimplePentagoServer gameServer;
 
+    /**
+     * Constructor for the AcceptConnection object.
+     * @param serverSocket The socket for the server
+     * @param gameServer The server object itself
+     */
     public AcceptConnection(ServerSocket serverSocket, SimplePentagoServer gameServer) {
         this.serverSocket = serverSocket;
         this.gameServer = gameServer;
     }
 
+    /**
+     * Waits for new connections to connect and then assigns a new client handler object to them.
+     */
     @Override
     public void run() {
         Socket client = null;
