@@ -65,16 +65,17 @@ public class Game {
         return board.hasWinner() ? (board.isWinner(Mark.BLACK) ? Mark.BLACK : Mark.WHITE) : null;
     }
 
-    public void checkWinner() {
-        // TODO Check for disconnects
-        if (players[0] == null) {
+    public void winByDisconnect(ClientHandler discPlayer) {
+        if (players[0] == discPlayer) {
             players[1].sendMessage("GAMEOVER~DISCONNECT~" + players[1].getUsername());
             players[1].endGame();
-        } else if (players[1] == null) {
+        } else if (players[1] == discPlayer) {
             players[0].sendMessage("GAMEOVER~DISCONNECT~" + players[0].getUsername());
             players[0].endGame();
         }
+    }
 
+    public void checkWinner() {
         if (!board.hasWinner()) {
             return;
         }

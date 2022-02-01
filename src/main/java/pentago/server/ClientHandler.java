@@ -77,6 +77,7 @@ public class ClientHandler implements Runnable {
             }
 
             if (game != null) {
+                game.winByDisconnect(this);
                 //TODO win game by disconnect
             }
         } catch (IOException e) {
