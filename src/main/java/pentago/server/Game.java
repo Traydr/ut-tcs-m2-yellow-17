@@ -52,6 +52,7 @@ public class Game {
         for (ClientHandler p : players) {
             p.sendMessage("MOVE~" + pos + "~" + rot);
         }
+        checkWinner();
         return true;
     }
 
@@ -76,12 +77,12 @@ public class Game {
     }
 
     public void checkWinner() {
-        if (!board.hasWinner()) {
+        if (!board.hasWinner() && !board.isFull()) {
             return;
         }
         Mark mWinner = winner();
 
-        if (mWinner == null) {
+        if (!board.hasWinner() && board.isFull()) {
             for (ClientHandler player : players) {
                 player.sendMessage("GAMEOVER~DRAW");
                 player.endGame();

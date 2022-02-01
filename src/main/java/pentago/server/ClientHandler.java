@@ -78,7 +78,6 @@ public class ClientHandler implements Runnable {
 
             if (game != null) {
                 game.winByDisconnect(this);
-                //TODO win game by disconnect
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -156,8 +155,6 @@ public class ClientHandler implements Runnable {
                     sendError("It is not your turn");
                     break;
                 }
-
-                game.checkWinner();
                 break;
             case "PING":
                 sendMessage("PONG");
