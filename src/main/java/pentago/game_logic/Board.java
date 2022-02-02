@@ -351,13 +351,10 @@ public class Board {
         return boardString.toString();
     }
 
-    public static void main(String[] args) {
-        Board board = new Board();
-        board.setField("A0", Mark.BLACK);
-        System.out.println(board.toString());
-        System.out.println(board.toString(true));
-    }
-
+    /**
+     * Returns the board as a string, without help
+     * @return
+     */
     public String toString() {
         return this.toString(false);
     }
