@@ -128,7 +128,7 @@ public class PentagoClient {
         }
 
         client.connectToServer();
-
+        client.displayHelp();
         String output;
         while (scanner.hasNextLine() && client.network != null) {
             output = scanner.nextLine();
