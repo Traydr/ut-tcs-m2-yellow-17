@@ -103,24 +103,26 @@ public class Game {
      * Otherwise, it responds with the corresponding game over message.
      */
     public void checkWinner() {
-        if (!board.hasWinner() && !board.isFull()) {
-            return;
-        }
-        Mark mWinner = winner();
+        synchronized (board) {
+            if (!board.hasWinner() && !board.isFull()) {
+                return;
+            }
+            Mark mWinner = winner();
 
-        if (!board.hasWinner() && board.isFull()) {
+            if (!board.hasWinner() && board.isFull()) {
+                for (ClientHandler player : players) {
+                    player.sendMessage("GAMEOVER~DRAW");
+                    player.endGame();
+                }
+                return;
+            }
+
+            ClientHandler output = mWinner == Mark.BLACK ? players[0] : players[1];
             for (ClientHandler player : players) {
-                player.sendMessage("GAMEOVER~DRAW");
+                player.sendMessage("GAMEOVER~VICTORY~" + output.getUsername());
                 player.endGame();
             }
             return;
         }
-
-        ClientHandler output = mWinner == Mark.BLACK ? players[0] : players[1];
-        for (ClientHandler player : players) {
-            player.sendMessage("GAMEOVER~VICTORY~" + output.getUsername());
-            player.endGame();
-        }
-        return;
     }
 }
