@@ -9,21 +9,46 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Game {
-    public static final int NUMBER_PLAYERS = 2;
-
-    public final Board board;
-
-    public Player[] players;
-
+    private static final int NUMBER_PLAYERS = 2;
+    private final Board board;
+    private final Player[] players;
     private int current;
 
-    //TODO Check if it the local players turn
+    /**
+     * Game constructor.
+     * @param p0 player 1
+     * @param p1 player 2
+     */
     public Game(Player p0, Player p1) {
         board = new Board();
         players = new Player[NUMBER_PLAYERS];
         players[0] = p0;
         players[1] = p1;
         current = 0;
+    }
+
+    /**
+     * Gets the board object.
+     * @return Board object
+     */
+    public Board getBoard() {
+        return board;
+    }
+
+    /**
+     * Gets the current turn count.
+     * @return int count
+     */
+    public int getCurrent() {
+        return current;
+    }
+
+    /**
+     * Sets the current turn counter.
+     * @param current
+     */
+    public void setCurrent(int current) {
+        this.current = current;
     }
 
     /**
@@ -34,6 +59,12 @@ public class Game {
         board.reset();
     }
 
+    /**
+     * Sets a mark onto the board from the server.
+     *
+     * @param pos position of piece
+     * @param rot rotation
+     */
     public void listenerSetBoard(int pos, int rot) {
         int[] localCoords = CommandParser.protocolToLocalCoords(pos);
         board.setField(localCoords[0], localCoords[1], localCoords[2],
@@ -91,5 +122,13 @@ public class Game {
         } else {
             return "Draw. There is no winner!";
         }
+    }
+
+    /**
+     * Returns if the game is over.
+     * @return true if game over, otherwise false
+     */
+    public boolean isGameOver() {
+        return board.gameOver();
     }
 }

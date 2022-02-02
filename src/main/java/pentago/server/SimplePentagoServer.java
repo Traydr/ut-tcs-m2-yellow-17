@@ -9,6 +9,8 @@ public class SimplePentagoServer implements PentagoServer {
     private ServerSocket serverSocket;
     private List<ClientHandler> clients;
     private Queue<ClientHandler> queue;
+    private String serverName;
+    private ArrayList<String> supportedFeatures;
 
     /**
      * Starts the server.
@@ -16,12 +18,15 @@ public class SimplePentagoServer implements PentagoServer {
      * @param port port on which the server should listen on
      */
     @Override
-    public void start(int port) throws BindException {
+    public void start(int port, String name) throws BindException {
         try {
             serverSocket = new ServerSocket(port);
             System.out.println("Server: " + serverSocket.getLocalSocketAddress());
             clients = new ArrayList<>();
             queue = new ArrayDeque<>();
+            serverName = name;
+            supportedFeatures = new ArrayList<>();
+            supportedFeatures.add("CHAT");
 
             Thread accept = new Thread(new AcceptConnection(serverSocket, this));
             accept.start();
@@ -30,6 +35,22 @@ public class SimplePentagoServer implements PentagoServer {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Returns server name.
+     * @return server name
+     */
+    public String getServerName() {
+        return serverName;
+    }
+
+    /**
+     * Returns a list of the features supported by the server.
+     * @return list of features
+     */
+    public ArrayList<String> getSupportedFeatures() {
+        return supportedFeatures;
     }
 
     /**
@@ -68,12 +89,14 @@ public class SimplePentagoServer implements PentagoServer {
      * @return a list of strings containing usernames
      */
     public List<String> getAllUsernames() {
-        ArrayList<String> output = new ArrayList<>();
+        synchronized (clients) {
+            ArrayList<String> output = new ArrayList<>();
 
-        for (ClientHandler client : clients) {
-            output.add(client.getUsername());
+            for (ClientHandler client : clients) {
+                output.add(client.getUsername());
+            }
+            return output;
         }
-        return output;
     }
 
     /**
@@ -83,6 +106,10 @@ public class SimplePentagoServer implements PentagoServer {
      */
     public void addToQueue(ClientHandler clientHandler) {
         synchronized (queue) {
+            if (queue.contains(clientHandler)) {
+                return;
+            }
+            System.out.println("New client in queue: " + clientHandler.getUsername());
             queue.add(clientHandler);
         }
     }
@@ -94,6 +121,9 @@ public class SimplePentagoServer implements PentagoServer {
      */
     public ClientHandler getNextInQueue() {
         synchronized (queue) {
+            if (queue.size() == 0) {
+                return null;
+            }
             return queue.remove();
         }
     }
@@ -112,22 +142,30 @@ public class SimplePentagoServer implements PentagoServer {
             if (queue.size() <= 1) {
                 return;
             }
+            System.out.println("State of queue before new game:\n" + queue);
             player1 = getNextInQueue();
             player2 = getNextInQueue();
+            System.out.println("Newgame : "
+                               + player1.getUsername() + " | " + player2.getUsername());
+            System.out.println("State of queue before new game:\n" + queue);
         }
 
-        String message;
-        if (random.nextInt(2) == 0) {
-            game = new Game(player1, player2);
-            message = "NEWGAME~" + player1.getUsername() + "~" + player2.getUsername();
-        } else {
-            game = new Game(player2, player1);
-            message = "NEWGAME~" + player2.getUsername() + "~" + player1.getUsername();
+        synchronized (player1) {
+            synchronized (player2) {
+                String message;
+                if (random.nextInt(2) == 0) {
+                    game = new Game(player1, player2);
+                    message = "NEWGAME~" + player1.getUsername() + "~" + player2.getUsername();
+                } else {
+                    game = new Game(player2, player1);
+                    message = "NEWGAME~" + player2.getUsername() + "~" + player1.getUsername();
+                }
+                player1.setGame(game);
+                player2.setGame(game);
+                player1.sendMessage(message);
+                player2.sendMessage(message);
+            }
         }
-        player1.setGame(game);
-        player2.setGame(game);
-        player1.sendMessage(message);
-        player2.sendMessage(message);
     }
 
     /**
@@ -179,16 +217,18 @@ public class SimplePentagoServer implements PentagoServer {
      * @return true if the username is already in user, otherwise false
      */
     public boolean isUsernameInUse(String name, ClientHandler request) {
-        for (ClientHandler client : clients) {
-            if (client == request) {
-                continue;
-            }
+        synchronized (clients) {
+            for (ClientHandler client : clients) {
+                if (client == request) {
+                    continue;
+                }
 
-            if (client.getUsername().equals(name)) {
-                return true;
+                if (client.getUsername().equals(name)) {
+                    return true;
+                }
             }
+            return false;
         }
-        return false;
     }
 
     /**

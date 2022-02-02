@@ -11,22 +11,26 @@ public class Server {
      */
     public static void main(String[] args) {
         SimplePentagoServer server = new SimplePentagoServer();
-        boolean validPort = false;
-        Scanner scanner = new Scanner(System.in);
-        while (!validPort) {
-            try {
-                System.out.println("What port should the server listen on (0 for random)?");
-                int port = Integer.parseInt(scanner.nextLine());
-                server.start(port);
-                validPort = true;
-            } catch (BindException e) {
-                System.out.println("Couldn't bind to this port, please enter another one");
+        try (Scanner scanner = new Scanner(System.in)) {
+            boolean validPort = false;
+            System.out.println("What should the server name be?");
+            String name = scanner.nextLine();
+
+            while (!validPort) {
+                try {
+                    System.out.println("What port should the server listen on (0 for random)?");
+                    int port = Integer.parseInt(scanner.nextLine());
+                    server.start(port, name);
+                    validPort = true;
+                } catch (BindException e) {
+                    System.out.println("Couldn't bind to this port, please enter another one");
+                }
             }
+            String isClosing = "";
+            while (!isClosing.equals("quit")) {
+                isClosing = scanner.nextLine();
+            }
+            server.stop();
         }
-        String isClosing = "";
-        while (!isClosing.equals("quit")) {
-            isClosing = scanner.nextLine();
-        }
-        server.stop();
     }
 }

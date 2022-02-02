@@ -8,10 +8,10 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 
 public class Listener implements Runnable {
-    Socket socket = null;
-    BufferedReader br = null;
-    Network network = null;
-    PentagoClient client = null;
+    private Socket socket;
+    private BufferedReader br = null;
+    private Network network;
+    private PentagoClient client;
 
     /**
      * Constructs a new listener object.
@@ -29,7 +29,7 @@ public class Listener implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.client.moveCounter = 0;
+        this.client.setMoveCounter(0);
     }
 
     /**
@@ -53,9 +53,9 @@ public class Listener implements Runnable {
 
         switch (inputParsed[0]) {
             case "HELLO":
-                String features = "";
+                StringBuilder features = new StringBuilder();
                 for (int i = 2; i < inputParsed.length; i++) {
-                    features = features + "\n\t" + inputParsed[i];
+                    features.append("\n\t").append(inputParsed[i]);
                     client.addServerFeature(inputParsed[i]);
                 }
                 System.out.println("Connected" + "\nServer Name:\n\t" + inputParsed[1] +
@@ -68,18 +68,19 @@ public class Listener implements Runnable {
                 System.out.println(
                         "This username already exists! Please use the [setname] command to set a " +
                         "new name");
-                client.isValidName = false;
+                client.setValidName(false);
                 break;
             case "MOVE":
-                client.game.listenerSetBoard(Integer.parseInt(inputParsed[1]),
-                                             Integer.parseInt(inputParsed[2]));
-                if (client.player instanceof Bot && client.moveCounter % 2 == 0 &&
-                    !client.game.board.gameOver()) {
+                client.getGame().listenerSetBoard(
+                        Integer.parseInt(inputParsed[1]),
+                        Integer.parseInt(inputParsed[2]));
+                if (client.getPlayer() instanceof Bot && client.getMoveCounter() % 2 == 0 &&
+                    !client.getGame().isGameOver()) {
                     client.makePlayerDoMove();
                 }
-                client.moveCounter += 1;
-                System.out.println(client.game.update(!(client.player instanceof Bot)));
-                System.out.println(client.moveCounter % 2 == 1 ? "It's now your turn" :
+                client.setMoveCounter(client.getMoveCounter() + 1);
+                System.out.println(client.getGame().update(!(client.getPlayer() instanceof Bot)));
+                System.out.println(client.getMoveCounter() % 2 == 1 ? "It's now your turn" :
                                    "It's now the other player's turn");
                 break;
             case "PING":
@@ -103,21 +104,20 @@ public class Listener implements Runnable {
                         "New Game:" + "\n\tPlayer 1: " + inputParsed[1] + "\n\tPlayer 2: " +
                         inputParsed[2]);
                 client.startNewGame(inputParsed[1], inputParsed[2]);
-                boolean areWeStarting = client.player.getName().equals(inputParsed[1]);
+                boolean areWeStarting = client.getPlayer().getName().equals(inputParsed[1]);
                 System.out.println(
                         areWeStarting ? "It's our turn" : "It's the other player's turn");
                 if (areWeStarting) {
-                    if (client.player instanceof Bot) {
+                    if (client.getPlayer() instanceof Bot) {
                         client.makePlayerDoMove();
                     }
-                    client.moveCounter += 1;
+                    client.setMoveCounter(client.getMoveCounter() + 1);
                 }
                 break;
             case "GAMEOVER":
-                System.out.println(client.game.update());
                 switch (inputParsed[1]) {
                     case "VICTORY":
-                        if (client.player.getName().equals(inputParsed[2])) {
+                        if (client.getPlayer().getName().equals(inputParsed[2])) {
                             System.out.println("We won!!");
                         } else {
                             System.out.println("We lost...");
@@ -133,9 +133,9 @@ public class Listener implements Runnable {
                         System.out.println("ERR: unexpected win condition");
                         break;
                 }
-                client.moveCounter = 0;
+                client.setMoveCounter(0);
                 client.endCurrentGame();
-                if (client.player instanceof Bot) {
+                if (client.isAutoQueue()) {
                     System.out.println("Queueing again...");
                     network.sendMessage("QUEUE");
                 }
@@ -154,6 +154,9 @@ public class Listener implements Runnable {
             case "ERROR":
                 System.out.println("ERR:\n\t" + inputParsed[1]);
                 break;
+            default:
+                System.out.println("ERR:\n\tUnexpected message from server: " + inputParsed[0]);
+                break;
         }
     }
 
@@ -171,6 +174,7 @@ public class Listener implements Runnable {
                 messageParser(output);
             }
         } catch (IOException e) {
+            close();
         }
     }
 }

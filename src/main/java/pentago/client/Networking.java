@@ -9,10 +9,10 @@ import java.net.UnknownHostException;
 import java.util.Scanner;
 
 public class Networking implements Network {
-    Socket socket = null;
-    BufferedWriter bw;
-    Listener listener;
-    PentagoClient client;
+    private Socket socket = null;
+    private BufferedWriter bw;
+    private Listener listener;
+    private PentagoClient client;
 
     /**
      * Tries to connect to a specific server.
@@ -28,8 +28,8 @@ public class Networking implements Network {
         try {
             this.socket = new Socket(address, port);
             this.bw = new BufferedWriter(new OutputStreamWriter(this.socket.getOutputStream()));
-            listener = new Listener(this.socket, this, client);
-            Thread thread = new Thread(listener);
+            this.listener = new Listener(this.socket, this, client);
+            Thread thread = new Thread(this.listener);
             thread.start();
             return true;
         } catch (IOException e) {
@@ -61,6 +61,7 @@ public class Networking implements Network {
      */
     @Override
     public boolean sendMessage(String message) {
+        // TODO this function needs to be revised
         try {
             bw.write(message + "\n");
             bw.flush();
@@ -77,8 +78,9 @@ public class Networking implements Network {
             } else {
                 System.out.println("Reconnecting...");
                 try {
-                    if (!client.network.connect(
-                            InetAddress.getByName(client.serverAddress), client.port, client)) {
+                    if (!client.getNetwork().connect(
+                            InetAddress.getByName(client.getServerAddress()), client.getPort(),
+                            client)) {
                         System.out.println("ERR: bad connection");
                         System.exit(1);
                     }
