@@ -308,11 +308,14 @@ public class Board {
      *
      * @return Board as a string
      */
-    public String toString() {
+    public String toString(boolean withHelp) {
         StringBuilder boardString = new StringBuilder();
         int width = 25;
+        int margin = 5;
 
-        boardString.append("-".repeat(width) + "\n");
+        boardString.append(
+                "-".repeat(width) + (withHelp ? (" ".repeat(margin) + "-".repeat(width)) : "") +
+                "\n");
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 3; j++) {
                 StringBuilder row = new StringBuilder();
@@ -322,13 +325,34 @@ public class Board {
                     row.append(String.format("|%-1s%-2s", "", fieldValue)); // Add a string with
                     // padding
                 }
+
+                if (withHelp) {
+                    row.append("|" + " ".repeat(margin));
+
+                    for (int k = 0; k < 6; k++) {
+                        row.append(String.format("|%-1s%-2s", "", (k + j * 3) - (k > 2 ? 3 : 0)));
+                    }
+                }
                 row.append("|\n");
                 boardString.append(row);
-                boardString.append("-".repeat(width) + "\n");
+                boardString.append("-".repeat(width) +
+                                   (withHelp ? (" ".repeat(margin) + "-".repeat(width)) : "") +
+                                   "\n");
             }
         }
 
         return boardString.toString();
+    }
+
+    public static void main(String[] args) {
+        Board board = new Board();
+        board.setField("A0", Mark.BLACK);
+        System.out.println(board.toString());
+        System.out.println(board.toString(true));
+    }
+
+    public String toString() {
+        return this.toString(false);
     }
 
     /**
