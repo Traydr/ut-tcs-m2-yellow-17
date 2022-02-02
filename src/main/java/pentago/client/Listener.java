@@ -15,8 +15,9 @@ public class Listener implements Runnable {
 
     /**
      * Constructs a new listener object.
-     * @param sock the socket connecting to the server
-     * @param net the network object
+     *
+     * @param sock   the socket connecting to the server
+     * @param net    the network object
      * @param client the client object
      */
     Listener(Socket sock, Network net, PentagoClient client) {
@@ -44,6 +45,7 @@ public class Listener implements Runnable {
 
     /**
      * Parses the messages from the server.
+     *
      * @param input protocol messages from the server
      */
     private void messageParser(String input) {
@@ -76,7 +78,7 @@ public class Listener implements Runnable {
                     client.makePlayerDoMove();
                 }
                 client.moveCounter += 1;
-                System.out.println(client.game.update());
+                System.out.println(client.game.update(!(client.player instanceof Bot)));
                 System.out.println(client.moveCounter % 2 == 1 ? "It's now your turn" :
                                    "It's now the other player's turn");
                 break;

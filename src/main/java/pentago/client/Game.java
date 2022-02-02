@@ -45,14 +45,25 @@ public class Game {
     /**
      * Updates the user on the current game situation by displaying the board.
      *
+     * @param withHelp Whether the program should output an example board with the values
+     * @return A string representing the board status
+     */
+    public String update(boolean withHelp) {
+        return board.toString(withHelp) + "\n";
+    }
+
+    /**
+     * Updates the user on the current game situation by displaying the board.
+     *
      * @return A string representing the board status
      */
     public String update() {
-        return board.toString() + "\n";
+        return this.update(false);
     }
 
     /**
      * Gets a random move to be made.
+     *
      * @return String in the form of "Place: [A-D][0-8] \n Rotate: [A-D][L|R]"
      */
     public String getRandomMove() {
