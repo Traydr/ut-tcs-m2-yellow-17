@@ -24,6 +24,7 @@ public class PentagoClient {
     private String moveCmd;
     private int moveCounter = 0;
     private boolean isValidName = false;
+    private boolean autoQueue = false;
 
     /**
      * Constructor for a new PentagoClient object.
@@ -356,10 +357,17 @@ public class PentagoClient {
                 }
                 System.out.println(game.update());
                 break;
+            case "autoqueue":
+                autoQueue = !autoQueue;
+                break;
             default:
                 System.out.println("Unknown Command: " + parsedInput[0]);
                 break;
         }
+    }
+
+    public boolean isAutoQueue() {
+        return autoQueue;
     }
 
     /**
@@ -394,6 +402,7 @@ public class PentagoClient {
                              "help\n\tDisplays this help message",
                              "hint\n\tDisplays a possible move",
                              "show\n\tShows the current state of the board ",
+                             "autoqueue\n\tToggles the autoqueue",
                              "quit\n\tquits out of the program"};
 
 

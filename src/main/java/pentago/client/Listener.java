@@ -115,7 +115,6 @@ public class Listener implements Runnable {
                 }
                 break;
             case "GAMEOVER":
-                System.out.println(client.getGame().update());
                 switch (inputParsed[1]) {
                     case "VICTORY":
                         if (client.getPlayer().getName().equals(inputParsed[2])) {
@@ -136,7 +135,7 @@ public class Listener implements Runnable {
                 }
                 client.setMoveCounter(0);
                 client.endCurrentGame();
-                if (client.getPlayer() instanceof Bot) {
+                if (client.isAutoQueue()) {
                     System.out.println("Queueing again...");
                     network.sendMessage("QUEUE");
                 }
@@ -175,6 +174,7 @@ public class Listener implements Runnable {
                 messageParser(output);
             }
         } catch (IOException e) {
+            close();
         }
     }
 }
