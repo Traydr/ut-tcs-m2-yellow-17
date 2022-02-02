@@ -8,6 +8,8 @@ public class SimplePentagoServer implements PentagoServer {
     private ServerSocket serverSocket;
     private List<ClientHandler> clients;
     private Queue<ClientHandler> queue;
+    private String serverName;
+    private ArrayList<String> supportedFeatures;
 
     /**
      * Starts the server.
@@ -15,18 +17,37 @@ public class SimplePentagoServer implements PentagoServer {
      * @param port port on which the server should listen on
      */
     @Override
-    public void start(int port) {
+    public void start(int port, String name) {
         try {
             serverSocket = new ServerSocket(port);
             System.out.println("Server: " + serverSocket.getLocalSocketAddress());
             clients = new ArrayList<>();
             queue = new ArrayDeque<>();
+            serverName = name;
+            supportedFeatures = new ArrayList<>();
+            supportedFeatures.add("CHAT");
 
             Thread accept = new Thread(new AcceptConnection(serverSocket, this));
             accept.start();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Returns server name
+     * @return server name
+     */
+    public String getServerName() {
+        return serverName;
+    }
+
+    /**
+     * Returns a list of the features supported by the server
+     * @return list of features
+     */
+    public ArrayList<String> getSupportedFeatures() {
+        return supportedFeatures;
     }
 
     /**
@@ -65,12 +86,14 @@ public class SimplePentagoServer implements PentagoServer {
      * @return a list of strings containing usernames
      */
     public List<String> getAllUsernames() {
-        ArrayList<String> output = new ArrayList<>();
+        synchronized (clients) {
+            ArrayList<String> output = new ArrayList<>();
 
-        for (ClientHandler client : clients) {
-            output.add(client.getUsername());
+            for (ClientHandler client : clients) {
+                output.add(client.getUsername());
+            }
+            return output;
         }
-        return output;
     }
 
     /**
@@ -191,16 +214,18 @@ public class SimplePentagoServer implements PentagoServer {
      * @return true if the username is already in user, otherwise false
      */
     public boolean isUsernameInUse(String name, ClientHandler request) {
-        for (ClientHandler client : clients) {
-            if (client == request) {
-                continue;
-            }
+        synchronized (clients) {
+            for (ClientHandler client : clients) {
+                if (client == request) {
+                    continue;
+                }
 
-            if (client.getUsername().equals(name)) {
-                return true;
+                if (client.getUsername().equals(name)) {
+                    return true;
+                }
             }
+            return false;
         }
-        return false;
     }
 
     /**

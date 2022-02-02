@@ -12,7 +12,10 @@ public class Server {
         try (Scanner scanner = new Scanner(System.in)) {
             System.out.println("What port should the server listen on (0 for random)?");
             int port = Integer.parseInt(scanner.nextLine());
-            server.start(port);
+            System.out.println("What should the server name be?");
+            String name = scanner.nextLine();
+
+            server.start(port, name);
 
             String isClosing = "";
             while (!isClosing.equals("quit")) {

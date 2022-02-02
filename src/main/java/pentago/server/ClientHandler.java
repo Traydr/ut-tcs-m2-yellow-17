@@ -10,16 +10,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-// TODO Cleanup the class and make it more structured
 public class ClientHandler implements Runnable {
     private Socket socket;
     private SimplePentagoServer server;
     private String username;
     private BufferedWriter writer;
-    private boolean helloPased;
+    private boolean helloPassed;
     private boolean loggedIn;
-    private String serverName;
-    private ArrayList<String> supportedFeatures;
     public ArrayList<String> clientSupportedFeatures;
     private Game game;
 
@@ -34,16 +31,9 @@ public class ClientHandler implements Runnable {
         this.socket = socket;
         this.server = server;
         this.writer = new BufferedWriter(new OutputStreamWriter(this.socket.getOutputStream()));
-        helloPased = false;
-        loggedIn = false;
-        clientSupportedFeatures = new ArrayList<>();
-
-        // TODO Decide where to place server name & how features are handled
-        // <---------- DEBUG ---------->
-        serverName = "TestServer";
-        supportedFeatures = new ArrayList<>();
-        supportedFeatures.add("CHAT");
-        // <---------- DEBUG ---------->
+        this.helloPassed = false;
+        this.loggedIn = false;
+        this.clientSupportedFeatures = new ArrayList<>();
     }
 
     /**
@@ -130,7 +120,7 @@ public class ClientHandler implements Runnable {
         switch (parsedInput[0]) {
             case "HELLO":
                 // Receiving the HELLO
-                if (helloPased) {
+                if (helloPassed) {
                     sendError("Unexpected [HELLO]");
                     break;
                 } else if (parsedInput.length < 2) {
@@ -146,10 +136,10 @@ public class ClientHandler implements Runnable {
 
                 // Sending back HELLO
                 String features = "";
-                for (String feature : supportedFeatures) {
+                for (String feature : server.getSupportedFeatures()) {
                     features += "~" + feature;
                 }
-                sendMessage("HELLO~" + serverName + features);
+                sendMessage("HELLO~" + server.getServerName() + features);
                 break;
             case "LOGIN":
                 if (parsedInput.length != 2) {
