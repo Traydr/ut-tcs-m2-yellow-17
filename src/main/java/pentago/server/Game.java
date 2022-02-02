@@ -45,29 +45,31 @@ public class Game {
     public boolean setBoard(int pos, int rot, ClientHandler player) {
         if (player != players[current % 2]) {
             return false;
-        } else if (board.isFull() || board.hasWinner()) {
-            checkWinner();
-            return false;
         }
 
-        int[] localCoords = CommandParser.protocolToLocalCoords(pos);
-        if (!board.isEmptyField(localCoords[0], localCoords[1], localCoords[2])) {
-            player.sendError("This field is already occupied");
-            return false;
-        }
-
-        board.setField(localCoords[0], localCoords[1], localCoords[2],
-                       current % 2 == 0 ? Mark.BLACK : Mark.WHITE);
-        current++;
-        board.rotateQuadrant(CommandParser.protocolToLocalRotate(rot));
-
-        for (ClientHandler p : players) {
-            if (p.isAlreadyInGame() && p.isHasSentNewGame()) {
-                p.sendMessage("MOVE~" + pos + "~" + rot);
+        synchronized (board) {
+            int[] localCoords = CommandParser.protocolToLocalCoords(pos);
+            if (!board.isEmptyField(localCoords[0], localCoords[1], localCoords[2])) {
+                player.sendError("This field is already occupied");
+                return false;
             }
+
+            board.setField(localCoords[0], localCoords[1], localCoords[2],
+                           current % 2 == 0 ? Mark.BLACK : Mark.WHITE);
+            current++;
+            board.rotateQuadrant(CommandParser.protocolToLocalRotate(rot));
+
+
+            for (ClientHandler p : players) {
+                if (p.isAlreadyInGame() && p.isHasSentNewGame()) {
+                    p.sendMessage("MOVE~" + pos + "~" + rot);
+                }
+            }
+            if (board.isFull() || board.hasWinner()) {
+                checkWinner();
+            }
+            return true;
         }
-        checkWinner();
-        return true;
     }
 
     /**
