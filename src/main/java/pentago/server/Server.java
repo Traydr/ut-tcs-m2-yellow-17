@@ -26,7 +26,6 @@ public class Server {
                     System.out.println("Couldn't bind to this port, please enter another one");
                 }
             }
-            server.start(port, name);
             String isClosing = "";
             while (!isClosing.equals("quit")) {
                 isClosing = scanner.nextLine();
