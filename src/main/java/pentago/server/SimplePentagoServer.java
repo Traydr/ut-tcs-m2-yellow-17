@@ -38,7 +38,7 @@ public class SimplePentagoServer implements PentagoServer {
     }
 
     /**
-     * Returns server name
+     * Returns server name.
      * @return server name
      */
     public String getServerName() {
@@ -46,7 +46,7 @@ public class SimplePentagoServer implements PentagoServer {
     }
 
     /**
-     * Returns a list of the features supported by the server
+     * Returns a list of the features supported by the server.
      * @return list of features
      */
     public ArrayList<String> getSupportedFeatures() {
