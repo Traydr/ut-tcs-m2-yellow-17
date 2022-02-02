@@ -27,7 +27,7 @@ public class ClientHandler implements Runnable {
      *
      * @param socket The socket that is connected to a user
      * @param server The server object
-     * @throws IOException
+     * @throws IOException Exception thrown if the socket could not get an output stream
      */
     public ClientHandler(Socket socket, SimplePentagoServer server) throws IOException {
         this.socket = socket;
@@ -76,7 +76,7 @@ public class ClientHandler implements Runnable {
     /**
      * Sets a new game objects.
      *
-     * @param game
+     * @param game Game object
      */
     public void setGame(Game game) {
         this.game = game;

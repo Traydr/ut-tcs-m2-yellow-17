@@ -54,7 +54,7 @@ public class PentagoClient {
      * Main function where the user specifies how the user wants to play. What the username should
      * be, what ip address and port do they want to connect to,
      *
-     * @param args
+     * @param args Some arguments for the default start of the program
      */
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -197,7 +197,7 @@ public class PentagoClient {
 
     /**
      * Sets the move counter to a specific value.
-     * @param moveCounter
+     * @param moveCounter sets the value of the move counter
      */
     public void setMoveCounter(int moveCounter) {
         this.moveCounter = moveCounter;

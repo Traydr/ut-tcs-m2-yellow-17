@@ -7,7 +7,7 @@ public class Server {
     /**
      * Starts a new server object and listens for a port and quit, for when to stop the server.
      *
-     * @param args
+     * @param args no arguments are currently supported
      */
     public static void main(String[] args) {
         SimplePentagoServer server = new SimplePentagoServer();

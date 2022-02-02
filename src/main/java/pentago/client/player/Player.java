@@ -8,10 +8,10 @@ public abstract class Player {
     private Strategy strategy;
 
     /**
-     * Creates a new player object with a name and mark.
-     *
-     * @param name Name of the player
-     * @param mark Mark of the player
+     * Abstract player constructor.
+     * @param name name of the player
+     * @param mark which mark the player possesses
+     * @param strategy which strategy does the player use
      */
     /*@ requires name != null;
         requires mark == Mark.BLACK || mark == Mark.WHITE;

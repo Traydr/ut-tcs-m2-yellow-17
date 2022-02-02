@@ -45,7 +45,7 @@ public class Game {
 
     /**
      * Sets the current turn counter.
-     * @param current
+     * @param current a turn number
      */
     public void setCurrent(int current) {
         this.current = current;
