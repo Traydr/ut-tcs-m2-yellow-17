@@ -22,6 +22,9 @@ public class ClientHandler implements Runnable {
     private boolean hasSentNewGame;
     private boolean isClosed;
 
+    //@ invariant this.socket != null;
+    //@ invariant
+
     /**
      * A constructor for the client handler object.
      *
@@ -29,6 +32,10 @@ public class ClientHandler implements Runnable {
      * @param server The server object
      * @throws IOException Exception thrown if the socket could not get an output stream
      */
+    //@ requires socket != null;
+    //@ requires server != null;
+    //@ ensures this.helloPassed == false && this.loggedIn == false && this.hasSentNewGame == false;
+    //@ ensures this.isClosed == false;
     public ClientHandler(Socket socket, SimplePentagoServer server) throws IOException {
         this.socket = socket;
         this.server = server;
@@ -45,6 +52,8 @@ public class ClientHandler implements Runnable {
      *
      * @return username
      */
+    //@ requires this.username != null;
+    //@ ensures \result == this.username;
     public String getUsername() {
         return username;
     }
@@ -54,6 +63,8 @@ public class ClientHandler implements Runnable {
      *
      * @return true if so, false if otherwise
      */
+    //@ requires hasSentNewGame == true || isHasSentNewGame() == false;
+    //@ ensures \result == hasSentNewGame;
     public boolean isHasSentNewGame() {
         return hasSentNewGame;
     }
@@ -63,6 +74,8 @@ public class ClientHandler implements Runnable {
      *
      * @param input true if message has been sent, false otherwise
      */
+    //@ requires input == true || input == false;
+    //@ ensures this.hasSentNewGame == input;
     public void setHasSentNewGame(boolean input) {
         this.hasSentNewGame = input;
     }
@@ -72,6 +85,7 @@ public class ClientHandler implements Runnable {
      *
      * @return true if already in a game
      */
+    //@ ensures \result == false || \result == true;
     public boolean isAlreadyInGame() {
         return game != null;
     }
@@ -81,6 +95,8 @@ public class ClientHandler implements Runnable {
      *
      * @param game Game object
      */
+    //@ requires game != null;
+    //@ ensures this.game == game;
     public void setGame(Game game) {
         this.game = game;
     }
@@ -88,6 +104,7 @@ public class ClientHandler implements Runnable {
     /**
      * Ends the game by turning this into a null reference.
      */
+    //@ ensures this.game == null;
     public void endGame() {
         this.game = null;
     }
@@ -97,6 +114,7 @@ public class ClientHandler implements Runnable {
      *
      * @param message the message to be sent to the client
      */
+    //@ requires message != null;
     public void sendMessage(String message) {
         try {
             if (!this.socket.isClosed()) {
@@ -116,6 +134,7 @@ public class ClientHandler implements Runnable {
      *
      * @param message error message to be sent
      */
+    //@ requires message != null;
     public void sendError(String message) {
         sendMessage("ERROR~" + message);
         close();
@@ -125,8 +144,8 @@ public class ClientHandler implements Runnable {
      * Closes the connection with the client, if the user was in a game it sends a win by.
      * disconnect
      */
-    /*@ ensures socket.isClosed() && !server.isUsernameInUse(this.username, this);
-    */
+    //@ ensures socket.isClosed() && !server.isUsernameInUse(this.username, this);
+    //@ ensures game == null;
     public void close() {
         if (isClosed) {
             return;
@@ -153,8 +172,7 @@ public class ClientHandler implements Runnable {
      *
      * @param input String of chars received from the user
      */
-    /*@ requires input != null;
-    */
+    //@ requires input != null;
     private void parseClient(String input) {
         String[] parsedInput = input.split("~");
 

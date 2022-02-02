@@ -88,6 +88,7 @@ public class Game {
      *
      * @param discPlayer the player that disconnected
      */
+    //@ requires discPlayer != null;
     public void winByDisconnect(ClientHandler discPlayer) {
         if (players[0] == discPlayer) {
             players[1].sendMessage("GAMEOVER~DISCONNECT~" + players[1].getUsername());

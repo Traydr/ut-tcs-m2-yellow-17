@@ -7,6 +7,8 @@ import java.net.Socket;
 public class AcceptConnection implements Runnable {
     ServerSocket serverSocket;
     SimplePentagoServer gameServer;
+    //@ invariant gameServer != null;
+    //@ invariant serverSocket != null;
 
     /**
      * Constructor for the AcceptConnection object.
@@ -14,6 +16,10 @@ public class AcceptConnection implements Runnable {
      * @param serverSocket The socket for the server
      * @param gameServer   The server object itself
      */
+    //@ requires gameServer != null;
+    //@ requires serverSocket != null;
+    //@ ensures this.serverSocket == serverSocket;
+    //@ ensures this.gameServer == gameServer;
     public AcceptConnection(ServerSocket serverSocket, SimplePentagoServer gameServer) {
         this.serverSocket = serverSocket;
         this.gameServer = gameServer;
