@@ -14,11 +14,18 @@ import static org.junit.jupiter.api.Assertions.*;
 public class BoardTest {
     Board board;
 
+    /**
+     * Initializes an empty board before each test.
+     */
     @BeforeEach
     void initialize() {
         board = new Board();
     }
 
+    /**
+     * Tests if the board only contains empty fields after initialization. This loops through all
+     * fields one by one.
+     */
     @Test
     void testIfEmpty() {
         for (int i = 0; i < board.quadrantNum; i++) {
@@ -30,6 +37,10 @@ public class BoardTest {
         }
     }
 
+    /**
+     * Tests the conversion of user commands (A3, B1, C0) to coordinates ((0,0,1), (1,1,0), (2,0,
+     * 0)).
+     */
     @Test
     void testGetCoords() {
         String[] testUserCoordinates = {"A3", "B1", "C0", "D8", "B5"};
@@ -45,6 +56,9 @@ public class BoardTest {
         assertNull(board.getCoords("A10"));
     }
 
+    /**
+     * Tests the isField method by looping through some existing and non-existing fields.
+     */
     @Test
     void testIsField() {
         String[] testCoordinates1 = {"A4", "B2", "C3", "D9"};
@@ -65,6 +79,10 @@ public class BoardTest {
         }
     }
 
+    /**
+     * This tests the getField and setField methods. After a field has been set to a specific mark,
+     * the getField method should return the same mark.
+     */
     @Test
     void testGetSetFields() {
         String[] testCoordinates1 = {"A2", "B5", "C4", "D8"};
@@ -89,6 +107,11 @@ public class BoardTest {
         }
     }
 
+    /**
+     * Tests if a field is empty. This is done by setting all positions to a specific mark first,
+     * and then setting some predefined coordinates to empty. Then the isEmptyField method should
+     * return true at those specific coordinates.
+     */
     @Test
     void testIsEmptyField() {
         String[] testCoordinates1 = {"A4", "B2", "C6", "D4", "D8"};
@@ -118,6 +141,11 @@ public class BoardTest {
         }
     }
 
+    /**
+     * Tests if the board is filled. This test fills every position of the board, except the last
+     * one. The function should of course return false. Then it also fills the last position, after
+     * which the function should return true.
+     */
     @Test
     void testIsFull() {
         // Fill the whole board, except for the very last value
@@ -139,6 +167,10 @@ public class BoardTest {
         assertTrue(board.isFull());
     }
 
+    /**
+     * This test checks the rotation of a quadrant by filling in some values, and then checking if
+     * they are all in the correct place after a rotation.
+     */
     @Test
     void testRotateQuadrant() {
         board.setField("A0", Mark.BLACK);
@@ -164,6 +196,10 @@ public class BoardTest {
         assertEquals(Mark.BLACK, board.getField("A8"));
     }
 
+    /**
+     * Tests the hasRow method by realizing some predefined situations where the player is known to
+     * have a row. The function should return true in these situations.
+     */
     @Test
     void testHasRow() {
         String[] column1 = {"A1", "A2", "B0", "B1", "B2"};
@@ -181,6 +217,10 @@ public class BoardTest {
         }
     }
 
+    /**
+     * Tests the hasColumn method by realizing some predefined situations where the player is known
+     * to have a column. The function should return true in these situations.
+     */
     @Test
     void testHasColumn() {
         String[] column1 = {"A1", "A4", "A7", "C1", "C4"};
@@ -198,6 +238,10 @@ public class BoardTest {
         }
     }
 
+    /**
+     * Tests the hasDiagonal method by realizing some predefined situations where the player is
+     * known to have a diagonal. The function should return true in these situations.
+     */
     @Test
     void testHasDiagonal() {
         String[][] columns = {{"A0", "A4", "A8", "D0", "D4"}, {"C4", "C2", "B6", "B4", "B2"},
@@ -212,6 +256,10 @@ public class BoardTest {
         }
     }
 
+    /**
+     * This test generates some boards where one player has 5 in a row. In this case, the
+     * isWinner method should of course return true.
+     */
     @Test
     void testIsWinner() {
         String[][] situations = {{"A1", "A2", "B0", "B1", "B2"}, {"B2", "B5", "B8", "D2", "D5"},
@@ -225,6 +273,10 @@ public class BoardTest {
         }
     }
 
+    /**
+     * By setting the board to have 5 in a row for one player, this test checks if the hasWinner
+     * method returns true in such cases.
+     */
     @Test
     void testHasWinner() {
         String[][] situations = {{"A1", "A2", "B0", "B1", "B2"}, {"A3", "A6", "C0", "C3", "C6"},
@@ -238,6 +290,11 @@ public class BoardTest {
         }
     }
 
+    /**
+     * This test first fills the board with random values. Then it empties some predefined fields,
+     * after which the getEmptyFields is called. This should return the same list as the predefined
+     * fields list (after we sort it).
+     */
     @Test
     void testGetEmptyFields() {
         // Fill the whole board
@@ -261,6 +318,11 @@ public class BoardTest {
         assertEquals(emptyFields, board.getEmptyFields());
     }
 
+    /**
+     * To test the toString method, a value on the board is set to the black mark. The string should
+     * now contain a black mark string representation. Then a white mark is placed, now the string
+     * should also include a white mark string.
+     */
     @Test
     void testToString() {
         assertFalse(board.toString().contains(Mark.BLACK.toString()));
@@ -273,6 +335,11 @@ public class BoardTest {
         assertTrue(board.toString().contains(Mark.WHITE.toString()));
     }
 
+    /**
+     * Checks the deepCopy method by looping through all values. It first generates a board with
+     * random values. The copy should not be the same object, but the toString method should return
+     * the same value, because the marks should still be the same.
+     */
     @Test
     void testDeepCopy() {
         for (int i = 0; i < board.quadrantNum; i++) {
@@ -289,6 +356,10 @@ public class BoardTest {
         // in the same output for both boards
     }
 
+    /**
+     * This test runs a randomly generated game. It is repeated 100 times to make sure that the
+     * chances of having an edge case occur is very slim.
+     */
     @RepeatedTest(100)
     void testFullGame() {
         Mark mark = Mark.BLACK;
