@@ -306,7 +306,7 @@ public class PentagoClient {
                     System.out.println("ERR: There is no game");
                     break;
                 }
-                System.out.println(game.update());
+                System.out.println(game.update(true));
                 break;
             default:
                 System.out.println("Unknown Command: " + parsedInput[0]);
