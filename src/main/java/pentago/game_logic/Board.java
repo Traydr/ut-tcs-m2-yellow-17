@@ -334,7 +334,7 @@ public class Board {
 
                     for (int k = 0; k < 6; k++) {
                         row.append(
-                                String.format("|%-1s%-2s", "", ((k + j * 3) - (k > 2 ? 3 : +0))));
+                                String.format("|%-1s%-2s", "", (k + j * 3) - (k > 2 ? 3 : +0)));
                     }
                 }
                 row.append("|\n");
