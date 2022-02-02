@@ -9,8 +9,10 @@ public class SimplePentagoServer implements PentagoServer {
     private ServerSocket serverSocket;
     private List<ClientHandler> clients;
     private Queue<ClientHandler> queue;
+    private List<Game> activeGames;
     private String serverName;
     private ArrayList<String> supportedFeatures;
+    private int gameCounter;
 
     /**
      * Starts the server.
@@ -24,9 +26,11 @@ public class SimplePentagoServer implements PentagoServer {
             System.out.println("Server: " + serverSocket.getLocalSocketAddress());
             clients = new ArrayList<>();
             queue = new ArrayDeque<>();
+            activeGames = new ArrayList<>();
             serverName = name;
             supportedFeatures = new ArrayList<>();
             supportedFeatures.add("CHAT");
+            gameCounter = 0;
 
             Thread accept = new Thread(new AcceptConnection(serverSocket, this));
             accept.start();
@@ -61,6 +65,16 @@ public class SimplePentagoServer implements PentagoServer {
     public void addClient(ClientHandler clientHandler) {
         synchronized (clients) {
             clients.add(clientHandler);
+        }
+    }
+
+    /**
+     * Removes a specific game from the active games list.
+     * @param game Game object
+     */
+    public void removeGame(Game game) {
+        if (activeGames.contains(game)) {
+            activeGames.remove(game);
         }
     }
 
@@ -109,7 +123,6 @@ public class SimplePentagoServer implements PentagoServer {
             if (queue.contains(clientHandler)) {
                 return;
             }
-            System.out.println("New client in queue: " + clientHandler.getUsername());
             queue.add(clientHandler);
         }
     }
@@ -121,7 +134,7 @@ public class SimplePentagoServer implements PentagoServer {
      */
     public ClientHandler getNextInQueue() {
         synchronized (queue) {
-            if (queue.size() == 0) {
+            if (queue.isEmpty()) {
                 return null;
             }
             return queue.remove();
@@ -142,16 +155,22 @@ public class SimplePentagoServer implements PentagoServer {
             if (queue.size() <= 1) {
                 return;
             }
-            System.out.println("State of queue before new game:\n" + queue);
             player1 = getNextInQueue();
             player2 = getNextInQueue();
-            System.out.println("Newgame : "
-                               + player1.getUsername() + " | " + player2.getUsername());
-            System.out.println("State of queue before new game:\n" + queue);
         }
 
         synchronized (player1) {
             synchronized (player2) {
+                if (player1.isAlreadyInGame() && player2.isAlreadyInGame()) {
+                    return;
+                } else if (player1.isAlreadyInGame()) {
+                    addToQueue(player2);
+                    return;
+                } else if (player2.isAlreadyInGame()) {
+                    addToQueue(player1);
+                    return;
+                }
+
                 String message;
                 if (random.nextInt(2) == 0) {
                     game = new Game(player1, player2);
@@ -160,10 +179,16 @@ public class SimplePentagoServer implements PentagoServer {
                     game = new Game(player2, player1);
                     message = "NEWGAME~" + player2.getUsername() + "~" + player1.getUsername();
                 }
+                activeGames.add(game);
                 player1.setGame(game);
                 player2.setGame(game);
                 player1.sendMessage(message);
                 player2.sendMessage(message);
+                player1.setHasSentNewGame(true);
+                player2.setHasSentNewGame(true);
+
+                gameCounter += 1;
+                System.out.println(gameCounter);
             }
         }
     }

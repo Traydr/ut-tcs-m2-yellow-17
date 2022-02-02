@@ -129,11 +129,6 @@ public class PentagoClient {
 
         client.connectToServer();
 
-        if (client.player instanceof Bot) {
-            System.out.println("Automatically queueing...");
-            client.network.sendMessage("QUEUE");
-        }
-
         String output;
         while (scanner.hasNextLine() && client.network != null) {
             output = scanner.nextLine();
@@ -152,50 +147,66 @@ public class PentagoClient {
         System.out.println("Quitting!");
     }
 
+    /**
+     * Returns the server address.
+     * @return server address as string
+     */
     public String getServerAddress() {
         return serverAddress;
     }
 
+    /**
+     * Returns port to connect to.
+     * @return integer port
+     */
     public int getPort() {
         return port;
     }
 
-    public void setPort(int port) {
-        this.port = port;
-    }
-
+    /**
+     * Returns the network object.
+     * @return network object
+     */
     public Network getNetwork() {
         return network;
     }
 
-    public void setNetwork(Network network) {
-        this.network = network;
-    }
-
+    /**
+     * Returns the game object.
+     * @return Game object
+     */
     public Game getGame() {
         return game;
     }
 
-    public void setGame(Game game) {
-        this.game = game;
-    }
-
+    /**
+     * Returns player object.
+     * @return Player object
+     */
     public Player getPlayer() {
         return player;
     }
 
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
-
+    /**
+     * Returns the current move counter for a game.
+     * @return counter
+     */
     public int getMoveCounter() {
         return moveCounter;
     }
 
+    /**
+     * Sets the move counter to a specific value.
+     * @param moveCounter
+     */
     public void setMoveCounter(int moveCounter) {
         this.moveCounter = moveCounter;
     }
 
+    /**
+     * Sets whether the selected username is valid.
+     * @param validName true if valid, otherwise false
+     */
     public void setValidName(boolean validName) {
         isValidName = validName;
     }

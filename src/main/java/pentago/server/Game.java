@@ -47,22 +47,29 @@ public class Game {
             return false;
         }
 
-        int[] localCoords = CommandParser.protocolToLocalCoords(pos);
-        if (!board.isEmptyField(localCoords[0], localCoords[1], localCoords[2])) {
-            player.sendError("This field is already occupied");
-            return false;
-        }
+        synchronized (board) {
+            int[] localCoords = CommandParser.protocolToLocalCoords(pos);
+            if (!board.isEmptyField(localCoords[0], localCoords[1], localCoords[2])) {
+                player.sendError("This field is already occupied");
+                return false;
+            }
 
-        board.setField(localCoords[0], localCoords[1], localCoords[2],
-                       current % 2 == 0 ? Mark.BLACK : Mark.WHITE);
-        current++;
-        board.rotateQuadrant(CommandParser.protocolToLocalRotate(rot));
+            board.setField(localCoords[0], localCoords[1], localCoords[2],
+                           current % 2 == 0 ? Mark.BLACK : Mark.WHITE);
+            current++;
+            board.rotateQuadrant(CommandParser.protocolToLocalRotate(rot));
 
-        for (ClientHandler p : players) {
-            p.sendMessage("MOVE~" + pos + "~" + rot);
+
+            for (ClientHandler p : players) {
+                if (p.isAlreadyInGame() && p.isHasSentNewGame()) {
+                    p.sendMessage("MOVE~" + pos + "~" + rot);
+                }
+            }
+            if (board.isFull() || board.hasWinner()) {
+                checkWinner();
+            }
+            return true;
         }
-        checkWinner();
-        return true;
     }
 
     /**
@@ -96,24 +103,26 @@ public class Game {
      * Otherwise, it responds with the corresponding game over message.
      */
     public void checkWinner() {
-        if (!board.hasWinner() && !board.isFull()) {
-            return;
-        }
-        Mark mWinner = winner();
+        synchronized (board) {
+            if (!board.hasWinner() && !board.isFull()) {
+                return;
+            }
+            Mark mWinner = winner();
 
-        if (!board.hasWinner() && board.isFull()) {
+            if (!board.hasWinner() && board.isFull()) {
+                for (ClientHandler player : players) {
+                    player.sendMessage("GAMEOVER~DRAW");
+                    player.endGame();
+                }
+                return;
+            }
+
+            ClientHandler output = mWinner == Mark.BLACK ? players[0] : players[1];
             for (ClientHandler player : players) {
-                player.sendMessage("GAMEOVER~DRAW");
+                player.sendMessage("GAMEOVER~VICTORY~" + output.getUsername());
                 player.endGame();
             }
             return;
         }
-
-        ClientHandler output = mWinner == Mark.BLACK ? players[0] : players[1];
-        for (ClientHandler player : players) {
-            player.sendMessage("GAMEOVER~VICTORY~" + output.getUsername());
-            player.endGame();
-        }
-        return;
     }
 }
