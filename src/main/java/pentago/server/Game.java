@@ -45,6 +45,9 @@ public class Game {
     public boolean setBoard(int pos, int rot, ClientHandler player) {
         if (player != players[current % 2]) {
             return false;
+        } else if (board.isFull() || board.hasWinner()) {
+            checkWinner();
+            return false;
         }
 
         int[] localCoords = CommandParser.protocolToLocalCoords(pos);
@@ -59,7 +62,9 @@ public class Game {
         board.rotateQuadrant(CommandParser.protocolToLocalRotate(rot));
 
         for (ClientHandler p : players) {
-            p.sendMessage("MOVE~" + pos + "~" + rot);
+            if (p.isAlreadyInGame() && p.isHasSentNewGame()) {
+                p.sendMessage("MOVE~" + pos + "~" + rot);
+            }
         }
         checkWinner();
         return true;

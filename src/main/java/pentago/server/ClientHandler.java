@@ -15,10 +15,11 @@ public class ClientHandler implements Runnable {
     private SimplePentagoServer server;
     private String username;
     private BufferedWriter writer;
-    private boolean helloPassed;
-    private boolean loggedIn;
     public ArrayList<String> clientSupportedFeatures;
     private Game game;
+    private boolean helloPassed;
+    private boolean loggedIn;
+    private boolean hasSentNewGame;
 
     /**
      * A constructor for the client handler object.
@@ -31,9 +32,10 @@ public class ClientHandler implements Runnable {
         this.socket = socket;
         this.server = server;
         this.writer = new BufferedWriter(new OutputStreamWriter(this.socket.getOutputStream()));
+        this.clientSupportedFeatures = new ArrayList<>();
         this.helloPassed = false;
         this.loggedIn = false;
-        this.clientSupportedFeatures = new ArrayList<>();
+        this.hasSentNewGame = false;
     }
 
     /**
@@ -43,6 +45,30 @@ public class ClientHandler implements Runnable {
      */
     public String getUsername() {
         return username;
+    }
+
+    /**
+     * Returns if the new game message has been sent yet
+     * @return true if so, false if otherwise
+     */
+    public boolean isHasSentNewGame() {
+        return hasSentNewGame;
+    }
+
+    /**
+     * Set has set new game
+     * @param input true if message has been sent, false otherwise
+     */
+    public void setHasSentNewGame(boolean input) {
+        this.hasSentNewGame = input;
+    }
+
+    /**
+     * Returns true if the client is already in another game.
+     * @return true if already in a game
+     */
+    public boolean isAlreadyInGame() {
+        return game != null;
     }
 
     /**
@@ -93,6 +119,8 @@ public class ClientHandler implements Runnable {
      * Closes the connection with the client, if the user was in a game it sends a win by.
      * disconnect
      */
+    /*@ ensures socket.isClosed() && !server.isUsernameInUse(this.username, this);
+    */
     public void close() {
         try {
             if (!socket.isClosed()) {
@@ -114,6 +142,8 @@ public class ClientHandler implements Runnable {
      *
      * @param input String of chars received from the user
      */
+    /*@ requires input != null;
+    */
     private void parseClient(String input) {
         String[] parsedInput = input.split("~");
 
@@ -180,6 +210,11 @@ public class ClientHandler implements Runnable {
                     break;
                 }
 
+                if (game == null) {
+                    sendError("There is no game");
+                    break;
+                }
+
                 if (!game.setBoard(move, rotate, this)) {
                     sendError("It is not your turn");
                     break;
@@ -207,7 +242,7 @@ public class ClientHandler implements Runnable {
                 close();
                 break;
             default:
-                sendError("ERROR~Unrecognised command: " + parsedInput[0]);
+                sendError("Unrecognised command: " + parsedInput[0]);
                 break;
         }
     }

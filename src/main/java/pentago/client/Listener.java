@@ -71,17 +71,19 @@ public class Listener implements Runnable {
                 client.setValidName(false);
                 break;
             case "MOVE":
-                client.getGame().listenerSetBoard(
-                        Integer.parseInt(inputParsed[1]),
-                        Integer.parseInt(inputParsed[2]));
-                if (client.getPlayer() instanceof Bot && client.getMoveCounter() % 2 == 0 &&
-                    !client.getGame().isGameOver()) {
-                    client.makePlayerDoMove();
+                synchronized (client.getGame()) {
+                    client.getGame().listenerSetBoard(
+                            Integer.parseInt(inputParsed[1]),
+                            Integer.parseInt(inputParsed[2]));
+                    if (client.getPlayer() instanceof Bot && client.getMoveCounter() % 2 == 0 &&
+                        !client.getGame().isGameOver()) {
+                        client.makePlayerDoMove();
+                    }
+                    client.setMoveCounter(client.getMoveCounter() + 1);
+                    System.out.println(client.getGame().update(!(client.getPlayer() instanceof Bot)));
+                    System.out.println(client.getMoveCounter() % 2 == 1 ? "It's now your turn" :
+                                       "It's now the other player's turn");
                 }
-                client.setMoveCounter(client.getMoveCounter() + 1);
-                System.out.println(client.getGame().update(!(client.getPlayer() instanceof Bot)));
-                System.out.println(client.getMoveCounter() % 2 == 1 ? "It's now your turn" :
-                                   "It's now the other player's turn");
                 break;
             case "PING":
                 network.sendMessage("PONG");
@@ -100,18 +102,20 @@ public class Listener implements Runnable {
                 System.out.println("Connected:" + allUsers);
                 break;
             case "NEWGAME":
-                System.out.println(
-                        "New Game:" + "\n\tPlayer 1: " + inputParsed[1] + "\n\tPlayer 2: " +
-                        inputParsed[2]);
                 client.startNewGame(inputParsed[1], inputParsed[2]);
-                boolean areWeStarting = client.getPlayer().getName().equals(inputParsed[1]);
-                System.out.println(
-                        areWeStarting ? "It's our turn" : "It's the other player's turn");
-                if (areWeStarting) {
-                    if (client.getPlayer() instanceof Bot) {
-                        client.makePlayerDoMove();
+                synchronized (client.getGame()) {
+                    System.out.println(
+                            "New Game:" + "\n\tPlayer 1: " + inputParsed[1] + "\n\tPlayer 2: " +
+                            inputParsed[2]);
+                    boolean areWeStarting = client.getPlayer().getName().equals(inputParsed[1]);
+                    System.out.println(
+                            areWeStarting ? "It's our turn" : "It's the other player's turn");
+                    if (areWeStarting) {
+                        if (client.getPlayer() instanceof Bot) {
+                            client.makePlayerDoMove();
+                        }
+                        client.setMoveCounter(client.getMoveCounter() + 1);
                     }
-                    client.setMoveCounter(client.getMoveCounter() + 1);
                 }
                 break;
             case "GAMEOVER":
@@ -171,6 +175,7 @@ public class Listener implements Runnable {
         try {
             String output;
             while ((output = br.readLine()) != null) {
+                System.out.println("[SERVER]" + output);
                 messageParser(output);
             }
         } catch (IOException e) {
