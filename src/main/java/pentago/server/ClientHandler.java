@@ -20,6 +20,7 @@ public class ClientHandler implements Runnable {
     private boolean helloPassed;
     private boolean loggedIn;
     private boolean hasSentNewGame;
+    private boolean isClosed;
 
     /**
      * A constructor for the client handler object.
@@ -36,6 +37,7 @@ public class ClientHandler implements Runnable {
         this.helloPassed = false;
         this.loggedIn = false;
         this.hasSentNewGame = false;
+        this.isClosed = false;
     }
 
     /**
@@ -101,7 +103,8 @@ public class ClientHandler implements Runnable {
             }
             close();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println();
+            close();
         }
     }
 
@@ -122,6 +125,10 @@ public class ClientHandler implements Runnable {
     /*@ ensures socket.isClosed() && !server.isUsernameInUse(this.username, this);
     */
     public void close() {
+        if (isClosed) {
+            return;
+        }
+
         try {
             if (!socket.isClosed()) {
                 socket.close();
@@ -134,6 +141,7 @@ public class ClientHandler implements Runnable {
             e.printStackTrace();
         } finally {
             server.removeClient(this);
+            isClosed = true;
         }
     }
 
@@ -206,7 +214,6 @@ public class ClientHandler implements Runnable {
 
                 if (move < 0 || move > 35 || rotate < 0 || rotate > 8) {
                     sendError("Move or rotate have invalid numbers");
-                    close();
                     break;
                 }
 
