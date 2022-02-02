@@ -176,7 +176,6 @@ public class Listener implements Runnable {
         try {
             String output;
             while ((output = br.readLine()) != null) {
-                System.out.println("[SERVER]" + output);
                 messageParser(output);
             }
         } catch (IOException e) {
