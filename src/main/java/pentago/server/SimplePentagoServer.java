@@ -1,6 +1,7 @@
 package pentago.server;
 
 import java.io.IOException;
+import java.net.BindException;
 import java.net.ServerSocket;
 import java.util.*;
 
@@ -15,7 +16,7 @@ public class SimplePentagoServer implements PentagoServer {
      * @param port port on which the server should listen on
      */
     @Override
-    public void start(int port) {
+    public void start(int port) throws BindException {
         try {
             serverSocket = new ServerSocket(port);
             System.out.println("Server: " + serverSocket.getLocalSocketAddress());
@@ -24,6 +25,8 @@ public class SimplePentagoServer implements PentagoServer {
 
             Thread accept = new Thread(new AcceptConnection(serverSocket, this));
             accept.start();
+        } catch (BindException e) {
+            throw new BindException();
         } catch (IOException e) {
             e.printStackTrace();
         }
