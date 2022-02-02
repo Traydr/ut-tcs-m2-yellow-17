@@ -43,6 +43,7 @@ public class SimplePentagoServer implements PentagoServer {
 
     /**
      * Returns server name.
+     *
      * @return server name
      */
     public String getServerName() {
@@ -51,6 +52,7 @@ public class SimplePentagoServer implements PentagoServer {
 
     /**
      * Returns a list of the features supported by the server.
+     *
      * @return list of features
      */
     public ArrayList<String> getSupportedFeatures() {
@@ -70,6 +72,7 @@ public class SimplePentagoServer implements PentagoServer {
 
     /**
      * Removes a specific game from the active games list.
+     *
      * @param game Game object
      */
     public void removeGame(Game game) {

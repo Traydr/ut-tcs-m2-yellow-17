@@ -305,6 +305,7 @@ public class Board {
 
     /**
      * Converts the board into a string representation.
+     *
      * @param withHelp if the board should include the help board
      * @return Board as a string
      */
@@ -353,6 +354,7 @@ public class Board {
 
     /**
      * Returns the board as a string, without help.
+     *
      * @return returns the board without the additional help
      */
     public String toString() {

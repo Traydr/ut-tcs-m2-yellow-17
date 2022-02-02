@@ -149,6 +149,7 @@ public class PentagoClient {
 
     /**
      * Returns the server address.
+     *
      * @return server address as string
      */
     public String getServerAddress() {
@@ -157,6 +158,7 @@ public class PentagoClient {
 
     /**
      * Returns port to connect to.
+     *
      * @return integer port
      */
     public int getPort() {
@@ -165,6 +167,7 @@ public class PentagoClient {
 
     /**
      * Returns the network object.
+     *
      * @return network object
      */
     public Network getNetwork() {
@@ -173,6 +176,7 @@ public class PentagoClient {
 
     /**
      * Returns the game object.
+     *
      * @return Game object
      */
     public Game getGame() {
@@ -181,6 +185,7 @@ public class PentagoClient {
 
     /**
      * Returns player object.
+     *
      * @return Player object
      */
     public Player getPlayer() {
@@ -189,6 +194,7 @@ public class PentagoClient {
 
     /**
      * Returns the current move counter for a game.
+     *
      * @return counter
      */
     public int getMoveCounter() {
@@ -197,6 +203,7 @@ public class PentagoClient {
 
     /**
      * Sets the move counter to a specific value.
+     *
      * @param moveCounter sets the value of the move counter
      */
     public void setMoveCounter(int moveCounter) {
@@ -205,6 +212,7 @@ public class PentagoClient {
 
     /**
      * Sets whether the selected username is valid.
+     *
      * @param validName true if valid, otherwise false
      */
     public void setValidName(boolean validName) {

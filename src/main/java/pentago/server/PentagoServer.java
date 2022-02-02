@@ -5,6 +5,7 @@ import java.net.BindException;
 public interface PentagoServer {
     /**
      * Starts the server.
+     *
      * @param port the port the server should run on
      * @param name the name of the server
      * @throws BindException exception if the server couldn't connect to the port
@@ -13,6 +14,7 @@ public interface PentagoServer {
 
     /**
      * Returns the port of the server.
+     *
      * @return port.
      */
     int getPort();

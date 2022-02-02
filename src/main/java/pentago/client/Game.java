@@ -16,6 +16,7 @@ public class Game {
 
     /**
      * Game constructor.
+     *
      * @param p0 player 1
      * @param p1 player 2
      */
@@ -29,6 +30,7 @@ public class Game {
 
     /**
      * Gets the board object.
+     *
      * @return Board object
      */
     public Board getBoard() {
@@ -37,6 +39,7 @@ public class Game {
 
     /**
      * Gets the current turn count.
+     *
      * @return int count
      */
     public int getCurrent() {
@@ -45,6 +48,7 @@ public class Game {
 
     /**
      * Sets the current turn counter.
+     *
      * @param current a turn number
      */
     public void setCurrent(int current) {
@@ -126,6 +130,7 @@ public class Game {
 
     /**
      * Returns if the game is over.
+     *
      * @return true if game over, otherwise false
      */
     public boolean isGameOver() {

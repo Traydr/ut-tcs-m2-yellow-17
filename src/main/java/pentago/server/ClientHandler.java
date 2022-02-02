@@ -51,6 +51,7 @@ public class ClientHandler implements Runnable {
 
     /**
      * Returns if the new game message has been sent yet.
+     *
      * @return true if so, false if otherwise
      */
     public boolean isHasSentNewGame() {
@@ -59,6 +60,7 @@ public class ClientHandler implements Runnable {
 
     /**
      * Set has set new game.
+     *
      * @param input true if message has been sent, false otherwise
      */
     public void setHasSentNewGame(boolean input) {
@@ -67,6 +69,7 @@ public class ClientHandler implements Runnable {
 
     /**
      * Returns true if the client is already in another game.
+     *
      * @return true if already in a game
      */
     public boolean isAlreadyInGame() {

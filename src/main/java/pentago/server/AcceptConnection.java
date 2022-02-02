@@ -10,8 +10,9 @@ public class AcceptConnection implements Runnable {
 
     /**
      * Constructor for the AcceptConnection object.
+     *
      * @param serverSocket The socket for the server
-     * @param gameServer The server object itself
+     * @param gameServer   The server object itself
      */
     public AcceptConnection(ServerSocket serverSocket, SimplePentagoServer gameServer) {
         this.serverSocket = serverSocket;

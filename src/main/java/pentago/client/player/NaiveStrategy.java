@@ -32,7 +32,7 @@ public class NaiveStrategy implements Strategy {
         Random random = new Random();
 
         return new String[]{
-            arrSize < 1 ? emptyFields.get(0) : emptyFields.get(random.nextInt(arrSize)),
-            CommandParser.protocolToLocalRotate(random.nextInt(8))};
+                arrSize < 1 ? emptyFields.get(0) : emptyFields.get(random.nextInt(arrSize)),
+                CommandParser.protocolToLocalRotate(random.nextInt(8))};
     }
 }

@@ -10,7 +10,7 @@ public class Bot extends Player {
     /**
      * Creates a new Bot object with a specified strategy.
      *
-     * @param mark Which mark does the bot have
+     * @param mark     Which mark does the bot have
      * @param strategy Strategy which the bot should follow
      */
     /*@ requires mark == Mark.BLACK || mark == Mark.WHITE;
@@ -37,6 +37,7 @@ public class Bot extends Player {
 
     /**
      * Gets the strategy assigned to the bot to calculate its next move.
+     *
      * @param board The current game board
      * @return A move to be made
      */

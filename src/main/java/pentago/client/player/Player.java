@@ -9,8 +9,9 @@ public abstract class Player {
 
     /**
      * Abstract player constructor.
-     * @param name name of the player
-     * @param mark which mark the player possesses
+     *
+     * @param name     name of the player
+     * @param mark     which mark the player possesses
      * @param strategy which strategy does the player use
      */
     /*@ requires name != null;
