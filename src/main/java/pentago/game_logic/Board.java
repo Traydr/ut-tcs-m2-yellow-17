@@ -313,6 +313,9 @@ public class Board {
         int width = 25;
         int margin = 5;
 
+        if (withHelp) {
+            boardString.append(" ".repeat(width + margin + 6) + "A" + " ".repeat(11) + "B" + "\n");
+        }
         boardString.append(
                 "-".repeat(width) + (withHelp ? (" ".repeat(margin) + "-".repeat(width)) : "") +
                 "\n");
@@ -330,7 +333,8 @@ public class Board {
                     row.append("|" + " ".repeat(margin));
 
                     for (int k = 0; k < 6; k++) {
-                        row.append(String.format("|%-1s%-2s", "", (k + j * 3) - (k > 2 ? 3 : 0)));
+                        row.append(
+                                String.format("|%-1s%-2s", "", ((k + j * 3) - (k > 2 ? 3 : +0))));
                     }
                 }
                 row.append("|\n");
@@ -339,6 +343,9 @@ public class Board {
                                    (withHelp ? (" ".repeat(margin) + "-".repeat(width)) : "") +
                                    "\n");
             }
+        }
+        if (withHelp) {
+            boardString.append(" ".repeat(width + margin + 6) + "C" + " ".repeat(11) + "D" + "\n");
         }
 
         return boardString.toString();
