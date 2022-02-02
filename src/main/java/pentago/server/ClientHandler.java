@@ -83,7 +83,6 @@ public class ClientHandler implements Runnable {
                 this.writer.flush();
                 return;
             }
-            game.checkWinner();
             close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -125,7 +124,7 @@ public class ClientHandler implements Runnable {
      *
      * @param input String of chars received from the user
      */
-    public void parseClient(String input) {
+    private void parseClient(String input) {
         String[] parsedInput = input.split("~");
 
         switch (parsedInput[0]) {
@@ -134,7 +133,7 @@ public class ClientHandler implements Runnable {
                 if (helloPased) {
                     sendError("Unexpected [HELLO]");
                     break;
-                } else if (parsedInput.length <= 2) {
+                } else if (parsedInput.length < 2) {
                     sendError("Too few arguments");
                     break;
                 }

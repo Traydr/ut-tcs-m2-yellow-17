@@ -80,6 +80,10 @@ public class SimplePentagoServer implements PentagoServer {
      */
     public void addToQueue(ClientHandler clientHandler) {
         synchronized (queue) {
+            if (queue.contains(clientHandler)) {
+                return;
+            }
+            System.out.println("New client in queue: " + clientHandler.getUsername());
             queue.add(clientHandler);
         }
     }
@@ -91,6 +95,9 @@ public class SimplePentagoServer implements PentagoServer {
      */
     public ClientHandler getNextInQueue() {
         synchronized (queue) {
+            if (queue.size() == 0) {
+                return null;
+            }
             return queue.remove();
         }
     }
@@ -109,22 +116,30 @@ public class SimplePentagoServer implements PentagoServer {
             if (queue.size() <= 1) {
                 return;
             }
+            System.out.println("State of queue before new game:\n" + queue);
             player1 = getNextInQueue();
             player2 = getNextInQueue();
+            System.out.println("Newgame : "
+                               + player1.getUsername() + " | " + player2.getUsername());
+            System.out.println("State of queue before new game:\n" + queue);
         }
 
-        String message;
-        if (random.nextInt(2) == 0) {
-            game = new Game(player1, player2);
-            message = "NEWGAME~" + player1.getUsername() + "~" + player2.getUsername();
-        } else {
-            game = new Game(player2, player1);
-            message = "NEWGAME~" + player2.getUsername() + "~" + player1.getUsername();
+        synchronized (player1) {
+            synchronized (player2) {
+                String message;
+                if (random.nextInt(2) == 0) {
+                    game = new Game(player1, player2);
+                    message = "NEWGAME~" + player1.getUsername() + "~" + player2.getUsername();
+                } else {
+                    game = new Game(player2, player1);
+                    message = "NEWGAME~" + player2.getUsername() + "~" + player1.getUsername();
+                }
+                player1.setGame(game);
+                player2.setGame(game);
+                player1.sendMessage(message);
+                player2.sendMessage(message);
+            }
         }
-        player1.setGame(game);
-        player2.setGame(game);
-        player1.sendMessage(message);
-        player2.sendMessage(message);
     }
 
     /**
