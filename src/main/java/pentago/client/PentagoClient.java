@@ -355,7 +355,7 @@ public class PentagoClient {
                     System.out.println("ERR: There is no game");
                     break;
                 }
-                System.out.println(game.update());
+                System.out.println(game.update(true));
                 break;
             case "autoqueue":
                 autoQueue = !autoQueue;
