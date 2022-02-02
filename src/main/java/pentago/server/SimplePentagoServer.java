@@ -19,6 +19,8 @@ public class SimplePentagoServer implements PentagoServer {
      *
      * @param port port on which the server should listen on
      */
+    //@ requires port >= 0 && port <= 65535;
+    //@ requires name != null;
     @Override
     public void start(int port, String name) throws BindException {
         try {
@@ -46,6 +48,8 @@ public class SimplePentagoServer implements PentagoServer {
      *
      * @return server name
      */
+    //@ requires this.serverName != null;
+    //@ ensures \result == this.serverName;
     public String getServerName() {
         return serverName;
     }
@@ -55,6 +59,8 @@ public class SimplePentagoServer implements PentagoServer {
      *
      * @return list of features
      */
+    //@ requires supportedFeatures != null;
+    //@ ensures \result == this.supportedFeatures;
     public ArrayList<String> getSupportedFeatures() {
         return supportedFeatures;
     }
@@ -64,6 +70,8 @@ public class SimplePentagoServer implements PentagoServer {
      *
      * @param clientHandler the client to add
      */
+    //@ requires clientHandler != null && clients != null;
+    //@ ensures clients.contains(clientHandler);
     public void addClient(ClientHandler clientHandler) {
         synchronized (clients) {
             clients.add(clientHandler);
@@ -75,6 +83,8 @@ public class SimplePentagoServer implements PentagoServer {
      *
      * @param game Game object
      */
+    //@ requires game != null && activeGames != null;
+    //@ ensures activeGames.contains(game);
     public void removeGame(Game game) {
         if (activeGames.contains(game)) {
             activeGames.remove(game);
@@ -86,6 +96,8 @@ public class SimplePentagoServer implements PentagoServer {
      *
      * @param clientHandler the client to remove
      */
+    //@ requires clients != null && clientHandler != null;
+    //@ ensures !\old(clients).contains(clientHandler) ==> clients.contains(clientHandler);
     public void removeClient(ClientHandler clientHandler) {
         synchronized (clients) {
             if (queue.contains(clientHandler)) {
@@ -105,6 +117,8 @@ public class SimplePentagoServer implements PentagoServer {
      *
      * @return a list of strings containing usernames
      */
+    //TODO add more conditions
+    //@ requires clients != null;
     public List<String> getAllUsernames() {
         synchronized (clients) {
             ArrayList<String> output = new ArrayList<>();
@@ -121,6 +135,7 @@ public class SimplePentagoServer implements PentagoServer {
      *
      * @param clientHandler the client to add
      */
+    //@ requires clientHandler != null && queue != null;
     public void addToQueue(ClientHandler clientHandler) {
         synchronized (queue) {
             if (queue.contains(clientHandler)) {
@@ -135,6 +150,7 @@ public class SimplePentagoServer implements PentagoServer {
      *
      * @return client in queue pos 1
      */
+    //@ requires queue != null;
     public ClientHandler getNextInQueue() {
         synchronized (queue) {
             if (queue.isEmpty()) {
@@ -148,6 +164,7 @@ public class SimplePentagoServer implements PentagoServer {
      * Starts a new game and randomly assigns which player should go first. It then sends the new
      * game info to the clients.
      */
+    //@ requires queue != null;
     public void startNewGame() {
         Random random = new Random();
         Game game;
