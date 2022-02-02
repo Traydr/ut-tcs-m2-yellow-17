@@ -69,7 +69,7 @@ public class SimplePentagoServer implements PentagoServer {
     }
 
     /**
-     * Removes a specific game from the active games list
+     * Removes a specific game from the active games list.
      * @param game Game object
      */
     public void removeGame(Game game) {

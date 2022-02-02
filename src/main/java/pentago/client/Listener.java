@@ -80,7 +80,8 @@ public class Listener implements Runnable {
                         client.makePlayerDoMove();
                     }
                     client.setMoveCounter(client.getMoveCounter() + 1);
-                    System.out.println(client.getGame().update(!(client.getPlayer() instanceof Bot)));
+                    System.out.println(client.getGame().update(
+                            !(client.getPlayer() instanceof Bot)));
                     System.out.println(client.getMoveCounter() % 2 == 1 ? "It's now your turn" :
                                        "It's now the other player's turn");
                 }

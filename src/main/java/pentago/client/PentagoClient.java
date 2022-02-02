@@ -180,7 +180,7 @@ public class PentagoClient {
     }
 
     /**
-     * Returns player object
+     * Returns player object.
      * @return Player object
      */
     public Player getPlayer() {
@@ -188,7 +188,7 @@ public class PentagoClient {
     }
 
     /**
-     * Returns the current move counter for a game
+     * Returns the current move counter for a game.
      * @return counter
      */
     public int getMoveCounter() {
@@ -196,7 +196,7 @@ public class PentagoClient {
     }
 
     /**
-     * Sets the move counter to a specific value
+     * Sets the move counter to a specific value.
      * @param moveCounter
      */
     public void setMoveCounter(int moveCounter) {
@@ -204,7 +204,7 @@ public class PentagoClient {
     }
 
     /**
-     * Sets whether the selected username is valid
+     * Sets whether the selected username is valid.
      * @param validName true if valid, otherwise false
      */
     public void setValidName(boolean validName) {
