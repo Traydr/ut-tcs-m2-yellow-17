@@ -42,6 +42,10 @@ public class Game {
      * @param player The player that made the move
      * @return true if the move went through, false if otherwise
      */
+    //@ requires pos >= 0 && pos <= 35 && rot >= 0 && rot <= 8;
+    //@ requires player != null;
+    //@ requires board != null;
+    // TODO Complete ensures
     public boolean setBoard(int pos, int rot, ClientHandler player) {
         if (player != players[current % 2]) {
             return false;
@@ -78,6 +82,9 @@ public class Game {
      *
      * @return The result of the game after it is over. {@code null} if there is no winner.
      */
+    //@ ensures board.isWinner(Mark.BLACK) ==> \result == Mark.BLACK;
+    //@ ensures board.isWinner(Mark.WHITE) ==> \result == Mark.WHITE;
+    //@ ensures (board.hasWinner() == false) ==> \result == null;
     public Mark winner() {
         return board.hasWinner() ? (board.isWinner(Mark.BLACK) ? Mark.BLACK : Mark.WHITE) : null;
     }
