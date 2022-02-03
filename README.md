@@ -60,7 +60,7 @@ To run the program directly from the command line, you need to manually build th
 the [Build instructions](#build-instructions) above before running.
 
 Now the client can be started by running `java -cp target/<output-file>.jar pentago.client.PentagoClient`
-To start the server, run `java -cp target/<output-file>.jar pentago.client.SimplePentagoServer`
+To start the server, run `java -cp target/<output-file>.jar pentago.server.Server`
 
 **Note:** Make sure to replace `<output-file>` by the actual output file. This should be something
 like `yellow17-1.0-SNAPSHOT`
