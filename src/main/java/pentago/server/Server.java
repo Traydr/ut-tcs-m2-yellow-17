@@ -16,6 +16,7 @@ public class Server {
             System.out.println("What should the server name be?");
             String name = scanner.nextLine();
 
+            // Keeps looping until a valid port is chosen
             while (!validPort) {
                 try {
                     System.out.println("What port should the server listen on (0 for random)?");

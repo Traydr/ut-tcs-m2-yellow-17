@@ -117,7 +117,6 @@ public class SimplePentagoServer implements PentagoServer {
      *
      * @return a list of strings containing usernames
      */
-    //TODO add more conditions
     //@ requires clients != null;
     public List<String> getAllUsernames() {
         synchronized (clients) {
@@ -171,6 +170,7 @@ public class SimplePentagoServer implements PentagoServer {
         ClientHandler player1;
         ClientHandler player2;
 
+        // Get 2 first players in queue
         synchronized (queue) {
             if (queue.size() <= 1) {
                 return;
@@ -181,6 +181,8 @@ public class SimplePentagoServer implements PentagoServer {
 
         synchronized (player1) {
             synchronized (player2) {
+                // If either player is in a game already then we stop and return the player who isnt
+                // back into queue
                 if (player1.isAlreadyInGame() && player2.isAlreadyInGame()) {
                     return;
                 } else if (player1.isAlreadyInGame()) {
@@ -222,7 +224,6 @@ public class SimplePentagoServer implements PentagoServer {
     public void sendChat(ClientHandler sender, String message) {
         synchronized (clients) {
             for (ClientHandler client : clients) {
-                // TODO Transfer this clientSupportedFeatures check to ClientHandler
                 if (client == sender && !client.clientSupportedFeatures.contains("CHAT")) {
                     continue;
                 }
@@ -239,10 +240,12 @@ public class SimplePentagoServer implements PentagoServer {
      * @param message  the message to be sent
      */
     public void sendWhisper(ClientHandler sender, String receiver, String message) {
+        // Makes sure that you aren't just trying to send a message to yourself
         if (sender.getUsername().equals(receiver)) {
             return;
         }
 
+        // Goes through the list of client and sends the whisper to the user if the support CHAT
         synchronized (clients) {
             for (ClientHandler client : clients) {
                 if (!client.getUsername().equals(receiver) &&
@@ -263,6 +266,8 @@ public class SimplePentagoServer implements PentagoServer {
      */
     public boolean isUsernameInUse(String name, ClientHandler request) {
         synchronized (clients) {
+            // Loops through clients and checks if the username is in use, and it is not the current
+            // client that is using it
             for (ClientHandler client : clients) {
                 if (client == request) {
                     continue;

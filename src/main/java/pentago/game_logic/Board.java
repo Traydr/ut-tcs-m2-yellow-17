@@ -469,6 +469,8 @@ public class Board {
      */
     //@ requires quadrants != null;
     public Board deepCopy() {
+        // This function loops through all positions in the current board and sets it in the new
+        // board
         Board newBoard = new Board();
         for (int i = 0; i < this.quadrantNum; i++) {
             for (int j = 0; j < this.quadrantSize; j++) {

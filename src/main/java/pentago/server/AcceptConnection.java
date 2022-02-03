@@ -33,6 +33,8 @@ public class AcceptConnection implements Runnable {
         Socket client = null;
         while (!serverSocket.isClosed()) {
             try {
+                // Waits for a new connection to form, makes a new client object and hands it
+                // off to a new client handler thread
                 client = serverSocket.accept();
             } catch (IOException e) {
                 System.out.println("The socket is closed");
