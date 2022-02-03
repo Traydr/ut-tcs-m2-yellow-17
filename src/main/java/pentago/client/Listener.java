@@ -72,16 +72,20 @@ public class Listener implements Runnable {
                 break;
             case "MOVE":
                 synchronized (client.getGame()) {
+                    // We set our own board on move received
                     client.getGame().listenerSetBoard(
                             Integer.parseInt(inputParsed[1]),
                             Integer.parseInt(inputParsed[2]));
+                    // If the player is a bot, and it's our turn we make it do a move
                     if (client.getPlayer() instanceof Bot && client.getMoveCounter() % 2 == 0 &&
                         !client.getGame().isGameOver()) {
                         client.makePlayerDoMove();
                     }
+                    // Increase the move counter and show an updated view of the board
                     client.setMoveCounter(client.getMoveCounter() + 1);
                     System.out.println(client.getGame().update(
                             !(client.getPlayer() instanceof Bot)));
+                    // Tells the user whose turn is it
                     System.out.println(client.getMoveCounter() % 2 == 1 ? "It's now your turn" :
                                        "It's now the other player's turn");
                 }
@@ -103,14 +107,17 @@ public class Listener implements Runnable {
                 System.out.println("Connected:" + allUsers);
                 break;
             case "NEWGAME":
+                // Starts a brand new game locally
                 client.startNewGame(inputParsed[1], inputParsed[2]);
                 synchronized (client.getGame()) {
+                    // Tells the player who is starting
                     System.out.println(
                             "New Game:" + "\n\tPlayer 1: " + inputParsed[1] + "\n\tPlayer 2: " +
                             inputParsed[2]);
                     boolean areWeStarting = client.getPlayer().getName().equals(inputParsed[1]);
                     System.out.println(
                             areWeStarting ? "It's our turn" : "It's the other player's turn");
+                    // If it's our turn we make the bot play
                     if (areWeStarting) {
                         if (client.getPlayer() instanceof Bot) {
                             client.makePlayerDoMove();
@@ -138,6 +145,7 @@ public class Listener implements Runnable {
                         System.out.println("ERR: unexpected win condition");
                         break;
                 }
+                // Reset move counter, end the game and queue again if auto queue is on
                 client.setMoveCounter(0);
                 client.endCurrentGame();
                 if (client.isAutoQueue()) {

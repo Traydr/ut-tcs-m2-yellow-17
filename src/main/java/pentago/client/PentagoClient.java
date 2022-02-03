@@ -61,6 +61,8 @@ public class PentagoClient {
         PentagoClient client;
         Player player;
 
+        // Goes through the command line arguments to see what presets it should use
+        // if no preset has been picked then it will ask the user to pick
         List argsList = Arrays.asList(args);
         if (argsList.contains("--human")) {
             System.out.println("Player: Human");
@@ -86,6 +88,8 @@ public class PentagoClient {
             }
         }
 
+        // if the --preset command line argument is given it will connect to the reference server
+        // otherwise it asks the user to choose
         if (argsList.contains("--preset")) {
             Random random = new Random();
             client = new PentagoClient(player);
@@ -105,6 +109,7 @@ public class PentagoClient {
             }
         }
 
+        // Asks the user to enter a name, will keep asking until the user enters an invalid name
         System.out.println("Username:");
         String username = scanner.nextLine();
 
@@ -114,8 +119,10 @@ public class PentagoClient {
             username = scanner.nextLine();
         }
 
+        // Sets the username
         player.setName(username);
 
+        // Tries to connect if it doesn't work then it exits
         try {
             if (!client.network.connect(
                     InetAddress.getByName(client.serverAddress), client.port, client)) {
@@ -127,9 +134,12 @@ public class PentagoClient {
             System.exit(2);
         }
 
+        // Connects to the server and displays the help menu
         client.connectToServer();
         client.displayHelp();
         String output;
+        // Reads from system in until quit is received
+        // Does not allow ~ characters in input
         while (scanner.hasNextLine() && client.network != null) {
             output = scanner.nextLine();
             if (output.equals("quit")) {
@@ -142,6 +152,7 @@ public class PentagoClient {
             }
         }
 
+        // Closes everything before quiting
         client.network.close();
         scanner.close();
         System.out.println("Quitting!");
@@ -226,6 +237,7 @@ public class PentagoClient {
      * @param player2 Player 2 name
      */
     public void startNewGame(String player1, String player2) {
+        // Starts the game with fake players, sets their names to the actual player names
         Player humanPlayer1 = new Human(player1, Mark.WHITE);
         Player humanPlayer2 = new Human(player2, Mark.BLACK);
         this.game = new Game(humanPlayer1, humanPlayer2);
@@ -273,6 +285,9 @@ public class PentagoClient {
                 network.sendMessage("LIST");
                 break;
             case "place":
+                // If a place has been done before then we do not allow the user to place again
+                // Also if there are not exactly 2 arguments that being 'place A0' then we do not
+                // accept the command either
                 if (moveCmd != null) {
                     System.out.println("ERR: cannot place twice");
                     break;
@@ -281,11 +296,13 @@ public class PentagoClient {
                     break;
                 }
 
+                // If it not our turn then we break aswell
                 if (moveCounter % 2 == 0) {
                     System.out.println("It is not your turn!");
                     break;
                 }
 
+                // We check if the move is valid according to the system we use
                 Pattern movePattern = Pattern.compile("[A-D][0-8]");
                 Matcher moveMatcher = movePattern.matcher(parsedInput[1]);
                 boolean isValidMove = moveMatcher.find();
@@ -294,16 +311,19 @@ public class PentagoClient {
                     break;
                 }
 
+                //Then we check if there is already a move there
                 if (this.game.getBoard().getField(parsedInput[1]) != Mark.EMPTY) {
                     System.out.println("There is already a mark there");
                     break;
                 }
+                // Finally, we commit the move to moveCmd var
                 Board tmpBoard = new Board();
                 int[] coords = tmpBoard.getCoords(parsedInput[1]);
                 moveCmd = "MOVE~" +
                           CommandParser.localToProtocolCoords(coords[0], coords[1], coords[2]);
                 break;
             case "rotate":
+                // Check if there has been anything placed yet and that there are only 2 arguments
                 if (moveCmd == null) {
                     System.out.println("ERR: nothing has been placed yet");
                     break;
@@ -312,6 +332,7 @@ public class PentagoClient {
                     break;
                 }
 
+                // Check that the move is in the right pattern
                 Pattern rotatePattern = Pattern.compile("[A-D][L|R]");
                 Matcher rotateMatcher = rotatePattern.matcher(parsedInput[1]);
                 boolean isValidRotate = rotateMatcher.find();
@@ -320,14 +341,17 @@ public class PentagoClient {
                     break;
                 }
 
+                // Finally, send the move and wipe moveCmd
                 moveCmd += "~" + CommandParser.localToProtocolRotate(parsedInput[1]);
                 network.sendMessage(moveCmd);
                 moveCmd = null;
                 break;
             case "rplace":
+                // Reset moveCmd if the player didn't want to place there
                 moveCmd = "";
                 break;
             case "setname":
+                // Sets a new username and tries to re log
                 player.setName(parsedInput[1]);
                 this.login();
                 break;
@@ -338,6 +362,7 @@ public class PentagoClient {
                 network.sendMessage("QUEUE");
                 break;
             case "chat":
+                // If the server doesn't support chatting or there is no message break
                 if (!serverFeatures.contains("CHAT")) {
                     System.out.println("ERR: The server does not support chatting");
                 }
@@ -352,6 +377,11 @@ public class PentagoClient {
                 network.sendMessage("CHAT~" + tmpChat);
                 break;
             case "whisper":
+                // Checks to make sure that the server supports chatting
+                if (!serverFeatures.contains("CHAT")) {
+                    System.out.println("ERR: The server does not support chatting");
+                }
+                // Checks to make sure that the whisper has the correct amount of details
                 if (parsedInput.length < 3) {
                     System.out.println("ERR: no whisper message / or no username specified");
                     break;
@@ -363,6 +393,7 @@ public class PentagoClient {
                 network.sendMessage(String.format("WHISPER~%s~%s", parsedInput[1], tmpWhisper));
                 break;
             case "hint":
+                // Gives a random move if currently in a game
                 if (game == null) {
                     System.out.println("ERR: There is no game");
                     break;
@@ -370,6 +401,7 @@ public class PentagoClient {
                 System.out.println(game.getRandomMove());
                 break;
             case "show":
+                // shows the board with a help board aswell
                 if (game == null) {
                     System.out.println("ERR: There is no game");
                     break;
@@ -377,6 +409,7 @@ public class PentagoClient {
                 System.out.println(game.update(true));
                 break;
             case "autoqueue":
+                // toggles auto queue
                 autoQueue = !autoQueue;
                 break;
             default:
@@ -393,6 +426,7 @@ public class PentagoClient {
      * Makes a bot do a move and then sends it to the server.
      */
     public void makePlayerDoMove() {
+        // Makes a bot do a move and then sends it to the server
         Bot bot = new Bot(this.player.getMark(), this.player.getStrategy());
         String[] move = bot.determineMove(this.game.getBoard());
         int[] coords = game.getBoard().getCoords(move[0]);

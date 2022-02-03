@@ -73,8 +73,8 @@ public class Game {
         int[] localCoords = CommandParser.protocolToLocalCoords(pos);
         board.setField(localCoords[0], localCoords[1], localCoords[2],
                        current % 2 == 0 ? Mark.BLACK : Mark.WHITE);
-        current++;
         board.rotateQuadrant(CommandParser.protocolToLocalRotate(rot));
+        current++;
     }
 
     /**

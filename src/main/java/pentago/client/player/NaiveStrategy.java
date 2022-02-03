@@ -31,6 +31,7 @@ public class NaiveStrategy implements Strategy {
         int arrSize = emptyFields.size();
         Random random = new Random();
 
+        // Returns a random move
         return new String[]{
                 arrSize < 1 ? emptyFields.get(0) : emptyFields.get(random.nextInt(arrSize)),
                 CommandParser.protocolToLocalRotate(random.nextInt(8))};
