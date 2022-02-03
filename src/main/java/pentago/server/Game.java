@@ -27,6 +27,7 @@ public class Game {
     /**
      * Resets the board. All fields will be set to {@code Mark.EMPTY}.
      */
+    //@ requires board != null;
     public void reset() {
         current = 0;
         board.reset();
@@ -112,6 +113,7 @@ public class Game {
      * Checks if there is a winner, it does nothing if there is no winner and the board is not full.
      * Otherwise, it responds with the corresponding game over message.
      */
+    //@ requires board != null;
     public void checkWinner() {
         synchronized (board) {
             // If the board isn't full or doesn't have a winner immediately return

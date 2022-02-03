@@ -33,6 +33,7 @@ public class Game {
      *
      * @return Board object
      */
+    //@ requires board != null;
     public Board getBoard() {
         return board;
     }
@@ -42,6 +43,7 @@ public class Game {
      *
      * @return int count
      */
+    //@ requires current >= 0;
     public int getCurrent() {
         return current;
     }
@@ -51,6 +53,7 @@ public class Game {
      *
      * @param current a turn number
      */
+    //@ requires current >= 0;
     public void setCurrent(int current) {
         this.current = current;
     }
@@ -58,6 +61,7 @@ public class Game {
     /**
      * Resets the board. All fields will be set to {@code Mark.EMPTY}.
      */
+    //@ requires board != null;
     public void reset() {
         current = 0;
         board.reset();
@@ -69,6 +73,7 @@ public class Game {
      * @param pos position of piece
      * @param rot rotation
      */
+    //@ requires board != null;
     public void listenerSetBoard(int pos, int rot) {
         int[] localCoords = CommandParser.protocolToLocalCoords(pos);
         board.setField(localCoords[0], localCoords[1], localCoords[2],
@@ -83,6 +88,7 @@ public class Game {
      * @param withHelp Whether the program should output an example board with the values
      * @return A string representing the board status
      */
+    //@ requires board != null;
     public String update(boolean withHelp) {
         return board.toString(withHelp) + "\n";
     }
@@ -101,6 +107,8 @@ public class Game {
      *
      * @return String in the form of "Place: [A-D][0-8] \n Rotate: [A-D][L|R]"
      */
+    //@ requires board != null;
+    //@ ensures \result != null;
     public String getRandomMove() {
         ArrayList<String> emptyFields = board.getEmptyFields();
         int arrSize = emptyFields.size();
@@ -119,6 +127,8 @@ public class Game {
      *
      * @return The result of the game after it is over
      */
+    //@ requires board != null;
+    //@ ensures \result != null;
     public String result() {
         if (board.hasWinner()) {
             Player winner = board.isWinner(players[0].getMark()) ? players[0] : players[1];
@@ -133,6 +143,8 @@ public class Game {
      *
      * @return true if game over, otherwise false
      */
+    //@ requires board != null;
+    //@ ensures \result == true || \result == false;
     public boolean isGameOver() {
         return board.gameOver();
     }
