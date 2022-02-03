@@ -20,6 +20,7 @@ public class Board {
     /**
      * This sets all the positions of the board to be empty.
      */
+    //@ requires quadrants != null;
     public void reset() {
         for (int i = 0; i < quadrantNum; i++) {
             for (int j = 0; j < quadrantSize; j++) {
@@ -36,6 +37,7 @@ public class Board {
      * @param userCoords A combination a letters A-D and 0-8
      * @return An array of 3 indexes indicating quadrants and x, y within them
      */
+    //@ requires userCoords != null;
     public int[] getCoords(String userCoords) {
         if (userCoords.length() != 2) {
             return null;
@@ -62,6 +64,10 @@ public class Board {
      * @param y    y position
      * @return true if field exists, false if not
      */
+    //@ requires quad >= 0 || quad <= 3;
+    //@ requires x >= 0 || x <= 3;
+    //@ requires y >= 0 || y <= 3;
+    //@ ensures \result == true || \result == false;
     public boolean isField(int quad, int x, int y) {
         return quad >= 0 && quad <= quadrantNum - 1 && x >= 0 && x <= quadrantSize - 1 && y >= 0 &&
                y <= quadrantSize - 1;
@@ -73,6 +79,8 @@ public class Board {
      * @param userCoords [A-D][0-8]
      * @return true if field exists, false if not
      */
+    //@ requires userCoords != null;
+    //@ ensures \result == true || \result == false;
     public boolean isField(String userCoords) {
         int[] coords = getCoords(userCoords);
         return isField(coords[0], coords[1], coords[2]);
@@ -86,6 +94,11 @@ public class Board {
      * @param y    y position
      * @return The mark in the field
      */
+    //@ requires quad >= 0 || quad <= 3;
+    //@ requires x >= 0 || x <= 3;
+    //@ requires y >= 0 || y <= 3;
+    //@ requires quadrants != null;
+    //@ ensures \result == this.quadrants[quad][x][y];
     public Mark getField(int quad, int x, int y) {
         synchronized (this.quadrants) {
             return this.quadrants[quad][x][y];
@@ -98,6 +111,8 @@ public class Board {
      * @param userCoords [A-D][0-8]
      * @return The mark in the field
      */
+    //@ requires userCoords != null;
+    //@ requires quadrants != null;
     public Mark getField(String userCoords) {
         int[] coords = getCoords(userCoords);
         return getField(coords[0], coords[1], coords[2]);
@@ -111,6 +126,11 @@ public class Board {
      * @param y    y position
      * @return True if the field is empty, false if occupied
      */
+    //@ requires quad >= 0 || quad <= 3;
+    //@ requires x >= 0 || x <= 3;
+    //@ requires y >= 0 || y <= 3;
+    //@ ensures this.quadrants[quad][x][y] == Mark.EMPTY ==> \result == true;
+    //@ ensures this.quadrants[quad][x][y] != Mark.EMPTY ==> \result == false;
     public boolean isEmptyField(int quad, int x, int y) {
         return getField(quad, x, y) == Mark.EMPTY;
     }
@@ -121,6 +141,8 @@ public class Board {
      * @param userCoords [A-D][0-8]
      * @return True if the field is empty, false if occupied
      */
+    //@ requires userCoords != null;
+    //@ ensures \result == true || \result == false;
     public boolean isEmptyField(String userCoords) {
         int[] coords = getCoords(userCoords);
         return isEmptyField(coords[0], coords[1], coords[2]);
@@ -131,6 +153,7 @@ public class Board {
      *
      * @return True if full, false if at least 1 space remains empty
      */
+    //@ requires quadrants != null;
     public boolean isFull() {
         for (int i = 0; i < quadrantNum; i++) {
             for (int j = 0; j < quadrantSize; j++) {
@@ -150,6 +173,8 @@ public class Board {
      *
      * @param cmd format [A-D][L|R]
      */
+    //@ requires cmd != null;
+    //@ requires quadrants != null;
     public void rotateQuadrant(String cmd) {
         synchronized (this.quadrants) {
             // Command that comes in is in format [A-D][L|R]
@@ -193,6 +218,8 @@ public class Board {
      * @param mark Specific player
      * @return True if there is 5 in a row, false if not
      */
+    //@ requires mark != null;
+    //@ requires quadrants != null;
     public boolean hasRow(Mark mark) {
         for (int i = 0; i < (quadrantNum / 2); i++) {
             for (int j = 0; j < quadrantSize; j++) {
@@ -222,6 +249,8 @@ public class Board {
      * @param mark Specific player
      * @return True if there is 5 in a column, false if not
      */
+    //@ requires mark != null;
+    //@ requires quadrants != null;
     public boolean hasColumn(Mark mark) {
         for (int i = 0; i < (quadrantNum / 2); i++) {
             for (int j = 0; j < quadrantSize; j++) {
@@ -251,6 +280,8 @@ public class Board {
      * @param mark Specific player
      * @return True if there is 5 diagonally, false if not
      */
+    //@ requires mark != null;
+    //@ requires quadrants != null;
     public boolean hasDiagonal(Mark mark) {
         String[][] possibilities = {{"A0", "A4", "A8", "D0", "D4"}, {"A4", "A8", "D0", "D4", "D8"},
                                     {"A3", "A7", "C2", "D3", "D7"}, {"A1", "A5", "B6", "D1", "D5"},
@@ -281,6 +312,11 @@ public class Board {
      * @param mark Specific player
      * @return True if there are 5 consecutive marks somewhere, false if not
      */
+    //@ requires mark != null;
+    //@ requires quadrants != null;
+    //@ ensures hasRow(mark) == true ==> \result == true;
+    //@ ensures hasColumn(mark) == true ==> \result == true;
+    //@ ensures hasDiagonal(mark) == true ==> \result == true;
     public boolean isWinner(Mark mark) {
         return hasRow(mark) || hasColumn(mark) || hasDiagonal(mark);
     }
@@ -290,6 +326,10 @@ public class Board {
      *
      * @return True if there is a winner, false if not
      */
+    //@ requires quadrants != null;
+    //@ ensures (hasRow(Mark.BLACK) || hasRow(Mark.WHITE)) == true ==> \result == true;
+    //@ ensures (hasColumn(Mark.BLACK) || hasColumn(Mark.WHITE)) == true ==> \result == true;
+    //@ ensures (hasDiagonal(Mark.BLACK) || hasDiagonal(Mark.WHITE)) == true ==> \result == true;
     public boolean hasWinner() {
         return isWinner(Mark.BLACK) || isWinner(Mark.WHITE);
     }
@@ -299,6 +339,9 @@ public class Board {
      *
      * @return true if game has ended, false if not
      */
+    //@ requires quadrants != null;
+    //@ ensures isFull() == true ==> \result == true;
+    //@ ensures hasWinner() == true ==> \result == true;
     public boolean gameOver() {
         return isFull() || hasWinner();
     }
@@ -306,8 +349,11 @@ public class Board {
     /**
      * Converts the board into a string representation.
      *
+     * @param withHelp if the board should include the help board
      * @return Board as a string
      */
+    //@ requires withHelp == true || withHelp == false;
+    //@ requires quadrants != null;
     public String toString(boolean withHelp) {
         StringBuilder boardString = new StringBuilder();
         int width = 25;
@@ -316,17 +362,17 @@ public class Board {
         if (withHelp) {
             boardString.append(" ".repeat(width + margin + 6) + "A" + " ".repeat(11) + "B" + "\n");
         }
-        boardString.append(
-                "-".repeat(width) + (withHelp ? (" ".repeat(margin) + "-".repeat(width)) : "") +
-                "\n");
+        String str = "-".repeat(width) + (withHelp ? (" ".repeat(margin) + "-".repeat(width)) : "")
+                     + "\n";
+        boardString.append(str);
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 3; j++) {
                 StringBuilder row = new StringBuilder();
                 for (int k = 0; k < 6; k++) {
                     String fieldValue =
                             this.getField(k < 3 ? 2 * i : 1 + 2 * i, k % 3, j).toString();
-                    row.append(String.format("|%-1s%-2s", "", fieldValue)); // Add a string with
-                    // padding
+                    row.append(String.format("|%-1s%-2s", "", fieldValue));
+                    // Add a string with padding
                 }
 
                 if (withHelp) {
@@ -339,9 +385,7 @@ public class Board {
                 }
                 row.append("|\n");
                 boardString.append(row);
-                boardString.append("-".repeat(width) +
-                                   (withHelp ? (" ".repeat(margin) + "-".repeat(width)) : "") +
-                                   "\n");
+                boardString.append(str);
             }
         }
         if (withHelp) {
@@ -351,13 +395,12 @@ public class Board {
         return boardString.toString();
     }
 
-    public static void main(String[] args) {
-        Board board = new Board();
-        board.setField("A0", Mark.BLACK);
-        System.out.println(board.toString());
-        System.out.println(board.toString(true));
-    }
-
+    /**
+     * Returns the board as a string, without help.
+     *
+     * @return returns the board without the additional help
+     */
+    //@ requires quadrants != null;
     public String toString() {
         return this.toString(false);
     }
@@ -370,6 +413,11 @@ public class Board {
      * @param y    y position
      * @param mark Specific player
      */
+    //@ requires quad >= 0 || quad <= 3;
+    //@ requires x >= 0 || x <= 3;
+    //@ requires y >= 0 || y <= 3;
+    //@ requires mark != Mark.EMPTY;
+    //@ requires quadrants != null;
     public void setField(int quad, int x, int y, Mark mark) {
         synchronized (this.quadrants) {
             this.quadrants[quad][x][y] = mark;
@@ -382,6 +430,9 @@ public class Board {
      * @param userCoords [A-D][0-8]
      * @param mark       Specific player
      */
+    //@ requires userCoords != null;
+    //@ requires mark != Mark.EMPTY;
+    //@ requires quadrants != null;
     public void setField(String userCoords, Mark mark) {
         int[] coords = getCoords(userCoords);
         setField(coords[0], coords[1], coords[2], mark);
@@ -392,6 +443,8 @@ public class Board {
      *
      * @return ArrayList of strings [A-D][0-8]
      */
+    //@ requires quadrants != null;
+    //@ ensures \result != null;
     public ArrayList<String> getEmptyFields() {
         char[] quads = new char[]{'A', 'B', 'C', 'D'};
         ArrayList<String> output = new ArrayList<>();
@@ -414,7 +467,10 @@ public class Board {
      *
      * @return A deep copy of the board.
      */
+    //@ requires quadrants != null;
     public Board deepCopy() {
+        // This function loops through all positions in the current board and sets it in the new
+        // board
         Board newBoard = new Board();
         for (int i = 0; i < this.quadrantNum; i++) {
             for (int j = 0; j < this.quadrantSize; j++) {

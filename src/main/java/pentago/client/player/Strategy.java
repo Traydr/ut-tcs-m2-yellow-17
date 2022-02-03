@@ -15,7 +15,7 @@ public interface Strategy {
      * Determines the next move to make.
      *
      * @param board the current board
-     * @param mark the mark of the strategy
+     * @param mark  the mark of the strategy
      * @return the next move in [A-D][0-8] and rotate in [A-D][L|R]
      */
     String[] determineMove(Board board, Mark mark);

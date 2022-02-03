@@ -7,7 +7,7 @@ public class Server {
     /**
      * Starts a new server object and listens for a port and quit, for when to stop the server.
      *
-     * @param args
+     * @param args no arguments are currently supported
      */
     public static void main(String[] args) {
         SimplePentagoServer server = new SimplePentagoServer();
@@ -16,6 +16,7 @@ public class Server {
             System.out.println("What should the server name be?");
             String name = scanner.nextLine();
 
+            // Keeps looping until a valid port is chosen
             while (!validPort) {
                 try {
                     System.out.println("What port should the server listen on (0 for random)?");

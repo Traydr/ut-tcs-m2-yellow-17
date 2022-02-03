@@ -19,6 +19,8 @@ public class SimplePentagoServer implements PentagoServer {
      *
      * @param port port on which the server should listen on
      */
+    //@ requires port >= 0 && port <= 65535;
+    //@ requires name != null;
     @Override
     public void start(int port, String name) throws BindException {
         try {
@@ -43,16 +45,22 @@ public class SimplePentagoServer implements PentagoServer {
 
     /**
      * Returns server name.
+     *
      * @return server name
      */
+    //@ requires this.serverName != null;
+    //@ ensures \result == this.serverName;
     public String getServerName() {
         return serverName;
     }
 
     /**
      * Returns a list of the features supported by the server.
+     *
      * @return list of features
      */
+    //@ requires supportedFeatures != null;
+    //@ ensures \result == this.supportedFeatures;
     public ArrayList<String> getSupportedFeatures() {
         return supportedFeatures;
     }
@@ -62,6 +70,8 @@ public class SimplePentagoServer implements PentagoServer {
      *
      * @param clientHandler the client to add
      */
+    //@ requires clientHandler != null && clients != null;
+    //@ ensures clients.contains(clientHandler);
     public void addClient(ClientHandler clientHandler) {
         synchronized (clients) {
             clients.add(clientHandler);
@@ -70,8 +80,11 @@ public class SimplePentagoServer implements PentagoServer {
 
     /**
      * Removes a specific game from the active games list.
+     *
      * @param game Game object
      */
+    //@ requires game != null && activeGames != null;
+    //@ ensures activeGames.contains(game);
     public void removeGame(Game game) {
         if (activeGames.contains(game)) {
             activeGames.remove(game);
@@ -83,6 +96,8 @@ public class SimplePentagoServer implements PentagoServer {
      *
      * @param clientHandler the client to remove
      */
+    //@ requires clients != null && clientHandler != null;
+    //@ ensures !\old(clients).contains(clientHandler) ==> clients.contains(clientHandler);
     public void removeClient(ClientHandler clientHandler) {
         synchronized (clients) {
             if (queue.contains(clientHandler)) {
@@ -102,6 +117,7 @@ public class SimplePentagoServer implements PentagoServer {
      *
      * @return a list of strings containing usernames
      */
+    //@ requires clients != null;
     public List<String> getAllUsernames() {
         synchronized (clients) {
             ArrayList<String> output = new ArrayList<>();
@@ -118,6 +134,7 @@ public class SimplePentagoServer implements PentagoServer {
      *
      * @param clientHandler the client to add
      */
+    //@ requires clientHandler != null && queue != null;
     public void addToQueue(ClientHandler clientHandler) {
         synchronized (queue) {
             if (queue.contains(clientHandler)) {
@@ -132,6 +149,7 @@ public class SimplePentagoServer implements PentagoServer {
      *
      * @return client in queue pos 1
      */
+    //@ requires queue != null;
     public ClientHandler getNextInQueue() {
         synchronized (queue) {
             if (queue.isEmpty()) {
@@ -145,12 +163,14 @@ public class SimplePentagoServer implements PentagoServer {
      * Starts a new game and randomly assigns which player should go first. It then sends the new
      * game info to the clients.
      */
+    //@ requires queue != null;
     public void startNewGame() {
         Random random = new Random();
         Game game;
         ClientHandler player1;
         ClientHandler player2;
 
+        // Get 2 first players in queue
         synchronized (queue) {
             if (queue.size() <= 1) {
                 return;
@@ -161,6 +181,8 @@ public class SimplePentagoServer implements PentagoServer {
 
         synchronized (player1) {
             synchronized (player2) {
+                // If either player is in a game already then we stop and return the player who isnt
+                // back into queue
                 if (player1.isAlreadyInGame() && player2.isAlreadyInGame()) {
                     return;
                 } else if (player1.isAlreadyInGame()) {
@@ -202,7 +224,6 @@ public class SimplePentagoServer implements PentagoServer {
     public void sendChat(ClientHandler sender, String message) {
         synchronized (clients) {
             for (ClientHandler client : clients) {
-                // TODO Transfer this clientSupportedFeatures check to ClientHandler
                 if (client == sender && !client.clientSupportedFeatures.contains("CHAT")) {
                     continue;
                 }
@@ -219,10 +240,12 @@ public class SimplePentagoServer implements PentagoServer {
      * @param message  the message to be sent
      */
     public void sendWhisper(ClientHandler sender, String receiver, String message) {
+        // Makes sure that you aren't just trying to send a message to yourself
         if (sender.getUsername().equals(receiver)) {
             return;
         }
 
+        // Goes through the list of client and sends the whisper to the user if the support CHAT
         synchronized (clients) {
             for (ClientHandler client : clients) {
                 if (!client.getUsername().equals(receiver) &&
@@ -243,6 +266,8 @@ public class SimplePentagoServer implements PentagoServer {
      */
     public boolean isUsernameInUse(String name, ClientHandler request) {
         synchronized (clients) {
+            // Loops through clients and checks if the username is in use, and it is not the current
+            // client that is using it
             for (ClientHandler client : clients) {
                 if (client == request) {
                     continue;

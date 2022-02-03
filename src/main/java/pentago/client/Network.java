@@ -8,6 +8,7 @@ public interface Network {
      *
      * @param address address of the server
      * @param port    port of the server
+     * @param client  the client that is connecting
      * @return true on success, false on failure
      */
     boolean connect(InetAddress address, int port, PentagoClient client);

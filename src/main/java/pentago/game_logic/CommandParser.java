@@ -10,9 +10,14 @@ public class CommandParser {
      * @param y        The vertical position of the coordinate
      * @return Coordinate from 0 to 35
      */
+    //@ requires quadrant >= 0 || quadrant <= 3;
+    //@ requires x >= 0 || x <= 3;
+    //@ requires y >= 0 || y <= 3;
+    //@ ensures \result >= 0 || \result <= 35;
     public static int localToProtocolCoords(int quadrant, int x, int y) {
         int offset;
 
+        // Offsets of the first position of each of the quads according to protocol
         switch (quadrant) {
             case 1:
                 offset = 3;
@@ -36,6 +41,7 @@ public class CommandParser {
      * @param serverCoords Number from 0 to 35
      * @return an array of size 3 {quad, x, y}
      */
+    //@ requires serverCoords >= 0 || serverCoords <= 35;
     public static int[] protocolToLocalCoords(int serverCoords) {
         int[] gameCoords = new int[3];
         int tmpNum = serverCoords;
@@ -71,7 +77,11 @@ public class CommandParser {
      * @param cmd [A-D][L|R]
      * @return number from 0 to 7
      */
+    //@ requires cmd != null;
+    //@ ensures \result >= 0 || \result <= 8;
     public static int localToProtocolRotate(String cmd) {
+        // Get the int representation of the char, multiply by 2 and then add 1 depending on if
+        // its clockwise or anti-clockwise
         int quad = (int) cmd.charAt(0) - 65;
         if (cmd.charAt(1) == 'L') {
             return quad * 2;
@@ -85,11 +95,14 @@ public class CommandParser {
      * @param serverRotate Protocol number 0 to 7
      * @return [A-D][L|R]
      */
+    //@ requires serverRotate >= 0 || serverRotate <= 8;
+    //@ ensures \result != null;
     public static String protocolToLocalRotate(int serverRotate) {
         String output;
         int serRot = serverRotate;
         int quadChar;
 
+        // Does the reverse process as described in the above method
         if (serverRotate % 2 == 0) {
             output = "L";
             quadChar = (serverRotate / 2) + 65;

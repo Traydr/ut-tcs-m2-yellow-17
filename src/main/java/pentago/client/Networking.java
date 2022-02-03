@@ -67,6 +67,7 @@ public class Networking implements Network {
             bw.flush();
             return true;
         } catch (IOException e) {
+            // If we lost connection we ask the user if they want to try to reconnect
             System.out.println("It looks like the pipe to the server is closed...");
             System.out.println("Do you want to reconnect? Y/n");
             Scanner scanner = new Scanner(System.in);
