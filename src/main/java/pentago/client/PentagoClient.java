@@ -47,7 +47,7 @@ public class PentagoClient {
      * @param player The type of player that is playing it
      */
     public PentagoClient(Player player) {
-        this("130.89.253.64", 55555, player);
+        this("0.0.0.0", 8080, player);
     }
 
     /**
